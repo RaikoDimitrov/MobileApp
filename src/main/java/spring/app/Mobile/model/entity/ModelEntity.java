@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "models")
 @Getter
@@ -30,4 +32,9 @@ public class ModelEntity extends BaseEntity {
 
     @ManyToOne
     private BrandEntity brandEntity;
+
+    @PrePersist
+    public void beforeCreate() {
+        setCreated(Instant.now());
+    }
 }

@@ -1,14 +1,12 @@
 package spring.app.Mobile.model.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,12 +17,16 @@ import java.util.List;
 @NoArgsConstructor
 public class BrandEntity extends BaseEntity {
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "brandEntity", cascade = CascadeType.ALL)
-    private List<ModelEntity> modelsEntity;
+    private List<ModelEntity> modelsEntity = new ArrayList<>();
 
     public void setModelsEntity(List<ModelEntity> modelsEntity) {
         this.modelsEntity = modelsEntity;
+        for (ModelEntity modelEntity : modelsEntity) {
+            modelEntity.setBrandEntity(this);
+        }
     }
 }
