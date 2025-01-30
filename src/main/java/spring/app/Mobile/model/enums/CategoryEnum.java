@@ -1,4 +1,4 @@
-package spring.app.Mobile.model.entity;
+package spring.app.Mobile.model.enums;
 
 public enum CategoryEnum {
     CAR,

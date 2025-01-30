@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import spring.app.Mobile.model.enums.CategoryEnum;
 
 import java.time.Instant;
 
