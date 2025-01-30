@@ -3,7 +3,7 @@ package spring.app.Mobile.init;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import spring.app.Mobile.model.entity.BrandEntity;
-import spring.app.Mobile.model.entity.CategoryEnum;
+import spring.app.Mobile.model.enums.CategoryEnum;
 import spring.app.Mobile.model.entity.ModelEntity;
 import spring.app.Mobile.repository.BrandRepository;
 
