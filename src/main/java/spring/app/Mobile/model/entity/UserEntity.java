@@ -27,6 +27,9 @@ public class UserEntity extends BaseEntity {
     @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
+    private String username;
+
     @UuidGenerator
     @JdbcTypeCode(VARCHAR)
     private UUID uuid;

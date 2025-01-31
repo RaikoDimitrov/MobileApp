@@ -27,6 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static UserDetails map(UserEntity userEntity) {
         return new spring.app.Mobile.model.user.UserDetails(userEntity.getUuid(),
+                userEntity.getUsername(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getRoles().stream().map(UserRoleEntity::getRole).map(UserDetailsServiceImpl::map).toList(),
