@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import spring.app.Mobile.model.enums.CategoryEnum;
+import spring.app.Mobile.model.enums.EngineTypeEnum;
 
 import java.time.Instant;
 
@@ -22,7 +22,7 @@ public class ModelEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CategoryEnum category;
+    private EngineTypeEnum category;
 
     @Column
     private String imageUrl;
@@ -34,8 +34,8 @@ public class ModelEntity extends BaseEntity {
     @ManyToOne
     private BrandEntity brandEntity;
 
-    @PrePersist
-    public void beforeCreate() {
-        setCreated(Instant.now());
-    }
+//    @PrePersist
+//    public void beforeCreate() {
+//        setCreated(Instant.now());
+//    }
 }
