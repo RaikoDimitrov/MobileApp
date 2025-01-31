@@ -1,7 +1,9 @@
 package spring.app.Mobile.security;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
@@ -11,6 +13,8 @@ import org.springframework.web.context.annotation.SessionScope;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class CurrentUser {
 
     private static final String ANONYMOUS = "anonymous";
@@ -22,4 +26,5 @@ public class CurrentUser {
         isAnonymous = anonymous;
         return this;
     }
+
 }
