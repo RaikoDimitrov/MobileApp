@@ -35,6 +35,7 @@ public class DBInit implements CommandLineRunner {
         UserEntity admin = UserEntity.builder()
                 .firstName("Raiko")
                 .lastName("Dimitrov")
+                .username("freddy123")
                 .email("freddy98@abv.bg")
                 .password("secret")
                 .build();
