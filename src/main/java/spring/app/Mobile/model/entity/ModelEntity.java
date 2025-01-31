@@ -34,8 +34,4 @@ public class ModelEntity extends BaseEntity {
     @ManyToOne
     private BrandEntity brandEntity;
 
-//    @PrePersist
-//    public void beforeCreate() {
-//        setCreated(Instant.now());
-//    }
 }
