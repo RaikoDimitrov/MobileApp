@@ -1,6 +1,6 @@
 package spring.app.Mobile.model.enums;
 
-public enum CategoryEnum {
+public enum EngineTypeEnum {
     CAR,
     BUS,
     TRUCK,
