@@ -18,5 +18,7 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Instant created;
+    private Instant updated;
 
 }
