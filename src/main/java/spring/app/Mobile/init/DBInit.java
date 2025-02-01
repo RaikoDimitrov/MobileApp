@@ -1,5 +1,6 @@
 package spring.app.Mobile.init;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -35,13 +36,13 @@ public class DBInit implements CommandLineRunner {
         UserEntity admin = UserEntity.builder()
                 .firstName("Raiko")
                 .lastName("Dimitrov")
-                .username("freddy123")
+                .username("freddy")
                 .email("freddy98@abv.bg")
-                .password("secret")
+                .password(passwordEncoder.encode("123123"))
                 .build();
         setCurrentTimeStamps(admin);
         userRepository.save(admin);
-        userRepository.flush();
+
     }
 
     @Override

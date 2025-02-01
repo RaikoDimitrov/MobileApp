@@ -18,13 +18,12 @@ import org.springframework.web.context.annotation.SessionScope;
 public class CurrentUser {
 
     private static final String ANONYMOUS = "anonymous";
-    private String name = ANONYMOUS;
+    private String username = ANONYMOUS;
     private boolean isAnonymous;
 
     public CurrentUser setAnonymous(boolean anonymous) {
-        if (anonymous) this.name = ANONYMOUS;
+        if (anonymous) this.username = ANONYMOUS;
         isAnonymous = anonymous;
         return this;
     }
-
 }
