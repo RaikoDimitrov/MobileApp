@@ -5,11 +5,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import spring.app.Mobile.model.entity.UserEntity;
 import spring.app.Mobile.model.entity.UserRoleEntity;
 import spring.app.Mobile.model.enums.UserRoleEnum;
 import spring.app.Mobile.repository.UserRepository;
 
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -19,10 +21,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
                 .map(UserDetailsServiceImpl::map)
-                .orElseThrow(() -> new UsernameNotFoundException("User with " + email + " not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("User with " + username + " not found!"));
     }
 
     private static UserDetails map(UserEntity userEntity) {
