@@ -13,23 +13,34 @@ import spring.app.Mobile.service.impl.UserDetailsServiceImpl;
 @Configuration
 public class SecurityConfig {
 
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.authorizeHttpRequests(authorizeRequests ->
+        return httpSecurity.
+                //csrf(csrf -> csrf.disable()).
+                authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/users/login", "/users/register", "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
+                        .requestMatchers("/", "/users/login", "/login", "/users/register", "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
                         .anyRequest()
                         .authenticated())
                 .formLogin(formLogin ->
                         formLogin.loginPage("/users/login")
-                                .usernameParameter("email")
+                                .usernameParameter("username")
                                 .passwordParameter("password")
                                 .defaultSuccessUrl("/", true)
-                                .failureForwardUrl("/users/login-error"))
+                                .failureForwardUrl("/users/login-error")
+                                .permitAll())
                 .logout(logout ->
                         logout.logoutUrl("/users/logout")
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true))
+                .userDetailsService(userDetailsService)
                 .build();
     }
 

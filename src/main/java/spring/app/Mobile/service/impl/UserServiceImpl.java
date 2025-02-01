@@ -32,7 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean authenticate(String username, String password) {
+        System.out.println("Attempting to authenticate user: " + username);
         Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
+       /* System.out.println("Stored pass: " + optionalUser.get().getPassword());
+        System.out.println("entered pass: " + password);*/
         if (optionalUser.isEmpty()) return false;
         else return passwordEncoder.matches(password, optionalUser.get().getPassword());
     }
