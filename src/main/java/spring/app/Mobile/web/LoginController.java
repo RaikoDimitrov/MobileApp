@@ -15,8 +15,11 @@ import spring.app.Mobile.service.interfaces.UserService;
 @RequestMapping("/users")
 public class LoginController {
 
+
     @Autowired
     private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(LoginController.class);
+
 
     public LoginController(UserService userService) {
         this.userService = userService;
@@ -28,8 +31,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username,@RequestParam String password, Model model) {
-        Logger logger = LoggerFactory.getLogger(LoginController.class);
+    public String login(@RequestParam String username, @RequestParam String password, Model model) {
         logger.info("Login attempt for user: {}", username);
         if (userService.authenticate(username, password)) {
             userService.loginUser(username);

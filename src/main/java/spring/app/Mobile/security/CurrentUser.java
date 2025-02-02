@@ -1,29 +1,29 @@
 package spring.app.Mobile.security;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 @Component
 @SessionScope
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class CurrentUser {
 
-    private static final String ANONYMOUS = "anonymous";
-    private String username = ANONYMOUS;
-    private boolean isAnonymous;
+    private static final String GUEST = "Guest";
+    private String username = GUEST;
+    private boolean isGuest;
 
-    public CurrentUser setAnonymous(boolean anonymous) {
-        if (anonymous) this.username = ANONYMOUS;
-        isAnonymous = anonymous;
+    public CurrentUser setGuest() {
+        this.username = GUEST;
+        this.isGuest = true;
+        return this;
+    }
+
+    public CurrentUser setAuthenticated(String username) {
+        this.username = username;
+        this.isGuest = false;
         return this;
     }
 }
