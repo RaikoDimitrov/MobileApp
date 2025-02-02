@@ -1,6 +1,7 @@
 package spring.app.Mobile.service.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final CurrentUser currentUser;
 
+    @Autowired
     public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -32,17 +34,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean authenticate(String username, String password) {
+        System.out.println("entering authenticate");
         System.out.println("Attempting to authenticate user: " + username);
         Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-       /* System.out.println("Stored pass: " + optionalUser.get().getPassword());
-        System.out.println("entered pass: " + password);*/
+
         if (optionalUser.isEmpty()) return false;
-        else return passwordEncoder.matches(password, optionalUser.get().getPassword());
+        else {
+            if (passwordEncoder.matches(password, optionalUser.get().getPassword())) {
+                currentUser.setUsername(optionalUser.get().getUsername());
+                currentUser.setAuthenticated(optionalUser.get().getUsername());
+                return true;
+            } else {
+                currentUser.setGuest();
+                return false;
+            }
+        }
     }
 
     @Override
     public void loginUser(String username) {
-        currentUser.setAnonymous(false).setUsername(username);
+        currentUser.setUsername(username);
+        currentUser.setAuthenticated(username);
         System.out.println("User logged in: " + currentUser.getUsername());
     }
 

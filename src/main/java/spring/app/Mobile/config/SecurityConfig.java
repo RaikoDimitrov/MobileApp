@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,21 +24,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.
-                //csrf(csrf -> csrf.disable()).
                 authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/users/login", "/login", "/users/register", "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
+                authorizeRequests
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers("/", "/users/login", "/login", "/users/register", "/error", "/offers/all", "/offers/{id}", "/api/convert")
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
                 .formLogin(formLogin ->
-                        formLogin.loginPage("/users/login")
+                        formLogin
+                                .loginPage("/users/login")
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                                 .defaultSuccessUrl("/", true)
                                 .failureForwardUrl("/users/login-error")
                                 .permitAll())
                 .logout(logout ->
-                        logout.logoutUrl("/users/logout")
+                        logout
+                                .logoutUrl("/users/logout")
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true))
                 .userDetailsService(userDetailsService)
