@@ -1,23 +1,34 @@
 package spring.app.Mobile.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import spring.app.Mobile.model.user.UserMobileDetails;
 import spring.app.Mobile.repository.UserRepository;
-import spring.app.Mobile.service.impl.UserDetailsServiceImpl;
+import spring.app.Mobile.security.CurrentUser;
+import spring.app.Mobile.service.impl.UserMobileDetailsServiceImpl;
+import spring.app.Mobile.service.impl.UserServiceImpl;
+
+import java.io.IOException;
 
 @Configuration
 public class SecurityConfig {
 
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserMobileDetailsServiceImpl userDetailsService;
+    private final CurrentUser currentUser;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(UserMobileDetailsServiceImpl userDetailsService, CurrentUser currentUser) {
         this.userDetailsService = userDetailsService;
+        this.currentUser = currentUser;
     }
 
 
@@ -25,20 +36,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.
                 authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/users/login", "/login", "/users/register", "/error", "/offers/all", "/offers/{id}", "/api/convert")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+                        authorizeRequests
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                                .requestMatchers("/", "/users/login", "/users/register", "/error", "/offers/all", "/offers/{id}", "/api/convert")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated())
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/users/login")
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                                 .defaultSuccessUrl("/", true)
-                                .failureForwardUrl("/users/login-error")
-                                .permitAll())
+                                .failureUrl("/users/login-error")
+                                .permitAll()
+                                .successHandler(authenticationSuccessHandler()))
                 .logout(logout ->
                         logout
                                 .logoutUrl("/users/logout")
@@ -48,9 +60,18 @@ public class SecurityConfig {
                 .build();
     }
 
+    // Custom AuthenticationSuccessHandler to update currentUser
     @Bean
-    public UserDetailsServiceImpl userDetailsService(UserRepository userRepository) {
-        return new UserDetailsServiceImpl(userRepository);
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new AuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+                // Set currentUser based on the authenticated user
+                UserMobileDetails principal = (UserMobileDetails) authentication.getPrincipal();
+                currentUser.setAuthenticated(principal.getFullName());
+                response.sendRedirect("/");
+            }
+        };
     }
 
     @Bean
