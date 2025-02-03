@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @Getter
-public class UserDetails extends User {
+public class UserMobileDetails extends User {
 
     private final UUID uuid;
 
@@ -19,13 +19,13 @@ public class UserDetails extends User {
 
     private final String lastName;
 
-    public UserDetails(UUID uuid,
-                       String username,
-                       String email,
-                       String password,
-                       Collection<? extends GrantedAuthority> authorities,
-                       String firstName,
-                       String lastName) {
+    public UserMobileDetails(UUID uuid,
+                             String username,
+                             String email,
+                             String password,
+                             Collection<? extends GrantedAuthority> authorities,
+                             String firstName,
+                             String lastName) {
         super(username, password, authorities);
         this.uuid = uuid;
         this.email = email;

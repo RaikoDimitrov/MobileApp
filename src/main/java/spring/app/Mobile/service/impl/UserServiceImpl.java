@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
 import spring.app.Mobile.model.entity.UserEntity;
-import spring.app.Mobile.model.user.UserDetails;
+import spring.app.Mobile.model.user.UserMobileDetails;
 import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.security.CurrentUser;
 import spring.app.Mobile.service.interfaces.UserService;
@@ -34,14 +34,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean authenticate(String username, String password) {
-        System.out.println("entering authenticate");
-        System.out.println("Attempting to authenticate user: " + username);
         Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
 
         if (optionalUser.isEmpty()) return false;
         else {
             if (passwordEncoder.matches(password, optionalUser.get().getPassword())) {
-                currentUser.setUsername(optionalUser.get().getUsername());
                 currentUser.setAuthenticated(optionalUser.get().getUsername());
                 return true;
             } else {
@@ -55,7 +52,6 @@ public class UserServiceImpl implements UserService {
     public void loginUser(String username) {
         currentUser.setUsername(username);
         currentUser.setAuthenticated(username);
-        System.out.println("User logged in: " + currentUser.getUsername());
     }
 
     @Override
@@ -65,10 +61,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDetails> getCurrentUser() {
+    public Optional<UserMobileDetails> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails userDetails) {
-            return Optional.of(userDetails);
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserMobileDetails userMobileDetails) {
+            return Optional.of(userMobileDetails);
         }
         return Optional.empty();
     }

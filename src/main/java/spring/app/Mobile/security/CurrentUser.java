@@ -13,7 +13,7 @@ public class CurrentUser {
 
     private static final String GUEST = "Guest";
     private String username = GUEST;
-    private boolean isGuest;
+    private boolean isGuest = true;
 
     public CurrentUser setGuest() {
         this.username = GUEST;
@@ -22,8 +22,10 @@ public class CurrentUser {
     }
 
     public CurrentUser setAuthenticated(String username) {
-        this.username = username;
-        this.isGuest = false;
+        if (username != null & !username.isEmpty()) {
+            this.username = username;
+            this.isGuest = false;
+        } else setGuest();
         return this;
     }
 }

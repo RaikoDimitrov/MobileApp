@@ -2,7 +2,6 @@ package spring.app.Mobile.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import spring.app.Mobile.model.entity.UserEntity;
-import spring.app.Mobile.model.user.UserDetails;
 
 import java.util.Optional;
 
