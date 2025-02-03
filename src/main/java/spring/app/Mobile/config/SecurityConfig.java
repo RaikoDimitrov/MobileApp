@@ -2,7 +2,6 @@ package spring.app.Mobile.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +12,8 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import spring.app.Mobile.model.user.UserMobileDetails;
-import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.security.CurrentUser;
 import spring.app.Mobile.service.impl.UserMobileDetailsServiceImpl;
-import spring.app.Mobile.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 
