@@ -4,21 +4,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import spring.app.Mobile.service.interfaces.BrandsService;
+import spring.app.Mobile.service.interfaces.BrandService;
 
 @Controller
 @RequestMapping("/brands")
 public class BrandsController {
 
-    private final BrandsService brandsService;
+    private final BrandService brandService;
 
-    public BrandsController(BrandsService brandsService) {
-        this.brandsService = brandsService;
+    public BrandsController(BrandService brandService) {
+        this.brandService = brandService;
     }
 
     @GetMapping("/all")
     public String allBrands(Model model) {
-        model.addAttribute("brands", brandsService.getAllBrands());
+        model.addAttribute("brands", brandService.getAllBrands());
         return "brands";
     }
 

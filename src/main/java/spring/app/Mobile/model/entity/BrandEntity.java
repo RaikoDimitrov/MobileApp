@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BrandEntity extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "brandEntity", cascade = CascadeType.ALL)

@@ -2,7 +2,6 @@ package spring.app.Mobile.web;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,13 +31,11 @@ public class RegistrationController {
     }
 
 
-
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("registerDTO") @Valid UserRegistrationDTO userDTO,
                                BindingResult result) {
-        if (result.hasErrors()) return  "auth-register";
+        if (result.hasErrors()) return "auth-register";
         userService.registerUser(userDTO);
-        //todo : automatically login user after successful registration
         return "redirect:/";
     }
 
