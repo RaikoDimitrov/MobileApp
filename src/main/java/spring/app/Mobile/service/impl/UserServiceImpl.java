@@ -13,6 +13,7 @@ import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.security.CurrentUser;
 import spring.app.Mobile.service.interfaces.UserService;
 
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
@@ -72,6 +73,8 @@ public class UserServiceImpl implements UserService {
     private UserEntity map(UserRegistrationDTO userRegistrationDTO) {
         UserEntity mappedEntity = modelMapper.map(userRegistrationDTO, UserEntity.class);
         mappedEntity.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
+        mappedEntity.setCreated(Instant.now());
+        mappedEntity.setUpdated(Instant.now());
         return mappedEntity;
     }
 }
