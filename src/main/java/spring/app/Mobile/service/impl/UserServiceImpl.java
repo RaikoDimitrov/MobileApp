@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
+import spring.app.Mobile.model.entity.BaseEntity;
 import spring.app.Mobile.model.entity.UserEntity;
 import spring.app.Mobile.model.user.UserMobileDetails;
 import spring.app.Mobile.repository.UserRepository;
@@ -14,6 +15,8 @@ import spring.app.Mobile.security.CurrentUser;
 import spring.app.Mobile.service.interfaces.UserService;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,6 +59,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserEntity> initializeUsers() {
+        List<UserEntity> users = new ArrayList<>();
+        if (userRepository.count() == 0) {
+            users.add(UserEntity.builder()
+                    .firstName("Raiko")
+                    .lastName("Dimitrov")
+                    .username("freddy")
+                    .email("freddy98@abv.bg")
+                    .password(passwordEncoder.encode("123123"))
+                    .build());
+            users.add(UserEntity.builder()
+                    .firstName("Ivan")
+                    .lastName("Petrov")
+                    .username("ivan123")
+                    .email("ivan@abv.bg")
+                    .password(passwordEncoder.encode("123321"))
+                    .build());
+            users.forEach(this::setCurrentTimeStamps);
+        }
+        return userRepository.saveAll(users);
+    }
+
+    @Override
     public void registerUser(UserRegistrationDTO userRegistrationDTO) {
         userRepository.save(map(userRegistrationDTO));
 
@@ -76,5 +102,9 @@ public class UserServiceImpl implements UserService {
         mappedEntity.setCreated(Instant.now());
         mappedEntity.setUpdated(Instant.now());
         return mappedEntity;
+    }
+    private void setCurrentTimeStamps(BaseEntity baseEntity) {
+        baseEntity.setCreated(Instant.now());
+        baseEntity.setUpdated(Instant.now());
     }
 }

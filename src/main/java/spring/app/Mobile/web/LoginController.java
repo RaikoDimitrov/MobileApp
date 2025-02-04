@@ -12,7 +12,6 @@ import spring.app.Mobile.service.interfaces.UserService;
 @RequestMapping("/users")
 public class LoginController {
 
-
     private final UserService userService;
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
