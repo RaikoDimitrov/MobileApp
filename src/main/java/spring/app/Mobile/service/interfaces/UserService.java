@@ -1,8 +1,10 @@
 package spring.app.Mobile.service.interfaces;
 
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
+import spring.app.Mobile.model.entity.UserEntity;
 import spring.app.Mobile.model.user.UserMobileDetails;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -14,4 +16,6 @@ public interface UserService {
     Optional<UserMobileDetails> getCurrentUser();
 
     void loginUser(String username);
+
+    List<UserEntity> initializeUsers();
 }
