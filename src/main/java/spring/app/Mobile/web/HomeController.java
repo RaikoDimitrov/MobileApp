@@ -12,8 +12,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (userDetails instanceof UserMobileDetails userMobileDetails1) {
-            model.addAttribute("welcomeMessage", userMobileDetails1.getFullName());
+        if (userDetails instanceof UserMobileDetails user) {
+            model.addAttribute("welcomeMessage", user.getFullName());
         } else {
             model.addAttribute("welcomeMessage", "Guest");
         }
