@@ -29,7 +29,7 @@ public class UserMobileDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
+        return userRepository.findByUsernameIgnoreCase(username)
                 .map(UserMobileDetailsServiceImpl::map)
                 .orElseThrow(() -> new UsernameNotFoundException("User with " + username + " not found!"));
     }

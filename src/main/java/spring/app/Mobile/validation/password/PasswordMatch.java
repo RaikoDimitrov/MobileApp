@@ -1,4 +1,4 @@
-package spring.app.Mobile.validation;
+package spring.app.Mobile.validation.password;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
