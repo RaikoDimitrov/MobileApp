@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BrandService {
 
-    BrandEntity getAllBrands();
+    List<BrandEntity> getAllBrands();
 
     List<BrandEntity> initializeBrands();
 }

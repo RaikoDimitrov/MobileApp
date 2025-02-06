@@ -20,8 +20,9 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandEntity getAllBrands() {
-        return null;
+    public List<BrandEntity> getAllBrands() {
+
+        return brandRepository.findAll();
     }
 
     @Override

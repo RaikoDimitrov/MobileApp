@@ -57,3 +57,92 @@ form.main-form {
 .logged-user {
      color: white;
 }
+
+/* ======= Brands Page Styles ======= */
+
+/* Apply flexbox to center the content in the browser */
+body {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Full height of the viewport */
+    margin: 0; /* Remove default margin */
+    background-image: url('/images/2.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+}
+
+/* Make sure container takes full width and is centered */
+.container {
+    max-width: 100%;
+    width: 80%; /* You can adjust this based on how wide you want the container */
+    padding-top: 90px;
+}
+
+/* Brand Section Styling */
+.brand-section {
+    background-image: linear-gradient(to bottom right, rgba(220, 220, 220, 0.9), rgba(255, 255, 255, 0.9));
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    mergin-left: auto;
+    mergin-right: 0;
+}
+
+/* Table Custom Styling */
+.table-custom {
+    width: 90%;
+    margin-left: auto;
+    margin-right: 0;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with slight transparency */
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    max-width: 100%; /* Ensure the container is not too narrow */
+    padding-top: 90px;
+    margin-left: 0; /* Remove left margin */
+    margin-right: 0; /* Remove right margin */
+}
+
+.table-custom th {
+    background-color: #d3d3d3; /* Light grey */
+    color: #333; /* Dark text for better contrast */
+    padding: 12px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.table-custom td {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+.table-custom tr:nth-child(even) {
+    background: rgba(52, 52, 52, 0.9); /* Slightly lighter black */
+}
+
+.table-custom tr:hover {
+    background: rgba(255, 255, 255, 0.1); /* Hover effect to slightly lighten */
+}
+
+/* Image styling */
+.img-thumbnail {
+    width: 80px;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+

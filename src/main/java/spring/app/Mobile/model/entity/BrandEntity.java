@@ -20,7 +20,7 @@ public class BrandEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "brandEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "brandEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ModelEntity> modelsEntity = new ArrayList<>();
 
     public void setModelsEntity(List<ModelEntity> modelsEntity) {

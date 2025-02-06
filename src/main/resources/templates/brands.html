@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-       <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <title>Mobile</title>
     <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
@@ -23,8 +23,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto col-12 justify-content-between">
-                <li class="nav-item"
-                    >
+                <li class="nav-item">
                     <a class="nav-link" href="/brands/all">All Brands</a>
                 </li>
                 <li class="nav-item">
@@ -48,18 +47,18 @@
                 <li class="nav-item">
                     <div class="form-inline my-2 my-lg-0 border px-3">
                         <div class="logged-user"
-                             text="Welcome, Gosho"></div>
+                             text="Welcome, User"></div>
                         <a class="nav-link" href="/users/logout">Logout</a>
                     </div>
                 </li>
-                
-                    <li class="nav-item">
-                        <a class="nav-link" href="/users/register">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/users/login">Login</a>
-                    </li>
-                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/register">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/login">Login</a>
+                </li>
+
             </ul>
         </div>
     </nav>
@@ -68,12 +67,12 @@
 <div class="container">
     <h2 class="text-center text-white m-3">All Brands</h2>
     <div class='row mb-4 d-flex justify-content-around'>
-        <div  class="brand-section col-md-5 mr-auto d-flex flex-column">
+        <div th:each="brand : ${brands}" class="brand-section col-md-5 mr-auto d-flex flex-column">
             <h2>Car brand:
-                <span >Brand name</span>
+                <span th:text="${brand.name}"></span>
             </h2>
             <div>Models:
-                <table>
+                <table class="table-custom">
                     <tr>
                         <th>No</th>
                         <th>Name</th>
@@ -82,14 +81,15 @@
                         <th>End Year</th>
                         <th>Picture</th>
                     </tr>
-                    <tr>
-                        <th>No</th>
-                        <th >Model Name</th>
-                        <th >Model Category</th>
-                        <th >Model Start Year</th>
-                        <th >Model End Year</th>
-                        <th><img alt="image" src="/"
-                                 class="img-thumbnail rounded"></th>
+                    <tr th:each="model, iter : ${brand.modelsEntity}">
+                        <td th:text="${iter.count}"></td>
+                        <td th:text="${model.name}"></td>
+                        <td th:text="${model.category}"></td>
+                        <td th:text="${model.startYear}"></td>
+                        <td th:text="${model.endYear != null ? model.endYear : 'Present'} "></td>
+                        <td>
+                            <img th:src="${model.imageUrl}" alt="image" class="img-thumbnail rounded">
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -97,7 +97,7 @@
     </div>
 
     <div>
-             <footer> </footer>
+        <footer></footer>
     </div>
 </div>
 </body>
