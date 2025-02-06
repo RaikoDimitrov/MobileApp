@@ -13,8 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import spring.app.Mobile.model.user.UserMobileDetails;
-import spring.app.Mobile.security.CurrentUser;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 import spring.app.Mobile.service.impl.UserMobileDetailsServiceImpl;
 
 import java.io.IOException;
@@ -22,12 +21,10 @@ import java.io.IOException;
 @Configuration
 public class SecurityConfig {
 
-    private final UserMobileDetailsServiceImpl userDetailsService;
-    private final CurrentUser currentUser;
+    private final UserMobileDetailsServiceImpl userMobileDetailsService;
 
-    public SecurityConfig(UserMobileDetailsServiceImpl userDetailsService, CurrentUser currentUser) {
-        this.userDetailsService = userDetailsService;
-        this.currentUser = currentUser;
+    public SecurityConfig(UserMobileDetailsServiceImpl userMobileDetailsService) {
+        this.userMobileDetailsService = userMobileDetailsService;
     }
 
 
@@ -50,25 +47,24 @@ public class SecurityConfig {
                                 .defaultSuccessUrl("/", true)
                                 .failureUrl("/users/login-error")
                                 .permitAll()
-                                .successHandler(authenticationSuccessHandler()))
+                                .successHandler(authenticationSuccessHandler(userMobileDetailsService)))
                 .logout(logout ->
                         logout
                                 .logoutUrl("/users/logout")
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true))
-                .userDetailsService(userDetailsService)
+                .userDetailsService(userMobileDetailsService)
                 .build();
     }
 
     // Custom AuthenticationSuccessHandler to update currentUser
     @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    public AuthenticationSuccessHandler authenticationSuccessHandler(UserMobileDetailsServiceImpl userMobileDetailsService) {
         return new AuthenticationSuccessHandler() {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-                // Set currentUser based on the authenticated user
-                UserMobileDetails principal = (UserMobileDetails) authentication.getPrincipal();
-                currentUser.setAuthenticated(principal.getFullName());
+                System.out.println("Authenticated user from handler: " + authentication.getName());
+                userMobileDetailsService.handlePostLogin(authentication);
                 response.sendRedirect("/");
             }
         };
@@ -78,6 +74,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public SpringSecurityDialect securityDialect() {
+        return new SpringSecurityDialect();
     }
 
     //encoding password

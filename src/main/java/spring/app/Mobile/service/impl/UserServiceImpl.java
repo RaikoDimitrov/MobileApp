@@ -1,21 +1,20 @@
 package spring.app.Mobile.service.impl;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
 import spring.app.Mobile.model.entity.BaseEntity;
@@ -28,6 +27,7 @@ import spring.app.Mobile.repository.UserRoleRepository;
 import spring.app.Mobile.security.CurrentUser;
 import spring.app.Mobile.service.interfaces.UserService;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +44,10 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    private JdbcTemplate jdbcTemplate;
+    private final UserMobileDetailsServiceImpl userMobileDetailsService;
 
     @PostConstruct
     public void resetAutoIncrement() {
@@ -58,13 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser, AuthenticationManager authenticationManager) {
+    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser, AuthenticationManager authenticationManager, UserMobileDetailsServiceImpl userMobileDetailsService) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.currentUser = currentUser;
         this.authenticationManager = authenticationManager;
+        this.userMobileDetailsService = userMobileDetailsService;
     }
 
 
@@ -122,7 +120,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(UserRegistrationDTO userRegistrationDTO) {
+    public void registerUser(UserRegistrationDTO userRegistrationDTO, HttpServletRequest request, HttpServletResponse response) {
         userRepository.save(map(userRegistrationDTO));
 
         //todo: login user after successful registration
@@ -131,12 +129,15 @@ public class UserServiceImpl implements UserService {
         );
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Manually trigger the authentication success event
-        eventPublisher.publishEvent(new AuthenticationSuccessEvent(authentication));
+        HttpSession session = request.getSession(false);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+        try {
+            userMobileDetailsService.handlePostLogin(authentication);
+        } catch (IOException e) {
+            throw new RuntimeException("Post-Login failed.");
+        }
     }
 
     @Override
@@ -172,7 +173,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private void setDefaultRole(UserEntity userEntity) {
-        logger.info("Setting role for user: " + userEntity.getUsername());
         if (userEntity.getRoles() == null) userEntity.setRoles(new ArrayList<>());
         UserRoleEntity defaultRole = userRoleRepository.findByRole(UserRoleEnum.USER)
                 .orElseGet(() -> {
@@ -184,6 +184,5 @@ public class UserServiceImpl implements UserService {
         if (!userEntity.getRoles().contains(defaultRole)) {
             userEntity.getRoles().add(defaultRole);
         }
-        logger.info("User ROLE before saving: " + userEntity.getRoles());
     }
 }
