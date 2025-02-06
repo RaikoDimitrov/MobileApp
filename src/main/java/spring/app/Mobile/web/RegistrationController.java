@@ -39,7 +39,16 @@ public class RegistrationController {
                                HttpServletRequest request,
                                HttpServletResponse response) {
         if (result.hasErrors()) return "auth-register";
-        userService.registerUser(userDTO, request, response);
+        try {
+            userService.registerUser(userDTO, request, response);
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Username is already taken!")) {
+                result.rejectValue("username", "error.registerDTO", e.getMessage());
+            } else if (e.getMessage().contains("Email is already taken!")) {
+                result.rejectValue("email", "error.registerDTO", e.getMessage());
+            }
+            return "auth-register";
+        }
         return "redirect:/";
     }
 

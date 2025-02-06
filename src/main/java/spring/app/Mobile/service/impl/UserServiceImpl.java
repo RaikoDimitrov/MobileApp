@@ -121,6 +121,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserRegistrationDTO userRegistrationDTO, HttpServletRequest request, HttpServletResponse response) {
+        //check if user with username or email already exists
+        if (userRepository.findByUsername(userRegistrationDTO.getUsername()).isPresent()) {
+            throw new RuntimeException("Username is already taken!");
+        }
+        if (userRepository.findByEmail(userRegistrationDTO.getEmail()).isPresent()) {
+            throw new RuntimeException("Email is already taken!");
+        }
+
         userRepository.save(map(userRegistrationDTO));
 
         //todo: login user after successful registration
@@ -159,8 +167,7 @@ public class UserServiceImpl implements UserService {
                 });
         UserEntity mappedEntity = modelMapper.map(userRegistrationDTO, UserEntity.class);
         mappedEntity.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
-        mappedEntity.setCreated(Instant.now());
-        mappedEntity.setUpdated(Instant.now());
+        setCurrentTimeStamps(mappedEntity);
         if (!mappedEntity.getRoles().contains(defaultRole)) {
             mappedEntity.getRoles().add(defaultRole);
         }
