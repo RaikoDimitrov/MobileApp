@@ -1,5 +1,7 @@
 package spring.app.Mobile.web;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -33,9 +35,11 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("registerDTO") @Valid UserRegistrationDTO userDTO,
-                               BindingResult result) {
+                               BindingResult result,
+                               HttpServletRequest request,
+                               HttpServletResponse response) {
         if (result.hasErrors()) return "auth-register";
-        userService.registerUser(userDTO);
+        userService.registerUser(userDTO, request, response);
         return "redirect:/";
     }
 
