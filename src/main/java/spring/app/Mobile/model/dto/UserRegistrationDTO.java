@@ -2,11 +2,14 @@ package spring.app.Mobile.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import spring.app.Mobile.validation.PasswordMatch;
+import spring.app.Mobile.validation.email.UniqueEmail;
+import spring.app.Mobile.validation.password.PasswordMatch;
+import spring.app.Mobile.validation.username.UniqueUsername;
 
 @SuperBuilder
 @Getter
@@ -18,6 +21,7 @@ public class UserRegistrationDTO {
 
     @NotBlank(message = "Username is required.")
     @Size(min = 5, max = 20, message = "Username must be between 5 - 20 symbols.")
+    @UniqueUsername
     private String username;
     @NotBlank(message = "First name is required.")
     private String firstName;
@@ -34,6 +38,7 @@ public class UserRegistrationDTO {
 
     @NotBlank(message = "Email is required.")
     @Email
+    @UniqueEmail
     private String email;
 
     @Override

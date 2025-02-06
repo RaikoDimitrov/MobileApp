@@ -1,4 +1,4 @@
-package spring.app.Mobile.validation;
+package spring.app.Mobile.validation.password;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -13,7 +13,7 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
         }
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("Password do not match!")
+            context.buildConstraintViolationWithTemplate("Password do not match.")
                     .addPropertyNode("confirmPassword")
                     .addConstraintViolation();
             return false;
