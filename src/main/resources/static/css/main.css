@@ -67,6 +67,8 @@ body {
     align-items: center; /* Center vertically */
     min-height: 100vh; /* Full height of the viewport */
     margin: 0; /* Remove default margin */
+    flex-direction: column;
+    overflow-y: auto;
     background-image: url('/images/2.jpg');
     background-position: center center;
     background-repeat: no-repeat;
@@ -79,7 +81,11 @@ body {
 .container {
     max-width: 100%;
     width: 80%; /* You can adjust this based on how wide you want the container */
+    margin-top: 20px;
+    margin: 0 auto;
     padding-top: 90px;
+    display: block;
+    overflow: auto;
 }
 
 /* Brand Section Styling */
@@ -89,16 +95,35 @@ body {
     border-radius: 10px;
     margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: visible;
     width: 100%;
-    mergin-left: auto;
-    mergin-right: 0;
+    max-width: 95%;
+    margin: 0 auto;
+    display: block;
+}
+/* Fix layout of the row to prevent elements from being glued */
+.row {
+    display: flex;
+    flex-wrap: wrap; /* Allows the items to wrap to the next line */
+    justify-content: space-between; /* Ensures space between columns */
+    gap: 20px; /* Adds space between both rows and columns */
+}
+
+/*
+ Ensures that brand-section has space around and is aligned
+*/
+.brand-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
 }
 
 /* Table Custom Styling */
 .table-custom {
-    width: 90%;
-    margin-left: auto;
-    margin-right: 0;
+    width: 100%;
+    max-width: 90%;
+    margin: 0 auto;
     border-collapse: collapse;
     border-radius: 8px;
     overflow: hidden;
@@ -140,7 +165,7 @@ body {
 
 /* Image styling */
 .img-thumbnail {
-    width: 80px;
+    width: 90px;
     height: auto;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
