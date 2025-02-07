@@ -11,11 +11,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/brands")
-public class BrandsController {
+public class BrandController {
 
     private final BrandService brandService;
 
-    public BrandsController(BrandService brandService) {
+    public BrandController(BrandService brandService) {
         this.brandService = brandService;
     }
 
