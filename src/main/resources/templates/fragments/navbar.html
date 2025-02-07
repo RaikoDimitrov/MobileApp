@@ -4,6 +4,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf" content="${_csrf.token}" />
+  <meta name="_csrf_header" content="${_csrf.headerName}" />
   <title>Mobile</title>
   <link rel="stylesheet" href="/css/reset-css.css"/>
   <link rel="stylesheet" href="/css/bootstrap.min.css"/>
@@ -51,9 +53,9 @@
           <div class="form-inline my-2 my-lg-0 border px-3">
             <div class="logged-user"
                  text="Welcome, User"></div>
-            <form th:method="post"
-                  th:action="@{/users/logout}">
-              <input class="btn btn-link" type="submit" value="Logout"/>
+            <form action="/logout" method="POST">
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+              <button type="submit" class="nav-link btn btn-link">Logout</button>
             </form>
           </div>
         </li>

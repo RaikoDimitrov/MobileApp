@@ -7,8 +7,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 
-import java.time.Instant;
-
 @Entity
 @Table(name = "models")
 @Getter

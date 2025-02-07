@@ -31,10 +31,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.
+                csrf(csrf -> csrf.ignoringRequestMatchers("/logout")).
                 authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/favicon.ico", "/", "/users/login", "/users/register",
+                                .requestMatchers("/favicon.ico", "/", "/users/login", "/logout", "/users/register",
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert")
                                 .permitAll()
                                 .anyRequest()
@@ -50,7 +51,7 @@ public class SecurityConfig {
                                 .successHandler(authenticationSuccessHandler(userMobileDetailsService)))
                 .logout(logout ->
                         logout
-                                .logoutUrl("/users/logout")
+                                .logoutUrl("/logout")
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true))
                 .userDetailsService(userMobileDetailsService)
