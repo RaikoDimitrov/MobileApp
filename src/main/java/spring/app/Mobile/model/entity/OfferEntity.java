@@ -16,7 +16,6 @@ import spring.app.Mobile.model.enums.EngineTypeEnum;
 @Table(name = "offers")
 @SuperBuilder
 @Getter
-@Setter
 @NoArgsConstructor
 public class OfferEntity extends BaseEntity {
 
@@ -31,6 +30,6 @@ public class OfferEntity extends BaseEntity {
     private int price;
 
     @Enumerated(EnumType.STRING)
-    private EngineTypeEnum engine;
+    private EngineTypeEnum category;
 
 }
