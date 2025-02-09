@@ -1,6 +1,6 @@
 package spring.app.Mobile.service.interfaces;
 
-import spring.app.Mobile.model.dto.OfferAddDTO;
+import spring.app.Mobile.model.dto.OfferCreateDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
 
@@ -10,7 +10,7 @@ public interface OfferService {
 
     List<OfferSummaryDTO> getAllOffers();
 
-    void createOffer(OfferAddDTO offerAddDTO);
+    void createOffer(OfferCreateDTO offerCreateDTO);
 
     void deleteOffer(Long offerId);
 

@@ -6,10 +6,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import spring.app.Mobile.model.dto.OfferAddDTO;
+import spring.app.Mobile.model.dto.OfferCreateDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
+import spring.app.Mobile.repository.BrandRepository;
+import spring.app.Mobile.repository.ModelRepository;
 import spring.app.Mobile.repository.OfferRepository;
+import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.service.interfaces.OfferService;
 
 import java.util.List;
@@ -18,11 +21,17 @@ import java.util.List;
 public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
+    private final BrandRepository brandRepository;
+    private final ModelRepository modelRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final RestClient offerRestClient;
 
-    public OfferServiceImpl(OfferRepository offerRepository, ModelMapper modelMapper, @Qualifier("offerRestClient") RestClient offerRestClient) {
+    public OfferServiceImpl(OfferRepository offerRepository, BrandRepository brandRepository, ModelRepository modelRepository, UserRepository userRepository, ModelMapper modelMapper, @Qualifier("offerRestClient") RestClient offerRestClient) {
         this.offerRepository = offerRepository;
+        this.brandRepository = brandRepository;
+        this.modelRepository = modelRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.offerRestClient = offerRestClient;
     }
@@ -40,7 +49,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void createOffer(OfferAddDTO offerAddDTO) {
+    public void createOffer(OfferCreateDTO offerCreateDTO) {
 
     }
 
@@ -53,5 +62,7 @@ public class OfferServiceImpl implements OfferService {
     public OfferDetailsDTO getOfferDetails(Long id) {
         return null;
     }
+
+    //mapping
 
 }

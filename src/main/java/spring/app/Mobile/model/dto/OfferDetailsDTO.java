@@ -1,34 +1,23 @@
 package spring.app.Mobile.model.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
+import spring.app.Mobile.model.enums.TransmissionTypeEnum;
+import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
-@SuperBuilder
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class OfferDetailsDTO {
+public class OfferDetailsDTO extends OfferBaseDTO {
 
-    @NotEmpty(message = "{add.offer.description.length}")
-    @Size(message = "{add.offer.description.length}", min = 50, max = 500)
-    private String description;
+    private VehicleTypeEnum category;
+    private EngineTypeEnum engine;
+    private TransmissionTypeEnum transmission;
+    private ChassisTypeEnum chassis;
 
-    @NotEmpty
-    @PositiveOrZero
-    private int mileage;
-
-    @NotEmpty
-    @PositiveOrZero
-    private int price;
-
-    @NotEmpty
-    private EngineTypeEnum category;
 }

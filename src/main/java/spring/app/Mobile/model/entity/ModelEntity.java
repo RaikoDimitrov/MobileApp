@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import spring.app.Mobile.model.enums.EngineTypeEnum;
+import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
 @Entity
 @Table(name = "models")
@@ -20,7 +20,7 @@ public class ModelEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EngineTypeEnum category;
+    private VehicleTypeEnum category;
 
     @Column
     private String imageUrl;

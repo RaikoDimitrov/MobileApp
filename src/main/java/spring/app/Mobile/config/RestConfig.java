@@ -16,6 +16,11 @@ import java.util.Map;
 @EnableConfigurationProperties(OfferApiConfig.class)
 public class RestConfig {
 
+    @Bean("genericRestClient")
+    public RestClient genericRestClient() {
+        return RestClient.create();
+    }
+
     @Bean("offerRestClient")
     public RestClient offerRestClient(OfferApiConfig offerApiConfig, ClientHttpRequestInterceptor requestInterceptor) {
         System.out.println("Base URL: " + offerApiConfig.getBaseUrl());

@@ -5,7 +5,11 @@ import org.springframework.stereotype.Repository;
 import spring.app.Mobile.model.entity.BrandEntity;
 import spring.app.Mobile.model.entity.ModelEntity;
 
+import java.util.List;
+
 @Repository
 public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
     long countByBrandEntity(BrandEntity brandEntity);
+
+    List<ModelEntity> findByName(String modelName);
 }
