@@ -1,10 +1,15 @@
 package spring.app.Mobile.model.dto;
 
-import spring.app.Mobile.model.enums.EngineTypeEnum;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-public record OfferSummaryDTO(Long id,
-                              String description,
-                              int mileage,
-                              int price,
-                              EngineTypeEnum category) {
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+public class OfferSummaryDTO extends OfferBaseDTO {
+
+    private String sellerUsername;
 }
