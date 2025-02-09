@@ -18,7 +18,7 @@ import spring.app.Mobile.model.enums.EngineTypeEnum;
 public class OfferDetailsDTO {
 
     @NotEmpty(message = "{add.offer.description.length}")
-    @Size(message = "{add.offer.description.length}", min = 50, max = 50)
+    @Size(message = "{add.offer.description.length}", min = 50, max = 500)
     private String description;
 
     @NotEmpty
