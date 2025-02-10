@@ -1,19 +1,20 @@
 package spring.app.Mobile.model.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract class OfferBaseDTO {
     private Long id;
     private String brandName;
     private String modelName;
-    private int price;
-    private int mileage;
+    private Integer price;
+    private Integer mileage;
     private String description;
+    private String sellerUsername;
+    private String imageUrl;
+
 }

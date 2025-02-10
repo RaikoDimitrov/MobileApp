@@ -2,18 +2,14 @@ package spring.app.Mobile.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import spring.app.Mobile.model.enums.UserRoleEnum;
 
 @Entity
 @Table(name = "roles")
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRoleEntity extends BaseEntity {

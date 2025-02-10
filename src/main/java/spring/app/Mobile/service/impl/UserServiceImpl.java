@@ -124,7 +124,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(map(userRegistrationDTO));
 
-        //todo: login user after successful registration
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 userRegistrationDTO.getUsername(), userRegistrationDTO.getPassword()
         );

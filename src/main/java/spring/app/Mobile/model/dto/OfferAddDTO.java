@@ -1,16 +1,16 @@
 package spring.app.Mobile.model.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
-@Getter
-@Setter
-public class OfferCreateDTO {
+@Data
+@NoArgsConstructor
+public class OfferAddDTO extends OfferBaseDTO {
 
     @NotEmpty(message = "Description cannot be empty.")
     @Size(message = "Description must be between 50-500 symbols", min = 50, max = 500)
@@ -20,7 +20,7 @@ public class OfferCreateDTO {
     private Integer mileage;
 
     @Positive(message = "Price must be positive number.")
-    private int price;
+    private Integer price;
 
     @NotNull(message = "Category is required.")
     private VehicleTypeEnum category;
@@ -39,4 +39,11 @@ public class OfferCreateDTO {
 
     @NotEmpty(message = "Model name is required.")
     private String modelName;
+
+    @NotEmpty(message = "Image is required.")
+    private String imageUrl;
+
+    public static OfferAddDTO empty() {
+        return new OfferAddDTO();
+    }
 }

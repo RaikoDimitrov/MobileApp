@@ -35,7 +35,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/favicon.ico", "/", "/users/login", "/logout", "/users/register",
+                                .requestMatchers("/offers/add","/favicon.ico", "/", "/users/login", "/logout", "/users/register",
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert")
                                 .permitAll()
                                 .anyRequest()
