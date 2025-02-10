@@ -7,4 +7,6 @@ import java.util.List;
 public interface ModelService {
 
     List<ModelEntity> initializeModels();
+
+    List<String> getModelsByBrandName(String brandName);
 }

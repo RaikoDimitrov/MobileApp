@@ -13,6 +13,7 @@ public abstract class OfferBaseDTO {
     private String modelName;
     private Integer price;
     private Integer mileage;
+    private Integer year;
     private String description;
     private String sellerUsername;
     private String imageUrl;

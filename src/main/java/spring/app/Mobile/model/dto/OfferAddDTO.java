@@ -8,6 +8,8 @@ import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
+import java.time.Year;
+
 @Data
 @NoArgsConstructor
 public class OfferAddDTO extends OfferBaseDTO {
@@ -22,17 +24,21 @@ public class OfferAddDTO extends OfferBaseDTO {
     @Positive(message = "Price must be positive number.")
     private Integer price;
 
+    @Min(value = 1900, message = "Year must be 1900 or older.")
+    @Max(value = Year.MAX_VALUE, message = "Year cannot be in the future.")
+    private Integer year;
+
     @NotNull(message = "Category is required.")
-    private VehicleTypeEnum category;
+    private VehicleTypeEnum vehicleType;
 
     @NotNull(message = "Engine is required.")
-    private EngineTypeEnum engine;
+    private EngineTypeEnum engineType;
 
     @NotNull(message = "Transmission is required.")
-    private TransmissionTypeEnum transmission;
+    private TransmissionTypeEnum transmissionType;
 
     @NotNull(message = "Chassis is required.")
-    private ChassisTypeEnum chassis;
+    private ChassisTypeEnum chassisType;
 
     @NotEmpty(message = "Brand name is required.")
     private String brandName;
