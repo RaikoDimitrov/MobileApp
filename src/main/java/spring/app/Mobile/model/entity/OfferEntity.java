@@ -2,9 +2,9 @@ package spring.app.Mobile.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
@@ -14,8 +14,9 @@ import spring.app.Mobile.model.enums.VehicleTypeEnum;
 @Entity
 @Table(name = "offers")
 @SuperBuilder
-@Getter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OfferEntity extends BaseEntity {
 
 
@@ -23,9 +24,11 @@ public class OfferEntity extends BaseEntity {
     private String description;
 
     @Positive
+    @NotNull
     private Integer mileage;
 
     @Positive
+    @NotNull
     private int price;
 
     @Enumerated(EnumType.STRING)
@@ -51,6 +54,9 @@ public class OfferEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
     private UserEntity sellerEntity;
+
+    @NotEmpty
+    private String imageUrl;
 
 
 }

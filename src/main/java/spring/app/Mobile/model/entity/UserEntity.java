@@ -1,10 +1,7 @@
 package spring.app.Mobile.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
@@ -18,8 +15,7 @@ import static java.sql.Types.VARCHAR;
 @Entity
 @Table(name = "users")
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity extends BaseEntity {
