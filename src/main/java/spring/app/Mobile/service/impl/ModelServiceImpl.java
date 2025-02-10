@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ModelServiceImpl implements ModelService {
@@ -63,6 +64,13 @@ public class ModelServiceImpl implements ModelService {
 
         models.forEach(this::setCurrentTimeStamps);
         return modelRepository.saveAll(models);
+    }
+
+    @Override
+    public List<String> getModelsByBrandName(String brandName) {
+        return modelRepository.findByBrandEntity_Name(brandName)
+                .stream().map(ModelEntity::getName)
+                .collect(Collectors.toList());
     }
 
     private void setCurrentTimeStamps(BaseEntity baseEntity) {

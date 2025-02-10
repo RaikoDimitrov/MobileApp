@@ -9,6 +9,7 @@ import spring.app.Mobile.service.interfaces.BrandService;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BrandServiceImpl implements BrandService {
@@ -20,9 +21,12 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<BrandEntity> getAllBrands() {
+    public List<String> getAllBrands() {
 
-        return brandRepository.findAll();
+        return brandRepository.findAll()
+                .stream()
+                .map(BrandEntity::getName)
+                .collect(Collectors.toList());
     }
 
     @Override

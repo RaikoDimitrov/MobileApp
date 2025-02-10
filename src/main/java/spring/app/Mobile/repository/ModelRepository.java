@@ -12,4 +12,6 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
     long countByBrandEntity(BrandEntity brandEntity);
 
     List<ModelEntity> findByName(String modelName);
+
+    List<ModelEntity> findByBrandEntity_Name(String brandName);
 }

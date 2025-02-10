@@ -14,6 +14,8 @@ import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
+import spring.app.Mobile.service.interfaces.BrandService;
+import spring.app.Mobile.service.interfaces.ModelService;
 import spring.app.Mobile.service.interfaces.OfferService;
 
 @Controller
@@ -21,29 +23,21 @@ import spring.app.Mobile.service.interfaces.OfferService;
 public class OfferController {
 
     private final OfferService offerService;
+    private final ModelService modelService;
+    private final BrandService brandService;
 
-    public OfferController(OfferService offerService) {
+    public OfferController(OfferService offerService, ModelService modelService, BrandService brandService) {
         this.offerService = offerService;
+        this.modelService = modelService;
+        this.brandService = brandService;
     }
 
-    @ModelAttribute("allVehicleTypes")
-    public VehicleTypeEnum[] allVehicleTypes() {
-        return VehicleTypeEnum.values();
-    }
-
-    @ModelAttribute("allEngineTypes")
-    public EngineTypeEnum[] allEngineTypes() {
-        return EngineTypeEnum.values();
-    }
-
-    @ModelAttribute("allTransmissionTypes")
-    public TransmissionTypeEnum[] allTransmissionTypes() {
-        return TransmissionTypeEnum.values();
-    }
-
-    @ModelAttribute("allEngineTypes")
-    public ChassisTypeEnum[] allChassisTypes() {
-        return ChassisTypeEnum.values();
+    @ModelAttribute
+    public void populateEnums(Model model) {
+        model.addAttribute("allVehicleTypes", VehicleTypeEnum.values());
+        model.addAttribute("allEngineTypes", EngineTypeEnum.values());
+        model.addAttribute("allTransmissionTypes", TransmissionTypeEnum.values());
+        model.addAttribute("allChassisTypes", ChassisTypeEnum.values());
     }
 
     @RequestMapping("/all")
@@ -57,17 +51,19 @@ public class OfferController {
         if (!model.containsAttribute("offerAddDTO")) {
             model.addAttribute("offerAddDTO", OfferAddDTO.empty());
         }
+        model.addAttribute("brands", brandService.getAllBrands());
         return "offer-add";
     }
 
     @PostMapping("/add")
-    public String addOffer(@Valid OfferAddDTO offerAddDTO, BindingResult result, RedirectAttributes rAtt) {
+    public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO, Model model, BindingResult result, RedirectAttributes rAtt) {
         if (result.hasErrors()) {
-            rAtt.addFlashAttribute("offerAddDTO", offerAddDTO);
-            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.offerAddDTO", result);
-            return "redirect:/offers/add";
+            model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("models", modelService.getModelsByBrandName(offerAddDTO.getBrandName()));
+            return "offers-add";
         }
         offerService.createOffer(offerAddDTO);
+        rAtt.addFlashAttribute("successMessage", "Offer added successfully!");
         return "redirect:/offers/all";
     }
 }
