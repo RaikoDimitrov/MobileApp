@@ -1,8 +1,10 @@
 package spring.app.Mobile.model.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.SuperCall;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
@@ -12,6 +14,7 @@ import java.time.Year;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OfferAddDTO extends OfferBaseDTO {
 
     @NotBlank(message = "Description cannot be empty")
@@ -30,6 +33,10 @@ public class OfferAddDTO extends OfferBaseDTO {
     @Max(value = Year.MAX_VALUE, message = "Year cannot be in the future")
     @NotNull(message = "Manufactured year is required")
     private Integer year;
+
+    @Positive(message = "Horse Power must be positive number")
+    @NotNull(message = "Horse power is required")
+    private Integer horsePower;
 
     @NotNull(message = "Category is required")
     private VehicleTypeEnum vehicleType;
@@ -50,6 +57,7 @@ public class OfferAddDTO extends OfferBaseDTO {
     private String modelName;
 
     @NotBlank(message = "Image is required")
+    @Pattern(regexp = "^(https?|ftp):\\/\\/([a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+)$", message = "Please provide a valid URL")
     private String imageUrl;
 
     public static OfferAddDTO empty() {

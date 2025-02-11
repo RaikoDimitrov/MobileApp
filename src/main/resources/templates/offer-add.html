@@ -37,9 +37,9 @@
                 <label class="text-center text-white font-weight-bold" for="modelName">Model</label>
                 <select id="modelName" th:field="*{modelName}" class="form-control">
                     <option value="">- Select a model -</option>
-                   <!-- <optgroup th:each="model : ${models}" th:label="${model}">
-                        <option th:value="${model}" th:text="${model}"></option>
-                    </optgroup>-->
+                    <!-- <optgroup th:each="model : ${models}" th:label="${model}">
+                         <option th:value="${model}" th:text="${model}"></option>
+                     </optgroup>-->
                 </select>
                 <span class="text-danger" th:if="${#fields.hasErrors('modelName')}" th:errors="*{modelName}"></span>
             </div>
@@ -87,7 +87,8 @@
                             th:text="${type}">
                     </option>
                 </select>
-                <span class="text-danger" th:if="${#fields.hasErrors('transmissionType')}" th:errors="*{transmissionType}"></span>
+                <span class="text-danger" th:if="${#fields.hasErrors('transmissionType')}"
+                      th:errors="*{transmissionType}"></span>
             </div>
 
             <div class="form-group col-md-6 mb-3">
@@ -118,7 +119,7 @@
             </div>
 
             <div class="form-group col-md-6 mb-3">
-                <label th:for="mileage" class="text-white font-weight-bold">Mileage</label>
+                <label th:for="mileage" class="text-white font-weight-bold">Mileage (km)</label>
                 <input th:field="*{mileage}"
                        type="number"
                        th:errorclass="is-invalid"
@@ -143,24 +144,36 @@
             </div>
 
             <div class="form-group col-md-6 mb-3">
-                <label class="text-white font-weight-bold" th:for="imageUrl">Image URL</label>
-                <input id="imageUrl" type="url" class="form-control"
+                <label class="text-white font-weight-bold" for="imageUrl">Image URL</label>
+                <input id="imageUrl" type="url" th:field="*{imageUrl}" class="form-control"
                        placeholder="Vehicle image URL">
                 <span class="text-danger" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></span>
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="text-white font-weight-bold" th:for="description">Description</label>
-            <textarea
-                    th:field="*{description}"
-                    th:errorclass="is-invalid"
-                    type="textarea"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Description">
+        <div class="row">
+            <div class="form-group col-md-6 mb-3">
+                <label th:for="horsePower" class="text-white font-weight-bold">Horse Power (HP)</label>
+                <input th:field="*{horsePower}"
+                       type="number"
+                       th:errorclass="is-invalid"
+                       class="form-control"
+                       placeholder="Horse Power"/>
+                <span class="text-danger" th:if="${#fields.hasErrors('horsePower')}" th:errors="*{horsePower}"></span>
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+                <label class="text-white font-weight-bold" th:for="description">Description</label>
+                <textarea
+                        th:field="*{description}"
+                        th:errorclass="is-invalid"
+                        type="textarea"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Description">
             </textarea>
-            <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
         </div>
 
         <div class="row justify-content-center">

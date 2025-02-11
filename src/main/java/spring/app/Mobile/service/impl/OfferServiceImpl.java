@@ -2,8 +2,6 @@ package spring.app.Mobile.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +21,9 @@ import spring.app.Mobile.repository.OfferRepository;
 import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.service.interfaces.OfferService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OfferServiceImpl implements OfferService {
@@ -44,16 +44,25 @@ public class OfferServiceImpl implements OfferService {
         this.offerRestClient = offerRestClient;
     }
 
-
     @Override
     public List<OfferSummaryDTO> getAllOffers() {
 
-        return offerRestClient.get()
+        /* web client
+        List<OfferEntity> offerEntities = offerRestClient.get()
                 .uri("/offers")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
                 });
+        System.out.println("API response : " + offerEntities);
+        if (offerEntities == null || offerEntities.isEmpty()) return Collections.emptyList();*/
+
+        List<OfferEntity> offerEntities = offerRepository.findAll();
+        if (offerEntities.isEmpty()) return Collections.emptyList();
+
+        return offerEntities.stream()
+                .map(offerEntity -> offerMapper.map(offerEntity, OfferSummaryDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -62,11 +71,11 @@ public class OfferServiceImpl implements OfferService {
         OfferEntity savedOffer = offerRepository.save(mappedOfferEntity);
         OfferAddDTO responseDTO = offerMapper.map(savedOffer, OfferAddDTO.class);
 
+    /* web client
         offerRestClient.post()
                 .uri("/offers")
                 .body(responseDTO)
-                .retrieve();
-
+                .retrieve();*/
         return responseDTO;
     }
 

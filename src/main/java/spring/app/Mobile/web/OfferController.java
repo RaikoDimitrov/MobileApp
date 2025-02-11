@@ -1,6 +1,9 @@
 package spring.app.Mobile.web;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +18,7 @@ import spring.app.Mobile.service.interfaces.BrandService;
 import spring.app.Mobile.service.interfaces.ModelService;
 import spring.app.Mobile.service.interfaces.OfferService;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +44,7 @@ public class OfferController {
         model.addAttribute("allChassisTypes", ChassisTypeEnum.values());
     }
 
-    @RequestMapping("/all")
+    @GetMapping("/all")
     public String getAllOffers(Model model) {
         model.addAttribute("allOffers", offerService.getAllOffers());
         return "offers";
@@ -63,7 +67,14 @@ public class OfferController {
     }
 
     @PostMapping("/add")
-    public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO, BindingResult result, Model model, RedirectAttributes rAtt) {
+    public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO,
+                           BindingResult result,
+                           Model model,
+                           RedirectAttributes rAtt,
+                           Principal principal) {
+        if (principal == null) {
+            return "redirect:/users/login";
+        }
         if (result.hasErrors()) {
             System.out.println("Validation Errors: " + result.getAllErrors());
             model.addAttribute("brands", brandService.getAllBrands());

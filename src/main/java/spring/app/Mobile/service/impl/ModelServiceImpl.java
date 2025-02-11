@@ -68,9 +68,7 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public List<String> getModelsByBrandName(String brandName) {
-        return modelRepository.findByBrandEntity_Name(brandName)
-                .stream().map(ModelEntity::getName)
-                .collect(Collectors.toList());
+        return modelRepository.findByBrandEntity_Name(brandName);
     }
 
     private void setCurrentTimeStamps(BaseEntity baseEntity) {

@@ -29,19 +29,25 @@ public class OfferEntity extends BaseEntity {
 
     @Positive
     @NotNull
-    private int price;
+    private Integer price;
+
+    @NotNull
+    private Integer year;
+
+    @NotNull
+    private Integer horsePower;
 
     @Enumerated(EnumType.STRING)
-    private VehicleTypeEnum category;
+    private VehicleTypeEnum vehicleType;
 
     @Enumerated(EnumType.STRING)
-    private EngineTypeEnum engine;
+    private EngineTypeEnum engineType;
 
     @Enumerated(EnumType.STRING)
-    private TransmissionTypeEnum transmission;
+    private TransmissionTypeEnum transmissionType;
 
     @Enumerated(EnumType.STRING)
-    private ChassisTypeEnum chassis;
+    private ChassisTypeEnum chassisType;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "brand_id", nullable = false)

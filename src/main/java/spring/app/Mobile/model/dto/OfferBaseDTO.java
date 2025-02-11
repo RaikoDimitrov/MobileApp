@@ -9,12 +9,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public abstract class OfferBaseDTO {
     private Long id;
+    private String description;
+    private Integer mileage;
+    private Integer price;
+    private Integer horsePower;
     private String brandName;
     private String modelName;
-    private Integer price;
-    private Integer mileage;
     private Integer year;
-    private String description;
     private String sellerUsername;
     private String imageUrl;
 
