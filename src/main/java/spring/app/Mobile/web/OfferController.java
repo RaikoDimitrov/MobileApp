@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
@@ -17,6 +14,9 @@ import spring.app.Mobile.model.enums.VehicleTypeEnum;
 import spring.app.Mobile.service.interfaces.BrandService;
 import spring.app.Mobile.service.interfaces.ModelService;
 import spring.app.Mobile.service.interfaces.OfferService;
+
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/offers")
@@ -46,21 +46,29 @@ public class OfferController {
         return "offers";
     }
 
+    @GetMapping("/models/{brandName}")
+    @ResponseBody
+    public List<String> getModelsByBrand(@PathVariable String brandName) {
+        return modelService.getModelsByBrandName(brandName);
+    }
+
     @GetMapping("/add")
     public String newOffer(Model model) {
         if (!model.containsAttribute("offerAddDTO")) {
             model.addAttribute("offerAddDTO", OfferAddDTO.empty());
         }
         model.addAttribute("brands", brandService.getAllBrands());
+        model.addAttribute("models", Collections.emptyList());
         return "offer-add";
     }
 
     @PostMapping("/add")
-    public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO, Model model, BindingResult result, RedirectAttributes rAtt) {
+    public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO, BindingResult result, Model model, RedirectAttributes rAtt) {
         if (result.hasErrors()) {
+            System.out.println("Validation Errors: " + result.getAllErrors());
             model.addAttribute("brands", brandService.getAllBrands());
             model.addAttribute("models", modelService.getModelsByBrandName(offerAddDTO.getBrandName()));
-            return "offers-add";
+            return "offer-add";
         }
         offerService.createOffer(offerAddDTO);
         rAtt.addFlashAttribute("successMessage", "Offer added successfully!");

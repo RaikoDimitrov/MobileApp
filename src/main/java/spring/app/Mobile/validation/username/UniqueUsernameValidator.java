@@ -17,7 +17,7 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
         //check if username has any spaces
         if (username.contains(" ")) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("Username cannot contain spaces.")
+            context.buildConstraintViolationWithTemplate("Username cannot contain spaces")
                     .addConstraintViolation();
             return false;
         }

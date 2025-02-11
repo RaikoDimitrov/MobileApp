@@ -18,24 +18,24 @@ public class UserRegistrationDTO {
     public UserRegistrationDTO() {
     }
 
-    @NotBlank(message = "Username is required.")
-    @Size(min = 5, max = 20, message = "Username must be between 5 - 20 symbols.")
+    @NotBlank(message = "Username is required")
+    @Size(min = 5, max = 20, message = "Username must be between 5 - 20 symbols")
     @UniqueUsername
     private String username;
-    @NotBlank(message = "First name is required.")
+    @NotBlank(message = "First name is required")
     private String firstName;
 
-    @NotBlank(message = "Last name is required.")
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotBlank(message = "Password is required.")
-    @Size(min = 5, message = "Password must be at least 5 symbols.")
+    @NotBlank(message = "Password is required")
+    @Size(min = 5, message = "Password must be at least 5 symbols")
     private String password;
 
-    @NotBlank(message = "Confirm password is required.")
+    @NotBlank(message = "Confirm password is required")
     private String confirmPassword;
 
-    @NotBlank(message = "Email is required.")
+    @NotBlank(message = "Email is required")
     @Email
     @UniqueEmail
     private String email;

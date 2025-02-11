@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
-    <script src="/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/modelAddOfferUpdate.js}"></script>
 </head>
 
 <body>
@@ -25,21 +26,22 @@
 
         <div class="row">
             <div class="form-group col-md-6 mb-3">
-                <label class="text-center text-white font-weight-bold" th:for="brandName">Brand</label>
+                <label class="text-center text-white font-weight-bold" for="brandName">Brand</label>
                 <select id="brandName" th:field="*{brandName}" class="form-control">
                     <option value="">- Select a brand -</option>
                     <option th:each="brand : ${brands}" th:value="${brand}" th:text="${brand}"></option>
                 </select>
+                <span class="text-danger" th:if="${#fields.hasErrors('brandName')}" th:errors="*{brandName}"></span>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label class="text-center text-white font-weight-bold" for="modelName">Model</label>
                 <select id="modelName" th:field="*{modelName}" class="form-control">
                     <option value="">- Select a model -</option>
-                    <optgroup th:each="model : ${models}" th:label="${model.brandName}">
-                        <option th:value="${model.modelName}" th:text="${model.modelName}"></option>
-                    </optgroup>
+                   <!-- <optgroup th:each="model : ${models}" th:label="${model}">
+                        <option th:value="${model}" th:text="${model}"></option>
+                    </optgroup>-->
                 </select>
-                <small th:each="err : ${#fields.errors('modelName')}" th:text="${err}" class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('modelName')}" th:errors="*{modelName}"></span>
             </div>
         </div>
 
@@ -55,8 +57,7 @@
                             th:text="${type}">
                     </option>
                 </select>
-                <small th:each="err : ${#fields.errors('vehicleType')}" th:text="${err}"
-                       class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('vehicleType')}" th:errors="*{vehicleType}"></span>
             </div>
 
             <div class="form-group col-md-6 mb-3">
@@ -70,7 +71,7 @@
                             th:text="${type}">
                     </option>
                 </select>
-                <small th:each="err : ${#fields.errors('engineType')}" th:text="${err}" class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></span>
             </div>
         </div>
 
@@ -86,8 +87,7 @@
                             th:text="${type}">
                     </option>
                 </select>
-                <small th:each="err : ${#fields.errors('transmissionType')}" th:text="${err}"
-                       class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('transmissionType')}" th:errors="*{transmissionType}"></span>
             </div>
 
             <div class="form-group col-md-6 mb-3">
@@ -101,7 +101,7 @@
                             th:text="${type}">
                     </option>
                 </select>
-                <small th:each="err : ${#fields.errors('chassisType')}" th:text="${err}" class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('chassisType')}" th:errors="*{chassisType}"></span>
             </div>
         </div>
 
@@ -114,7 +114,7 @@
                         th:errorclass="is-invalid"
                         class="form-control"
                         placeholder="Price in BGN"/>
-                <small th:each="err : ${#fields.errors('price')}" th:text="${err}" class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
             </div>
 
             <div class="form-group col-md-6 mb-3">
@@ -124,7 +124,7 @@
                        th:errorclass="is-invalid"
                        class="form-control"
                        placeholder="Mileage in kilometers"/>
-                <small th:each="err : ${#fields.errors('mileage')}" th:text="${err}" class="text-danger"></small>
+                <span class="text-danger" th:if="${#fields.hasErrors('mileage')}" th:errors="*{mileage}"></span>
             </div>
         </div>
 
@@ -138,15 +138,15 @@
                        step="1"
                        th:errorclass="is-invalid"
                        class="form-control"
-                       placeholder="Manufacturing year"/>
-                <small th:each="err : ${#fields.errors('year')}" th:text="${err}" class="text-danger"></small>
+                       placeholder="Manufactured year"/>
+                <span class="text-danger" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
             </div>
 
             <div class="form-group col-md-6 mb-3">
                 <label class="text-white font-weight-bold" th:for="imageUrl">Image URL</label>
                 <input id="imageUrl" type="url" class="form-control"
-                       placeholder="Put vehicle image URL here.">
-                <small th:each="err : ${#fields.errors('imageUrl')}" th:text="${err}" class="text-danger"></small>
+                       placeholder="Vehicle image URL">
+                <span class="text-danger" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></span>
             </div>
         </div>
 
@@ -160,7 +160,7 @@
                     rows="3"
                     placeholder="Description">
             </textarea>
-            <small th:each="err : ${#fields.errors('description')}" th:text="${err}" class="text-danger"></small>
+            <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </div>
 
         <div class="row justify-content-center">
