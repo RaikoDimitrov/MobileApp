@@ -39,6 +39,8 @@ public class SecurityConfig {
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
                                 .requestMatchers("/offers/add").authenticated()
                                 .anyRequest().authenticated())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(((request, response, authException) ->
+                        response.sendRedirect("/users/login"))))
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/users/login")

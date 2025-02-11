@@ -8,5 +8,7 @@ public interface BrandService {
 
     List<String> getAllBrands();
 
+    List<BrandEntity> getAllBrandsEntities();
+
     List<BrandEntity> initializeBrands();
 }

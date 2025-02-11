@@ -30,6 +30,11 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public List<BrandEntity> getAllBrandsEntities() {
+        return brandRepository.findAll();
+    }
+
+    @Override
     public List<BrandEntity> initializeBrands() {
         List<BrandEntity> brands = new ArrayList<>();
         if (brandRepository.count() == 0) {

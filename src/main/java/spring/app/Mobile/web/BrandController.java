@@ -21,7 +21,7 @@ public class BrandController {
 
     @GetMapping("/all")
     public String showBrands(Model model) {
-        List<String> allBrands = brandService.getAllBrands();
+        List<BrandEntity> allBrands = brandService.getAllBrandsEntities();
         model.addAttribute("brands", allBrands);
         return "brands";
     }

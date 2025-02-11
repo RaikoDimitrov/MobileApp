@@ -13,9 +13,9 @@ import spring.app.Mobile.model.enums.VehicleTypeEnum;
 @AllArgsConstructor
 public class OfferDetailsDTO extends OfferBaseDTO {
 
-    private VehicleTypeEnum category;
-    private EngineTypeEnum engine;
-    private TransmissionTypeEnum transmission;
-    private ChassisTypeEnum chassis;
+    private VehicleTypeEnum vehicleType;
+    private EngineTypeEnum engineType;
+    private TransmissionTypeEnum transmissionType;
+    private ChassisTypeEnum chassisType;
 
 }
