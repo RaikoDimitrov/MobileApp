@@ -14,39 +14,42 @@ import java.time.Year;
 @NoArgsConstructor
 public class OfferAddDTO extends OfferBaseDTO {
 
-    @NotEmpty(message = "Description cannot be empty.")
+    @NotBlank(message = "Description cannot be empty")
     @Size(message = "Description must be between 50-500 symbols", min = 50, max = 500)
     private String description;
 
-    @PositiveOrZero(message = "Mileage must be positive number.")
+    @PositiveOrZero(message = "Mileage must be positive number")
+    @NotNull(message = "Mileage in kilometers is required")
     private Integer mileage;
 
-    @Positive(message = "Price must be positive number.")
+    @Positive(message = "Price must be positive number")
+    @NotNull(message = "Price is required")
     private Integer price;
 
-    @Min(value = 1900, message = "Year must be 1900 or older.")
-    @Max(value = Year.MAX_VALUE, message = "Year cannot be in the future.")
+    @Min(value = 1900, message = "Year must be 1900 or older")
+    @Max(value = Year.MAX_VALUE, message = "Year cannot be in the future")
+    @NotNull(message = "Manufactured year is required")
     private Integer year;
 
-    @NotNull(message = "Category is required.")
+    @NotNull(message = "Category is required")
     private VehicleTypeEnum vehicleType;
 
-    @NotNull(message = "Engine is required.")
+    @NotNull(message = "Engine is required")
     private EngineTypeEnum engineType;
 
-    @NotNull(message = "Transmission is required.")
+    @NotNull(message = "Transmission is required")
     private TransmissionTypeEnum transmissionType;
 
-    @NotNull(message = "Chassis is required.")
+    @NotNull(message = "Chassis is required")
     private ChassisTypeEnum chassisType;
 
-    @NotEmpty(message = "Brand name is required.")
+    @NotBlank(message = "Brand is required")
     private String brandName;
 
-    @NotEmpty(message = "Model name is required.")
+    @NotEmpty(message = "Model is required")
     private String modelName;
 
-    @NotEmpty(message = "Image is required.")
+    @NotBlank(message = "Image is required")
     private String imageUrl;
 
     public static OfferAddDTO empty() {

@@ -35,11 +35,10 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/offers/add","/favicon.ico", "/", "/users/login", "/logout", "/users/register",
-                                        "/error", "/offers/all", "/offers/{id}", "/api/convert")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                                .requestMatchers("/favicon.ico", "/", "/users/login", "/logout", "/users/register",
+                                        "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
+                                .requestMatchers("/offers/add").authenticated()
+                                .anyRequest().authenticated())
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/users/login")
