@@ -10,5 +10,5 @@ public interface BrandService {
 
     List<BrandEntity> getAllBrandsEntities();
 
-    List<BrandEntity> initializeBrands();
+    void populateBrands();
 }
