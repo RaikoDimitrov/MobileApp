@@ -23,6 +23,7 @@ import spring.app.Mobile.service.interfaces.OfferService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,7 +87,9 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public OfferDetailsDTO getOfferDetails(Long id) {
-        return null;
+        Optional<OfferEntity> offerEntityById = offerRepository.findById(id);
+        OfferDetailsDTO mappedDTO = offerMapper.map(offerEntityById, OfferDetailsDTO.class);
+        return mappedDTO;
     }
 
     //mapping

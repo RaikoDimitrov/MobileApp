@@ -16,11 +16,13 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'all-offers'})}"></div>
 
 <div class="container-fluid offers">
-    <h2 class="text-center text-white offers-title">All Offers</h2>
+    <div th:if="${successMessage}" class="alert alert-success">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <h2 class="text-left text-white offers-title">All Offers</h2>
     <div class="offers row mx-auto d-flex justify-content-start">
         <!-- Loop through the offers -->
         <div th:each="offer : ${allOffers}" class="offer card col-sm-6 col-md-3 col-lg-2 m-1 p-0">
-
             <!-- Image Wrapper for Offer -->
             <div class="card-img-top-wrapper">
                 <img class="card-img-top" th:src="@{${offer.imageUrl}}" alt="Car image">
