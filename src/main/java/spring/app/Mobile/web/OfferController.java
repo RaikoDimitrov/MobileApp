@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.model.dto.OfferAddDTO;
+import spring.app.Mobile.model.dto.OfferDetailsDTO;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
@@ -46,10 +47,14 @@ public class OfferController {
 
     @GetMapping("/all")
     public String getAllOffers(Model model) {
+        if (model.containsAttribute("successMessage")) {
+            System.out.println("Flash msg: " + model.getAttribute("successMessage"));
+        } else System.out.println("No flash msg received");
         model.addAttribute("allOffers", offerService.getAllOffers());
         return "offers";
     }
 
+    //fetching models from ajax
     @GetMapping("/models/{brandName}")
     @ResponseBody
     public List<String> getModelsByBrand(@PathVariable String brandName) {
@@ -84,5 +89,11 @@ public class OfferController {
         offerService.createOffer(offerAddDTO);
         rAtt.addFlashAttribute("successMessage", "Offer added successfully!");
         return "redirect:/offers/all";
+    }
+
+    @GetMapping("{id}")
+    public String detailsOffer(@ModelAttribute OfferDetailsDTO offerDetailsDTO0) {
+
+        return "details";
     }
 }

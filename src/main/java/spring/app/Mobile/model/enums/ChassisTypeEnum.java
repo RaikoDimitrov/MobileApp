@@ -4,5 +4,8 @@ public enum ChassisTypeEnum {
     WAGON,
     SEDAN,
     COUPE,
-    SUV
+    SUV,
+    HATCHBACK,
+    CONVERTIBLE,
+    VAN
 }
