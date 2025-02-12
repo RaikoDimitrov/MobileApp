@@ -1,13 +1,11 @@
 body {
-    background-image: url('/images/2.jpg');
+    background-image: url('/images/1.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     background-color: #464646;
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
     min-height: 100vh; /* Full height of the viewport */
     margin: 0; /* Remove default margin */
     flex-direction: column;
@@ -20,13 +18,50 @@ body {
 }
 
 .container, .container-fluid {
-    padding-top: 40px; /* Adjust padding-top here */
+    padding-top: 100px;
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+    gap: 30px;
 }
+
+.welcome-message {
+    padding-top: 400px;
+}
+
+.offers {
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust spacing between offers */
+    justify-content: flex-start;
+}
+.offers-title {
+    width: 100%;
+    margin-top: 100px !important;
+    margin-bottom: 10px;
+}
+
+.offer {
+    background-color: transparent; /* Hollow look */
+    border: 2px solid #ccc; /* Border around the card */
+    border-radius: 10px; /* Rounded corners (optional) */
+    padding: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s ease; /* Smooth transition for the hover effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the card */
+}
+
+/* Hover effect for the offer card */
+.offer:hover {
+    background-color: rgba(255, 255, 255, 0.8); /* Slight background on hover */
+    transform: scale(1.1); /* Zoom the card on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhance shadow to give it a 'pop' effect */
+    border-color: #007bff; /* Change border color on hover (you can customize this) */
+}
+
 
 .bg-text {
     background-color: rgba(0, 0, 0, 0.4); /* Black w/opacity/see-through */
@@ -43,11 +78,11 @@ body {
     background-image: linear-gradient(to bottom right, rgba(220, 220, 220, 0.9), rgba(255, 255, 255, 0.9));
     padding: 15px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 95%;
-    margin: 0 auto;
+    margin: 0 auto 30px auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -64,8 +99,9 @@ body {
 
 form.main-form {
     background-image: linear-gradient(to bottom right, rgba(70, 70, 70, 0.8), rgba(10, 10, 10, 0.8));
-    padding: 10px 30px;
+    padding: 20px 30px;
     border-radius: 20px;
+    display: flex;
 }
 
 .field-error {

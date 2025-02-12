@@ -16,7 +16,7 @@
 
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'register'})}"></div>
 
-<div class="container">
+<div class="container " style="margin-top: 120px;">
     <h2 class="text-center text-white">Register User</h2>
     <form th:method="post"
           th:action="@{/users/register}"

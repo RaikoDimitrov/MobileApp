@@ -91,8 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<UserEntity> initializeUsers() {
-        logger.info("Initializing users: ");
-        userRepository.deleteAll();
+
         List<UserEntity> users = new ArrayList<>();
         logger.info("Users count in DB: " + userRepository.count());
         if (userRepository.count() == 0) {
