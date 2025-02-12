@@ -1,9 +1,6 @@
 package spring.app.Mobile.web;
 
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,9 +44,6 @@ public class OfferController {
 
     @GetMapping("/all")
     public String getAllOffers(Model model) {
-        if (model.containsAttribute("successMessage")) {
-            System.out.println("Flash msg: " + model.getAttribute("successMessage"));
-        } else System.out.println("No flash msg received");
         model.addAttribute("allOffers", offerService.getAllOffers());
         return "offers";
     }
@@ -92,8 +86,9 @@ public class OfferController {
     }
 
     @GetMapping("{id}")
-    public String detailsOffer(@ModelAttribute OfferDetailsDTO offerDetailsDTO0) {
-
+    public String detailsOffer(@PathVariable Long id, Model model) {
+        OfferDetailsDTO offerDetails = offerService.getOfferDetails(id);
+        model.addAttribute("offerDetails", offerDetails);
         return "details";
     }
 }
