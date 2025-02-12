@@ -88,8 +88,12 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public OfferDetailsDTO getOfferDetails(Long id) {
         Optional<OfferEntity> offerEntityById = offerRepository.findById(id);
-        OfferDetailsDTO mappedDTO = offerMapper.map(offerEntityById, OfferDetailsDTO.class);
-        return mappedDTO;
+        if (offerEntityById.isEmpty()) {
+            System.out.println("Offer not found!");
+            return null;
+        }
+        OfferEntity offerEntity = offerEntityById.get();
+        return offerMapper.map(offerEntity, OfferDetailsDTO.class);
     }
 
     //mapping

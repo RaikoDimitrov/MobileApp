@@ -56,7 +56,7 @@ body {
     flex-wrap: wrap;
     gap: 10px; /* Adjust spacing between offers */
     justify-content: center !important;
-    align-items: flex-start;
+    align-items: center;
 }
 .offers-title {
     width: 100%;
@@ -81,6 +81,12 @@ body {
     transform: scale(1.1); /* Zoom the card on hover */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhance shadow to give it a 'pop' effect */
     border-color: #007bff; /* Change border color on hover (you can customize this) */
+}
+
+.details-section {
+    padding: 300px;
+    width: 100%;
+    margin: 0 auto; /* Center the content horizontally */
 }
 
 
