@@ -41,4 +41,6 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<UserRoleEntity> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sellerEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<OfferEntity> offers = new ArrayList<>();
 }

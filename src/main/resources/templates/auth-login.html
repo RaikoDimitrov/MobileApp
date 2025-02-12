@@ -14,7 +14,7 @@
 
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'login'})}"></div>
 
-<div class="container" style="max-width: 600px;">
+<div class="container" style="max-width: 600px; margin-top: 150px;">
     <h2 class="text-center text-white">Login</h2>
     <form th:method="post"
           th:action="@{/users/login}"
