@@ -35,7 +35,7 @@ public class DBInit implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         brandService.populateBrands();
-        modelService.initializeModels();
+        modelService.populateModels();
         userService.initializeUsers();
 
     }

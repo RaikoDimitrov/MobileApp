@@ -17,4 +17,7 @@ public interface ModelRepository extends JpaRepository<ModelEntity, Long> {
 
     @Query("SELECT m.name FROM ModelEntity m WHERE m.brandEntity.name = :brandName")
     List<String> findByBrandEntity_Name(@Param("brandName")String brandName);
+
+    boolean existsByBrandEntityAndName(BrandEntity brandEntity, String name);
+
 }

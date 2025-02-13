@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import spring.app.Mobile.model.enums.ChassisTypeEnum;
+import spring.app.Mobile.model.enums.EngineTypeEnum;
+import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
 @Entity
@@ -18,18 +21,15 @@ public class ModelEntity extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private VehicleTypeEnum category;
-
     @Column
     private String imageUrl;
 
-    @Column(nullable = false)
     private Integer startYear;
+
     private Integer endYear;
 
     @ManyToOne
+    @JoinColumn(name = "brand_entity_id", nullable = false)
     private BrandEntity brandEntity;
 
 }

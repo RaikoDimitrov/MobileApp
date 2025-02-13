@@ -11,16 +11,14 @@ import org.springframework.web.client.RestClient;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
-import spring.app.Mobile.model.entity.BrandEntity;
-import spring.app.Mobile.model.entity.ModelEntity;
-import spring.app.Mobile.model.entity.OfferEntity;
-import spring.app.Mobile.model.entity.UserEntity;
+import spring.app.Mobile.model.entity.*;
 import spring.app.Mobile.repository.BrandRepository;
 import spring.app.Mobile.repository.ModelRepository;
 import spring.app.Mobile.repository.OfferRepository;
 import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.service.interfaces.OfferService;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -100,12 +98,9 @@ public class OfferServiceImpl implements OfferService {
     private OfferEntity map(OfferAddDTO offerAddDTO) {
         String username = getLoggedUsername();
         UserEntity seller = userRepository.findByUsername(username);
-        BrandEntity brandEntity = brandRepository.findByName(offerAddDTO.getBrandName())
-                .orElseGet(() -> {
-                    BrandEntity newBrand = new BrandEntity();
-                    newBrand.setName(offerAddDTO.getBrandName());
-                    return brandRepository.save(newBrand);
-                });
+        BrandEntity brandEntity = brandRepository.findByName(offerAddDTO.getBrandName());
+        brandEntity.setName(offerAddDTO.getBrandName());
+        brandRepository.save(brandEntity);
         ModelEntity modelEntity = modelRepository.findByName(offerAddDTO.getModelName())
                 .stream()
                 .filter(model -> model.getBrandEntity().getName().equals(offerAddDTO.getBrandName()))
@@ -119,6 +114,7 @@ public class OfferServiceImpl implements OfferService {
         mappedOfferEntity.setSellerEntity(seller);
         mappedOfferEntity.setBrandEntity(brandEntity);
         mappedOfferEntity.setModelEntity(modelEntity);
+        setCurrentTimeStamps(mappedOfferEntity);
         return mappedOfferEntity;
     }
 
@@ -128,5 +124,10 @@ public class OfferServiceImpl implements OfferService {
             return user.getUsername();
         }
         throw new UsernameNotFoundException("No logged-in user found.");
+    }
+
+    private void setCurrentTimeStamps(BaseEntity baseEntity) {
+        baseEntity.setCreated(Instant.now());
+        baseEntity.setUpdated(Instant.now());
     }
 }
