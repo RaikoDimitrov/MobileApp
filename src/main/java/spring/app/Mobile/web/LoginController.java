@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,21 +30,21 @@ public class LoginController {
         return "auth-login";
     }
 
-    @GetMapping("/")
-    public String successfulLogin(Model model, HttpServletRequest request) {
-        //todo: fix message for error and success to pop up with redirectattr
-        String successMessage = (String) request.getSession().getAttribute("successMessage");
-
-        if (successMessage != null) {
-            model.addAttribute("successMessage", successMessage);
-            request.getSession().removeAttribute("successMessage");
-        }
-        return "index";
+    @GetMapping("/login-success")
+    public String handleSuccessfulLogin(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("successMessage", "Logged in successfully!");
+        return "redirect:/";
     }
 
     @GetMapping("/login-error")
-    public String showLoginErrorPage(RedirectAttributes rAtt) {
-        rAtt.addFlashAttribute("error", "Invalid username or password!");
+    public String showLoginErrorPage(HttpServletRequest request, Model model) {
+        Exception exception = (Exception) request.getSession().getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
+        if (exception instanceof BadCredentialsException) {
+            model.addAttribute("error", "Invalid username or password!");
+        } else if (exception != null) {
+            model.addAttribute("error", exception.getMessage());
+        }
+        request.getSession().removeAttribute("SPRING_SECURITY_LAST_EXCEPTION");
         return "auth-login";
     }
 

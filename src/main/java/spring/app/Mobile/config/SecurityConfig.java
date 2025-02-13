@@ -1,5 +1,6 @@
 package spring.app.Mobile.config;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -9,13 +10,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 import spring.app.Mobile.model.enums.UserRoleEnum;
 import spring.app.Mobile.service.impl.UserMobileDetailsServiceImpl;
@@ -74,8 +73,7 @@ public class SecurityConfig {
                                                 Authentication authentication) throws IOException {
                 System.out.println("Authenticated user from handler: " + authentication.getName());
                 userMobileDetailsService.handlePostLogin(authentication);
-                request.getSession().setAttribute("successMessage", "Logged in successfully!");
-                response.sendRedirect("/");
+                response.sendRedirect("/users/login-success");
             }
         };
     }
