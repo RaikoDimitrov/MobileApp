@@ -5,15 +5,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
+import spring.app.Mobile.model.enums.UserRoleEnum;
 import spring.app.Mobile.service.impl.UserMobileDetailsServiceImpl;
 
 import java.io.IOException;
@@ -38,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/favicon.ico", "/", "/users/login", "/logout", "/users/register",
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
                                 .requestMatchers("/offers/add").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/offers/**").hasAuthority(UserRoleEnum.ADMIN.toString())
                                 .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(((request, response, authException) ->
                         response.sendRedirect("/users/login"))))
@@ -64,9 +69,12 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler authenticationSuccessHandler(UserMobileDetailsServiceImpl userMobileDetailsService) {
         return new AuthenticationSuccessHandler() {
             @Override
-            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+            public void onAuthenticationSuccess(HttpServletRequest request,
+                                                HttpServletResponse response,
+                                                Authentication authentication) throws IOException {
                 System.out.println("Authenticated user from handler: " + authentication.getName());
                 userMobileDetailsService.handlePostLogin(authentication);
+                request.getSession().setAttribute("successMessage", "Logged in successfully!");
                 response.sendRedirect("/");
             }
         };

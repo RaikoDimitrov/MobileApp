@@ -80,7 +80,13 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public void deleteOffer(Long offerId) {
+        System.out.println("delete method is called with id: " + offerId);
+        offerRepository.deleteById(offerId);
+    }
 
+    @Override
+    public OfferDetailsDTO updateOffer(Long offerId) {
+        return null;
     }
 
     @Override

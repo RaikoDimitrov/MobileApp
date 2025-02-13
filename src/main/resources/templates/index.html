@@ -18,6 +18,9 @@
 
 
 <div class="container-fluid welcome-message">
+    <div th:if="${successMessage}" class="alert-success">
+        <span th:text="${successMessage}"></span>
+    </div>
     <h5 class="text-center text-white mt-5">Welcome to Mobile,
         <th:block th:text="${welcomeMessage}"></th:block>!
     </h5>

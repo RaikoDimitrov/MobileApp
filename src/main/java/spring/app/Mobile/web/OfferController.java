@@ -1,6 +1,7 @@
 package spring.app.Mobile.web;
 
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -88,7 +89,7 @@ public class OfferController {
         return "redirect:/offers/all";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String detailsOffer(@PathVariable Long id, Model model, Principal principal) {
         OfferDetailsDTO offerDetails = offerService.getOfferDetails(id);
         Instant createdInstant = offerDetails.getCreated();
@@ -104,5 +105,12 @@ public class OfferController {
         model.addAttribute("username", username);
         model.addAttribute("offerDetails", offerDetails);
         return "details";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteOffer(@PathVariable Long id, RedirectAttributes rAtt) {
+        offerService.deleteOffer(id);
+        rAtt.addFlashAttribute("successMessage", "Offer deleted successfully!");
+        return "redirect:/offers/all";
     }
 }

@@ -37,9 +37,9 @@
                    placeholder="Password"/>
         </div>
 
-        <p class="errors alert alert-danger" th:if="${error}">
+        <div th:if="${error}" class="alert alert-error">
             <span th:text="${error}"></span>
-        </p>
+        </div>
 
         <div class="row justify-content-center">
             <div class="col col-md-4 ">

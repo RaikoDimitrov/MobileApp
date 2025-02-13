@@ -54,15 +54,17 @@
             <div class="card-body d-flex justify-content-between">
                 <a th:if="${offerDetails.sellerUsername == username}"
                    class="btn btn-primary btn-md d-inline-flex align-items-center px-3"
-                   th:href="@{/offers/delete/{id}(id=${offerDetails.id})}" role="button">
+                   th:href="@{/offers/update/{id}(id=${offerDetails.id})}" role="button">
                     <i class="fas fa-edit me-6"></i> Update
                 </a>
 
                 <form
-                        th:if="${offerDetails.sellerUsername == username}"
-                        th:method="delete"
-                        th:action="@{/offers/delete/{id}(id=${offerDetails.id})}"
+                        th:if="${offerDetails.sellerUsername == username} or ${#authentication?.authorities?.contains('ADMIN')}"
+                        th:method="POST"
+                        th:action="@{/offers/{id}(id=${offerDetails.id})}"
                         class="d-inline-block">
+                    <!-- hidden method for delete -->
+                    <input type="hidden" th:name="_method" th:value="DELETE">
                     <button type="submit" class="btn btn-danger btn-md d-inline-flex align-items-center px-3">
                         <i class="fas fa-trash me-6"></i> Delete
                     </button>
