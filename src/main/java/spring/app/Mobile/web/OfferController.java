@@ -17,6 +17,9 @@ import spring.app.Mobile.service.interfaces.ModelService;
 import spring.app.Mobile.service.interfaces.OfferService;
 
 import java.security.Principal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -86,8 +89,19 @@ public class OfferController {
     }
 
     @GetMapping("{id}")
-    public String detailsOffer(@PathVariable Long id, Model model) {
+    public String detailsOffer(@PathVariable Long id, Model model, Principal principal) {
         OfferDetailsDTO offerDetails = offerService.getOfferDetails(id);
+        Instant createdInstant = offerDetails.getCreated();
+        Instant updatedInstant = offerDetails.getUpdated();
+        LocalDateTime created = LocalDateTime.ofInstant(createdInstant, ZoneId.systemDefault());
+        LocalDateTime updated = LocalDateTime.ofInstant(updatedInstant, ZoneId.systemDefault());
+        String username = null;
+        if (principal != null) {
+            username = principal.getName();
+        }
+        model.addAttribute("created", created);
+        model.addAttribute("updated", updated);
+        model.addAttribute("username", username);
         model.addAttribute("offerDetails", offerDetails);
         return "details";
     }

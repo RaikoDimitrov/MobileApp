@@ -15,13 +15,26 @@ Aston Martin: DBX
 Aston Martin: Rapide
 Audi: A3
 Audi: A4
+Audi: A5
 Audi: A6
+Audi: A7
 Audi: A8
+Audi: S3
+Audi: S4
+Audi: S5
+Audi: S6
+Audi: S7
+Audi: S8
+Audi: RS3
+Audi: RS5
+Audi: RS6
+Audi: RS7
 Audi: Q3
 Audi: Q5
 Audi: Q7
 Audi: Q8
-Audi: e-tron
+Audi: Q8RS
+Audi: E-Tron
 Audi: R8
 Audi: TT
 Bentley: Bentayga
@@ -29,17 +42,26 @@ Bentley: Continental GT
 Bentley: Flying Spur
 Bentley: Mulsanne
 BMW: 1 Series
+BMW: 2 Series
 BMW: 3 Series
+BMW: 4 Series
 BMW: 5 Series
+BMW: 6 Series
 BMW: 7 Series
 BMW: X1
 BMW: X3
+BMW: X4
 BMW: X5
+BMW: X6
 BMW: X7
 BMW: i3
 BMW: i8
+BMW: M2
 BMW: M3
+BMW: M4
 BMW: M5
+BMW: M6
+BMW: M8
 Bugatti: Chiron
 Bugatti: Veyron
 Bugatti: Divo
@@ -76,9 +98,13 @@ Dodge: Durango
 Dodge: Hornet
 Ferrari: Roma
 Ferrari: Portofino
+Ferrari: 458 Stradale
 Ferrari: 488 Pista
 Ferrari: SF90 Stradale
 Ferrari: 812 Superfast
+Ferrari: F12
+Ferrari: F8
+Ferrari: Purosangue
 Ferrari: LaFerrari
 Fiat: 500
 Fiat: Panda
@@ -129,6 +155,7 @@ Jeep: Cherokee
 Jeep: Compass
 Jeep: Renegade
 Jeep: Gladiator
+Kia: Carens
 Kia: Soul
 Kia: Forte
 Kia: Seltos
@@ -143,6 +170,7 @@ Lada: Vesta
 Lamborghini: Aventador
 Lamborghini: Huracán
 Lamborghini: Urus
+Lamborghini: Murcielago
 Lamborghini: Revuelto
 Lancia: Ypsilon
 Lancia: Delta
@@ -181,15 +209,63 @@ McLaren: 765LT
 McLaren: Artura
 McLaren: Senna
 Mercedes-Benz: A-Class
+Mercedes-Benz: A45 AMG
+Mercedes-Benz: B-Class
 Mercedes-Benz: C-Class
+Mercedes-Benz: C 320
+Mercedes-Benz: C43 AMG
+Mercedes-Benz: C53 AMG
+Mercedes-Benz: C63 AMG
+Mercedes-Benz: CL
+Mercedes-Benz: CLA
+Mercedes-Benz: CLA35
+Mercedes-Benz: CLA45 AMG
+Mercedes-Benz: CLE
+Mercedes-Benz: CLE53 AMG
 Mercedes-Benz: E-Class
-Mercedes-Benz: S-Class
+Mercedes-Benz: E 320
+Mercedes-Benz: E 500
+Mercedes-Benz: E43 AMG
+Mercedes-Benz: E53 AMG
+Mercedes-Benz: E63 AMG
+Mercedes-Benz: G-Class
+Mercedes-Benz: G 550
+Mercedes-Benz: G63 AMG
 Mercedes-Benz: GLA
+Mercedes-Benz: GLA35
+Mercedes-Benz: GLA45
+Mercedes-Benz: GLB
+Mercedes-Benz: GLB35
 Mercedes-Benz: GLC
+Mercedes-Benz: GLC43 AMG
+Mercedes-Benz: GLC63 AMG
 Mercedes-Benz: GLE
+Mercedes-Benz: GLE43 AMG
+Mercedes-Benz: GLE53 AMG
+Mercedes-Benz: GLE63 AMG
 Mercedes-Benz: GLS
-Mercedes-Benz: EQC
+Mercedes-Benz: GLS63 AMG
+Mercedes-Benz: S-Class
+Mercedes-Benz: S 320
+Mercedes-Benz: S 500
+Mercedes-Benz: S43 AMG
+Mercedes-Benz: S53 AMG
+Mercedes-Benz: S63 AMG
+Mercedes-Benz: T-Class
+Mercedes-Benz: V-Class
 Mercedes-Benz: AMG GT
+Mercedes-Benz: AMG GT 4-Door
+Mercedes-Benz: AMG GT43 AMG
+Mercedes-Benz: AMG GT53 AMG
+Mercedes-Benz: AMG GT63 AMG
+Mercedes-Benz: AMG SL
+Mercedes-Benz: EQA
+Mercedes-Benz: EQB
+Mercedes-Benz: EQC
+Mercedes-Benz: EQE
+Mercedes-Benz: EQS
+Mercedes-Benz: EQT
+Mercedes-Benz: EQ
 Mini: Cooper
 Mini: Countryman
 Mini: Clubman

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
 </head>
@@ -21,7 +22,7 @@
          class="offers row mx-auto d-flex flex-row justify-content-center details-section">
 
         <!-- Card with offer details -->
-        <div class="offer card col-sm-2 col-md-3 col-lg-4 m-1 p-0">
+        <div class="offer card col-12 col-sm-5 col-md-4 col-lg-5 m-1 p-0">
             <div class="card-body pb-1">
                 <h5 class="card-title">
                     <!-- Use properties from DTO -->
@@ -34,30 +35,43 @@
             <ul class="offer-details list-group list-group-flush">
                 <li class="list-group-item">
                     <!-- Bind properties to display them -->
-                    <div class="card-text">• Mileage: <span th:text="*{mileage}">Mileage</span></div>
-                    <div class="card-text">• Price: <span th:text="*{price}">Price</span></div>
-                    <div class="card-text">• Engine Type: <span th:text="*{engineType}">Engine type</span></div>
-                    <div class="card-text">• Transmission Type: <span th:text="*{transmissionType}">Transmission type</span></div>
-                    <div class="card-text">• Vehicle Type: <span th:text="*{vehicleType}">Vehicle type</span></div>
-                    <div class="card-text">• Chassis Type: <span th:text="*{chassisType}">Chassis type</span></div>
-                    <div class="card-text">• Horse Power: <span th:text="*{horsePower}">Horse Power</span></div>
-                    <div class="card-text">• Seller: <span th:text="*{sellerUsername}">Seller Username</span></div>
+                    <div class="card-text">➤ Mileage: <span th:text="*{mileage} + ' km'">Mileage</span></div>
+                    <div class="card-text">➤ Price: <span th:text="*{price} + ' BGN'">Price</span></div>
+                    <div class="card-text">➤ Engine Type: <span th:text="*{engineType}">Engine type</span></div>
+                    <div class="card-text">➤ Transmission Type: <span
+                            th:text="*{transmissionType}">Transmission type</span></div>
+                    <div class="card-text">➤ Vehicle Type: <span th:text="*{vehicleType}">Vehicle type</span></div>
+                    <div class="card-text">➤ Chassis Type: <span th:text="*{chassisType}">Chassis type</span></div>
+                    <div class="card-text">➤ Horse Power: <span th:text="*{horsePower}">Horse Power</span></div>
+                    <div class="card-text">➤ Seller: <span th:text="*{sellerUsername}">Seller Username</span></div>
+                    <div class="card-text">➤ Created: <span th:text="${#temporals.format(created, 'yyyy-MM-dd HH:mm')}">Offer created</span>
+                    </div>
+                    <div class="card-text">➤ Last updated: <span
+                            th:text="${#temporals.format(updated, 'yyyy-MM-dd HH:mm')}">Offer updated</span></div>
                 </li>
             </ul>
 
-            <input type="hidden" id="priceInBGN" th:value="*{price}">
+            <div class="card-body d-flex justify-content-between">
+                <a th:if="${offerDetails.sellerUsername == username}"
+                   class="btn btn-primary btn-md d-inline-flex align-items-center px-3"
+                   th:href="@{/offers/delete/{id}(id=${offerDetails.id})}" role="button">
+                    <i class="fas fa-edit me-6"></i> Update
+                </a>
 
-            <div class="card-body">
-                <a class="card-link" href="/">Update</a>
-                <form th:method="delete"
-                      th:action="@{/offers/{id}(id=*{id})}">
-                    <input class="btn btn-link" type="submit" value="Delete"/>
+                <form
+                        th:if="${offerDetails.sellerUsername == username}"
+                        th:method="delete"
+                        th:action="@{/offers/delete/{id}(id=${offerDetails.id})}"
+                        class="d-inline-block">
+                    <button type="submit" class="btn btn-danger btn-md d-inline-flex align-items-center px-3">
+                        <i class="fas fa-trash me-6"></i> Delete
+                    </button>
                 </form>
             </div>
         </div>
 
         <!-- Image card -->
-        <div class="offer card col-sm-2 col-md-3 col-lg-4 m-1 p-0">
+        <div class="offer card col-12 col-sm-6 col-md-5 col-lg-6 m-1 p-0">
             <img th:src="@{*{imageUrl}}" class="card-img-top" alt="Car image">
             <div class="card-body">
                 <!-- Move description below the image -->
