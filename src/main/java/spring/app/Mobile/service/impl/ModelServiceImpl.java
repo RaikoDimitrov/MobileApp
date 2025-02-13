@@ -1,20 +1,18 @@
 package spring.app.Mobile.service.impl;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import spring.app.Mobile.model.entity.BaseEntity;
 import spring.app.Mobile.model.entity.BrandEntity;
 import spring.app.Mobile.model.entity.ModelEntity;
-import spring.app.Mobile.model.enums.VehicleTypeEnum;
 import spring.app.Mobile.repository.BrandRepository;
 import spring.app.Mobile.repository.ModelRepository;
 import spring.app.Mobile.service.interfaces.ModelService;
 
+import java.io.*;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ModelServiceImpl implements ModelService {
@@ -28,51 +26,38 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public List<ModelEntity> initializeModels() {
-        Optional<BrandEntity> brandFord = brandRepository.findByName("Ford");
-        if (brandFord.isEmpty()) {
-            System.out.println("Brand 'Ford' is not found.");
-            return Collections.emptyList();
-        }
-        if (modelRepository.countByBrandEntity(brandFord.get()) > 0) {
-            System.out.println("Models for Ford already exist in DB.");
-            return Collections.emptyList();
-        }
-
-        List<ModelEntity> models = new ArrayList<>();
-            models.add(ModelEntity
-                    .builder()
-                    .category(VehicleTypeEnum.CAR)
-                    .name("Fiesta").startYear(1976)
-                    .brandEntity(brandFord.get())
-                    .imageUrl("https://upload.wikimedia.org/wikipedia/commons/7/7d/2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg")
-                    .build());
-            models.add(ModelEntity
-                    .builder()
-                    .category(VehicleTypeEnum.CAR)
-                    .name("Mustang").startYear(1964)
-                    .brandEntity(brandFord.get())
-                    .imageUrl("https://upload.wikimedia.org/wikipedia/commons/4/47/00_1812_Ford_Mustang_1969.jpg")
-                    .build());
-            models.add(ModelEntity
-                    .builder()
-                    .category(VehicleTypeEnum.TRUCK)
-                    .name("Raptor").startYear(2010)
-                    .brandEntity(brandFord.get())
-                    .imageUrl("https://upload.wikimedia.org/wikipedia/commons/e/ee/Ford_F-150_SVT_Raptor_2011_%2815245966030%29.jpg")
-                    .build());
-
-        models.forEach(this::setCurrentTimeStamps);
-        return modelRepository.saveAll(models);
-    }
-
-    @Override
     public List<String> getModelsByBrandName(String brandName) {
         return modelRepository.findByBrandEntity_Name(brandName);
     }
 
-    private void setCurrentTimeStamps(BaseEntity baseEntity) {
-        baseEntity.setCreated(Instant.now());
-        baseEntity.setUpdated(Instant.now());
+    @Override
+    public void populateModels() {
+        List<String> modelsData = loadModelsFromFile("models.txt");
+        for (String line : modelsData) {
+            String[] parts = line.split(": ");
+            String brandName = parts[0];
+            String modelName = parts[1];
+            BrandEntity brandEntity = brandRepository.findByName(brandName);
+            if (!modelRepository.existsByBrandEntityAndName(brandEntity, modelName)) {
+                ModelEntity model = new ModelEntity();
+                model.setBrandEntity(brandEntity);
+                model.setName(modelName);
+                modelRepository.save(model);
+            }
+        }
     }
+
+    private List<String> loadModelsFromFile(String fileName) {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource(fileName).getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
+
 }

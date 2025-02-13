@@ -9,6 +9,7 @@ import spring.app.Mobile.service.interfaces.BrandService;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +44,6 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public List<String> getAllBrands() {
-
         return brandRepository.findAll()
                 .stream()
                 .map(BrandEntity::getName)
@@ -57,7 +57,6 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void populateBrands() {
-
         List<String> brandNames = loadBrandNamesFromFile("brands.txt");
         for (String brandName : brandNames) {
             if (!brandRepository.existsByName(brandName)) {
@@ -68,8 +67,4 @@ public class BrandServiceImpl implements BrandService {
         }
     }
 
-    private void setCurrentTimeStamps(BaseEntity baseEntity) {
-        baseEntity.setCreated(Instant.now());
-        baseEntity.setUpdated(Instant.now());
-    }
 }

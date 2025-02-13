@@ -1,0 +1,291 @@
+Acura: ILX
+Acura: RDX
+Acura: MDX
+Acura: NSX
+Acura: Integra
+Alfa Romeo: Giulia
+Alfa Romeo: Stelvio
+Alfa Romeo: Tonale
+Alfa Romeo: 4C
+Alfa Romeo: 8C Competizione
+Aston Martin: DB11
+Aston Martin: Vantage
+Aston Martin: DBS Superleggera
+Aston Martin: DBX
+Aston Martin: Rapide
+Audi: A3
+Audi: A4
+Audi: A6
+Audi: A8
+Audi: Q3
+Audi: Q5
+Audi: Q7
+Audi: Q8
+Audi: e-tron
+Audi: R8
+Audi: TT
+Bentley: Bentayga
+Bentley: Continental GT
+Bentley: Flying Spur
+Bentley: Mulsanne
+BMW: 1 Series
+BMW: 3 Series
+BMW: 5 Series
+BMW: 7 Series
+BMW: X1
+BMW: X3
+BMW: X5
+BMW: X7
+BMW: i3
+BMW: i8
+BMW: M3
+BMW: M5
+Bugatti: Chiron
+Bugatti: Veyron
+Bugatti: Divo
+Bugatti: Centodieci
+Cadillac: Escalade
+Cadillac: XT4
+Cadillac: XT5
+Cadillac: XT6
+Cadillac: CT4
+Cadillac: CT5
+Chevrolet: Malibu
+Chevrolet: Impala
+Chevrolet: Camaro
+Chevrolet: Corvette
+Chevrolet: Equinox
+Chevrolet: Blazer
+Chevrolet: Tahoe
+Chevrolet: Suburban
+Chrysler: 300
+Chrysler: Pacifica
+Chrysler: Voyager
+Citroën: C3
+Citroën: C4
+Citroën: C5 Aircross
+Citroën: Berlingo
+Citroën: Cactus
+Dacia: Duster
+Dacia: Sandero
+Dacia: Logan
+Dacia: Jogger
+Dodge: Charger
+Dodge: Challenger
+Dodge: Durango
+Dodge: Hornet
+Ferrari: Roma
+Ferrari: Portofino
+Ferrari: 488 Pista
+Ferrari: SF90 Stradale
+Ferrari: 812 Superfast
+Ferrari: LaFerrari
+Fiat: 500
+Fiat: Panda
+Fiat: Tipo
+Fiat: 124 Spider
+Fiat: 500X
+Ford: F-150
+Ford: Explorer
+Ford: Escape
+Ford: Mustang
+Ford: Bronco
+Ford: Edge
+Ford: Maverick
+Ford: Ranger
+Honda: Civic
+Honda: Accord
+Honda: CR-V
+Honda: HR-V
+Honda: Pilot
+Honda: Ridgeline
+Honda: Odyssey
+Hummer: EV Pickup
+Hummer: EV SUV
+Hyundai: Elantra
+Hyundai: Sonata
+Hyundai: Tucson
+Hyundai: Santa Fe
+Hyundai: Palisade
+Hyundai: Kona
+Hyundai: Ioniq
+Infiniti: Q50
+Infiniti: Q60
+Infiniti: QX50
+Infiniti: QX60
+Infiniti: QX80
+Iveco: Daily
+Iveco: Eurocargo
+Iveco: Stralis
+Jaguar: F-Type
+Jaguar: F-Pace
+Jaguar: E-Pace
+Jaguar: XE
+Jaguar: XF
+Jaguar: I-Pace
+Jeep: Wrangler
+Jeep: Grand Cherokee
+Jeep: Cherokee
+Jeep: Compass
+Jeep: Renegade
+Jeep: Gladiator
+Kia: Soul
+Kia: Forte
+Kia: Seltos
+Kia: Sportage
+Kia: Sorento
+Kia: Telluride
+Kia: Stinger
+KTM: X-Bow
+Lada: Niva
+Lada: Granta
+Lada: Vesta
+Lamborghini: Aventador
+Lamborghini: Huracán
+Lamborghini: Urus
+Lamborghini: Revuelto
+Lancia: Ypsilon
+Lancia: Delta
+Land Rover: Range Rover
+Land Rover: Range Rover Sport
+Land Rover: Range Rover Evoque
+Land Rover: Discovery
+Land Rover: Defender
+Lexus: IS
+Lexus: ES
+Lexus: GS
+Lexus: LS
+Lexus: RX
+Lexus: NX
+Lexus: UX
+Lexus: LC
+Lotus: Evora
+Lotus: Elise
+Lotus: Exige
+Lotus: Emira
+Lotus: Eletre
+Maserati: Ghibli
+Maserati: Quattroporte
+Maserati: Levante
+Maserati: MC20
+Maserati: GranTurismo
+Mazda: Mazda3
+Mazda: Mazda6
+Mazda: CX-3
+Mazda: CX-5
+Mazda: CX-9
+Mazda: MX-5 Miata
+McLaren: 570S
+McLaren: 720S
+McLaren: 765LT
+McLaren: Artura
+McLaren: Senna
+Mercedes-Benz: A-Class
+Mercedes-Benz: C-Class
+Mercedes-Benz: E-Class
+Mercedes-Benz: S-Class
+Mercedes-Benz: GLA
+Mercedes-Benz: GLC
+Mercedes-Benz: GLE
+Mercedes-Benz: GLS
+Mercedes-Benz: EQC
+Mercedes-Benz: AMG GT
+Mini: Cooper
+Mini: Countryman
+Mini: Clubman
+Mini: Electric
+Mitsubishi: Outlander
+Mitsubishi: Eclipse Cross
+Mitsubishi: ASX
+Mitsubishi: Mirage
+Mitsubishi: Pajero
+Nissan: Altima
+Nissan: Maxima
+Nissan: Sentra
+Nissan: Rogue
+Nissan: Murano
+Nissan: Pathfinder
+Nissan: GT-R
+Nissan: Leaf
+Opel: Corsa
+Opel: Astra
+Opel: Mokka
+Opel: Insignia
+Opel: Grandland
+Peugeot: 208
+Peugeot: 308
+Peugeot: 508
+Peugeot: 2008
+Peugeot: 3008
+Peugeot: 5008
+Porsche: 911
+Porsche: Cayenne
+Porsche: Macan
+Porsche: Panamera
+Porsche: Taycan
+Porsche: Boxster
+Porsche: Cayman
+Renault: Clio
+Renault: Captur
+Renault: Mégane
+Renault: Kadjar
+Renault: Scénic
+Renault: Duster
+Rolls-Royce: Phantom
+Rolls-Royce: Ghost
+Rolls-Royce: Wraith
+Rolls-Royce: Cullinan
+Rolls-Royce: Dawn
+Seat: Ibiza
+Seat: Leon
+Seat: Arona
+Seat: Ateca
+Seat: Tarraco
+Skoda: Octavia
+Skoda: Superb
+Skoda: Karoq
+Skoda: Kodiaq
+Skoda: Scala
+Skoda: Fabia
+Smart: Fortwo
+Smart: Forfour
+Smart: EQ Fortwo
+Subaru: Impreza
+Subaru: Legacy
+Subaru: Outback
+Subaru: Forester
+Subaru: Crosstrek
+Subaru: WRX
+Suzuki: Swift
+Suzuki: Vitara
+Suzuki: Jimny
+Suzuki: Baleno
+Suzuki: Ignis
+Tesla: Model S
+Tesla: Model 3
+Tesla: Model X
+Tesla: Model Y
+Tesla: Cybertruck
+Toyota: Camry
+Toyota: Corolla
+Toyota: Prius
+Toyota: RAV4
+Toyota: Highlander
+Toyota: Tacoma
+Toyota: Tundra
+Toyota: Land Cruiser
+Toyota: GR86
+Toyota: Supra
+Volkswagen: Golf
+Volkswagen: Jetta
+Volkswagen: Passat
+Volkswagen: Tiguan
+Volkswagen: Atlas
+Volkswagen: Polo
+Volvo: S60
+Volvo: S90
+Volvo: XC40
+Volvo: XC60
+Volvo: XC90
+Volvo: V60
+Volvo: V90
