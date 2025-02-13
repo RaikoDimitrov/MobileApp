@@ -3,6 +3,8 @@ package spring.app.Mobile.model.dto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Instant;
+
 @SuperBuilder
 @Data
 @NoArgsConstructor
@@ -18,5 +20,6 @@ public abstract class OfferBaseDTO {
     private Integer year;
     private String sellerUsername;
     private String imageUrl;
-
+    private Instant created;
+    private Instant updated;
 }
