@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
@@ -30,6 +31,7 @@ import spring.app.Mobile.service.interfaces.UserService;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,6 +102,7 @@ public class UserServiceImpl implements UserService {
                     .lastName("Dimitrov")
                     .username("freddy")
                     .email("freddy98@abv.bg")
+                            .roles(new ArrayList<>(List.of(UserRoleEntity.builder().role(UserRoleEnum.ADMIN).build())))
                     .password(passwordEncoder.encode("123123"))
                     .build());
             users.add(UserEntity.builder()
