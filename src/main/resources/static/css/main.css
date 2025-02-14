@@ -6,15 +6,54 @@ body {
     background-size: cover;
     background-color: #464646;
     display: flex;
-    min-height: 100vh; /* Full height of the viewport */
-    margin: 0; /* Remove default margin */
+    min-height: 100vh;
+    margin: 0;
     flex-direction: column;
     overflow-y: auto;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3); /* Darkens the image */
+    z-index: -1; /* Ensures the overlay stays behind the content */
 }
 
 .navbar .logo {
     max-height: 50px;
     padding-right: 100px;
+}
+/* Make the navbar background transparent */
+.navbar {
+    background-color: transparent !important; /* Ensure the navbar is transparent */
+    box-shadow: none; /* Remove any shadow */
+}
+
+/* Change navbar item color to white or another color */
+.navbar .nav-link {
+    color: white !important; /* Ensures text is visible */
+}
+
+/* Change the hover color of navbar items */
+.navbar .nav-link:hover {
+    color: #ddd !important; /* Slightly light color on hover */
+    transform: scale(1.1); /* Zoom in effect */
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Optional: When the navbar is collapsed, adjust the color of items */
+.navbar .navbar-toggler-icon {
+    background-color: white; /* Change hamburger icon color */
+}
+
+/* Optional: Style the active link (highlight) */
+.navbar .nav-link.active {
+    color: #ffd700 !important; /* Highlight active link with gold */
 }
 
 .container, .container-fluid {
@@ -190,5 +229,23 @@ form.main-form {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+    /* Make dropdown menu fully transparent */
+    .dropdown-menu {
+        background-color: transparent !important;
+        border: none; /* Remove the border */
+        box-shadow: none; /* Remove shadow */
+    }
+
+    /* Dropdown items: Only show text, make transparent backgrounds */
+    .dropdown-item {
+        background-color: transparent;
+        color: #ffffff; /* You can adjust the text color */
+    }
+
+    /* Change the hover color of items (optional) */
+    .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Slight transparency on hover */
+        color: #ffffff; /* Keeps the text color consistent */
+    }
 
 
