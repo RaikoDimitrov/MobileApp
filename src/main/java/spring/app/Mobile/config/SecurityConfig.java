@@ -1,6 +1,5 @@
 package spring.app.Mobile.config;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -38,7 +37,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/favicon.ico", "/", "/users/login", "/logout", "/users/register",
+                                .requestMatchers("/static/favicon.png", "/", "/users/login", "/logout", "/users/register",
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
                                 .requestMatchers("/offers/add").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/offers/**").hasAuthority(UserRoleEnum.ADMIN.toString())

@@ -14,7 +14,7 @@ public interface OfferService {
 
     void deleteOffer(Long offerId);
 
-    OfferDetailsDTO updateOffer(Long offerId);
+    void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO);
 
     OfferDetailsDTO getOfferDetails(Long id);
 

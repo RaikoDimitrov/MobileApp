@@ -1,6 +1,8 @@
 package spring.app.Mobile.web;
 
+import jakarta.validation.Path;
 import jakarta.validation.Valid;
+import org.apache.kafka.common.network.Mode;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -112,5 +114,23 @@ public class OfferController {
         offerService.deleteOffer(id);
         rAtt.addFlashAttribute("successMessage", "Offer deleted successfully!");
         return "redirect:/offers/all";
+    }
+
+    @GetMapping("/update/{id}")
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        OfferDetailsDTO offerUpdate = offerService.getOfferDetails(id);
+        model.addAttribute("offerUpdate", offerUpdate);
+        model.addAttribute("brands", brandService.getAllBrands());
+        model.addAttribute("models", modelService.getModelsByBrandName(offerUpdate.getBrandName()));
+        return "update";
+    }
+
+    @PatchMapping("/update/{id}")
+    public String updateOffer(@PathVariable Long id,
+                              @ModelAttribute OfferDetailsDTO offerDetailsDTO,
+                              RedirectAttributes rAtt) {
+        offerService.updateOffer(id, offerDetailsDTO);
+        rAtt.addFlashAttribute("successMessage", "Changes saved!");
+        return "redirect:/offers/{id}";
     }
 }
