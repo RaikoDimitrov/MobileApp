@@ -1,5 +1,6 @@
 package spring.app.Mobile.service.impl;
 
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -85,8 +86,14 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferDetailsDTO updateOffer(Long offerId) {
-        return null;
+    public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO) {
+        OfferEntity offerById = offerRepository.findById(offerId).
+                orElseThrow(() -> new ResourceNotFoundException("Offer not found!"));
+        Instant created = offerById.getCreated();
+        offerDetailsDTO.setUpdated(Instant.now());
+        offerMapper.map(offerDetailsDTO, offerById);
+        offerById.setCreated(created);
+        offerRepository.save(offerById);
     }
 
     @Override

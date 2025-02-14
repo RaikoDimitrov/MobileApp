@@ -20,38 +20,42 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3); /* Darkens the image */
+    background-color: rgba(0, 0, 0, 0.5); /* Darkens the image */
     z-index: -1; /* Ensures the overlay stays behind the content */
 }
 
 .navbar .logo {
+    width: 150px;
+    height: auto;
     max-height: 50px;
     padding-right: 100px;
 }
-/* Make the navbar background transparent */
+
 .navbar {
-    background-color: transparent !important; /* Ensure the navbar is transparent */
-    box-shadow: none; /* Remove any shadow */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent !important;
+    box-shadow: none;
+    z-index: 1000; /* Ensure it's above other content */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Change navbar item color to white or another color */
 .navbar .nav-link {
-    color: white !important; /* Ensures text is visible */
+    color: white !important;
 }
 
-/* Change the hover color of navbar items */
 .navbar .nav-link:hover {
     color: #ddd !important; /* Slightly light color on hover */
     transform: scale(1.1); /* Zoom in effect */
     transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
 
-/* Optional: When the navbar is collapsed, adjust the color of items */
 .navbar .navbar-toggler-icon {
-    background-color: white; /* Change hamburger icon color */
+    background-color: white;
 }
 
-/* Optional: Style the active link (highlight) */
 .navbar .nav-link.active {
     color: #ffd700 !important; /* Highlight active link with gold */
 }
