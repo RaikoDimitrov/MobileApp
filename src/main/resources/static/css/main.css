@@ -100,6 +100,11 @@ body::before {
     font-size: 28px;
 }
 
+.btn-same-height {
+    height: 40px;  /* Set a fixed height for both buttons */
+    line-height: 40px;  /* Center the text vertically */
+}
+
 .offers {
     width: 100%;
     padding-top: 10px;
@@ -129,16 +134,20 @@ body::before {
 /* Hover effect for the offer card */
 .offer:hover {
     background-color: rgba(255, 255, 255, 0.8); /* Slight background on hover */
-    transform: scale(1.1); /* Zoom the card on hover */
+    transform: scale(1.0); /* Zoom the card on hover */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhance shadow to give it a 'pop' effect */
     border-color: #007bff; /* Change border color on hover (you can customize this) */
 }
 
 .details-section {
-    padding: 250px;
+    padding: 200px;
     gap: 30px;
     width: 100%;
     margin: 0 auto; /* Center the content horizontally */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
 }
 
 
