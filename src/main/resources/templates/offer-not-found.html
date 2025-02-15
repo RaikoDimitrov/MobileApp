@@ -3,28 +3,73 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Mobile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offer Not Found</title>
   <link rel="stylesheet" href="/css/reset-css.css"/>
   <link rel="stylesheet" href="/css/bootstrap.min.css"/>
   <link rel="stylesheet" type="text/css" href="/css/main.css"/>
   <script src="/js/jquery-3.5.1.slim.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      background-color: #2c3e50;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e74c3c; /* Red color for error indication */
+    }
+
+    .details-box {
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      margin: 0 auto;
+      width: 600px;
+    }
+
+    a.home-link {
+      color: #1abc9c;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a.home-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
+<div class="container text-center">
+  <h1 class="error-message">Oops! Something Went Wrong</h1>
+  <p>We couldn't find the offer you're looking for.</p>
 
-<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+  <div class="details-box mt-4">
+    <p>Offer with ID <span th:text="${offerId}">[ID Not Found]</span> does not exist or may have been deleted.</p>
+    <p>Possible reasons include:</p>
+    <ul class="text-start">
+      <li>The offer has been removed or is no longer available.</li>
+      <li>The URL is incorrect or outdated.</li>
+      <li>There was an issue loading the page.</li>
+    </ul>
+  </div>
 
-
-<div class="container-fluid">
-  <h5 class="text-center text-white mt-5">Opps! Offer with id <th:block th:text="${offerId}">1</th:block> was not found!</h5>
+  <div class="mt-5">
+    <p>Please navigate to our <a th:href="@{/}" class="home-link">home page</a> or <a href="#" class="home-link">contact us</a> if you need assistance.</p>
+  </div>
 </div>
 
-<div class="text-center text-white mt-5">We are sorry! Please navigate to <a th:href="@{/}">home page</a>...</div>
-
-<div>
-  <footer> </footer>
-</div>
-
+<footer class="text-center mt-5">
+  <p>&copy; 2025 Mobile. All rights reserved.</p>
+</footer>
 </body>
 </html>
