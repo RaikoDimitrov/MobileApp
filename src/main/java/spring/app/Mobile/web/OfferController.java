@@ -92,8 +92,14 @@ public class OfferController {
     }
 
     @GetMapping("/{id}")
-    public String detailsOffer(@PathVariable Long id, Model model, Principal principal) {
+    public String detailsOffer(@PathVariable Long id,
+                               Model model,
+                               Principal principal) {
         OfferDetailsDTO offerDetails = offerService.getOfferDetails(id);
+        if (offerDetails == null || offerDetails.getCreated() == null) {
+            model.addAttribute("offerId", id);
+            return "offer-not-found";
+        }
         Instant createdInstant = offerDetails.getCreated();
         Instant updatedInstant = offerDetails.getUpdated();
         LocalDateTime created = LocalDateTime.ofInstant(createdInstant, ZoneId.systemDefault());
@@ -133,4 +139,5 @@ public class OfferController {
         rAtt.addFlashAttribute("successMessage", "Changes saved!");
         return "redirect:/offers/{id}";
     }
+
 }

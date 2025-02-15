@@ -233,23 +233,40 @@ form.main-form {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-    /* Make dropdown menu fully transparent */
-    .dropdown-menu {
-        background-color: transparent !important;
-        border: none; /* Remove the border */
-        box-shadow: none; /* Remove shadow */
-    }
 
-    /* Dropdown items: Only show text, make transparent backgrounds */
-    .dropdown-item {
-        background-color: transparent;
-        color: #ffffff; /* You can adjust the text color */
-    }
+/* Make dropdown menu fully transparent */
+.dropdown-menu {
+    background-color: transparent !important;
+    border: none; /* Remove the border */
+    box-shadow: none; /* Remove shadow */
+}
 
-    /* Change the hover color of items (optional) */
-    .dropdown-item:hover {
-        background-color: rgba(255, 255, 255, 0.2); /* Slight transparency on hover */
-        color: #ffffff; /* Keeps the text color consistent */
-    }
+/* Dropdown items: Only show text, make transparent backgrounds */
+.dropdown-item {
+    background-color: transparent;
+    color: #ffffff; /* You can adjust the text color */
+}
+
+/* Change the hover color of items (optional) */
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Slight transparency on hover */
+    color: #ffffff; /* Keeps the text color consistent */
+}
+
+footer {
+  position: fixed;      /* Fix the footer at the bottom */
+  bottom: 0;            /* Align it at the bottom of the viewport */
+  width: 100%;          /* Ensure it takes full width */
+  color: white;         /* White text */
+  font-size: 1rem;    /* Increase font size */
+  text-align: center;   /* Center the text */
+  padding: 10px 0;      /* Add some space around the text */
+  border-top: 1px solid rgba(0, 0, 0, 0.2);  /* Light transparent black border */
+  background-color: rgba(0, 0, 0, 0.3);
+
+}
+
+
+
 
 
