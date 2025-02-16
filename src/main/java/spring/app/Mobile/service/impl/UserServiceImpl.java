@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@EnableConfigurationProperties(AppProperties.class)
 public class UserServiceImpl implements UserService {
 
     private final AppProperties appProperties;
@@ -46,15 +48,14 @@ public class UserServiceImpl implements UserService {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final CurrentUser currentUser;
-    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final EmailService emailService;
-
+    private final AuthenticationManager authenticationManager;
+    private final UserMobileDetailsServiceImpl userMobileDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final UserMobileDetailsServiceImpl userMobileDetailsService;
 
     @PostConstruct
     public void resetAutoIncrement() {
@@ -67,22 +68,28 @@ public class UserServiceImpl implements UserService {
                            UserRepository userRepository,
                            UserRoleRepository userRoleRepository,
                            PasswordEncoder passwordEncoder, CurrentUser currentUser,
-                           AuthenticationManager authenticationManager,
                            JwtService jwtService,
                            EmailService emailService,
-                           UserMobileDetailsServiceImpl userMobileDetailsService) {
+                           AuthenticationManager authenticationManager, UserMobileDetailsServiceImpl userMobileDetailsService) {
         this.appProperties = appProperties;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.currentUser = currentUser;
-        this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.emailService = emailService;
+        this.authenticationManager = authenticationManager;
         this.userMobileDetailsService = userMobileDetailsService;
     }
 
+
+    @Override
+    public void registerUser(UserRegistrationDTO userRegistrationDTO) {
+
+        UserEntity userEntity = userRepository.save(map(userRegistrationDTO));
+        sendVerificationEmail(userEntity);
+    }
 
     @Override
     public void authenticateAfterVerification(String email, HttpServletRequest request) {
@@ -94,31 +101,30 @@ public class UserServiceImpl implements UserService {
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        HttpSession session = request.getSession(false);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
-        try {
-            userMobileDetailsService.handlePostLogin(authentication);
-        } catch (IOException e) {
-            throw new RuntimeException("Post-Login failed.");
+        //store security context in the session if needed
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
         }
+
     }
 
-    @Override
-    public void registerUser(UserRegistrationDTO userRegistrationDTO) {
-
-        UserEntity userEntity = userRepository.save(map(userRegistrationDTO));
-
+    private void sendVerificationEmail(UserEntity userEntity) {
+        String subject = "Email verification";
         String verificationToken = jwtService.generateEmailVerificationToken(userEntity.getEmail());
         String verificationLink = appProperties.getBaseUrl() + "/verify-email?token=" + verificationToken;
+        String message = "Click the link below to verify your email:\n" + verificationLink
+                + "\nOr enter the following code manually:\n" + verificationToken;
 
         try {
-            emailService.sendEmail(userEntity.getEmail(), "Email verification", "Verification link: " + verificationLink);
+            emailService.sendEmail(userEntity.getEmail(), subject, message);
         } catch (Exception e) {
             throw new RuntimeException("Failed to send verification email.", e);
         }
     }
 
+    @Transactional
     @Override
     public boolean verifyEmail(String token) {
         if (!jwtService.validateEmailVerificationToken(token)) {
@@ -183,6 +189,7 @@ public class UserServiceImpl implements UserService {
                     .lastName("Dimitrov")
                     .username("freddy")
                     .email("freddy98@abv.bg")
+                    .isVerified(true)
                     .roles(new ArrayList<>(List.of(UserRoleEntity.builder().role(UserRoleEnum.ADMIN).build())))
                     .password(passwordEncoder.encode("123123"))
                     .build());

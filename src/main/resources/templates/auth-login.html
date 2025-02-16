@@ -15,6 +15,11 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'login'})}"></div>
 
 <div class="container" style="max-width: 600px; margin-top: 150px;">
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+
     <h2 class="text-center text-white">Login</h2>
     <form th:method="post"
           th:action="@{/users/login}"

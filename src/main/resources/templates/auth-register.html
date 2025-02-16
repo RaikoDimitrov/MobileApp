@@ -81,7 +81,7 @@
                 <span class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
             </div>
         </div>
-        <p class="errors alert alert-danger" th:if="${error}">
+        <p class="errors alert alert-error" th:if="${error}">
             <span th:text="${error}"></span>
         </p>
 
