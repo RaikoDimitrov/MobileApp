@@ -2,9 +2,12 @@ package spring.app.Mobile.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.service.interfaces.JwtService;
 import spring.app.Mobile.service.interfaces.UserService;
 
@@ -21,17 +24,31 @@ public class UserController {
     }
 
     @GetMapping("/verify-email")
-    public String verifyEmail(@RequestParam("token") String token, HttpServletRequest request) {
+    public String showVerification(@RequestParam(value = "token", required = false) String token,
+                                   Model model) {
+        model.addAttribute("verificationCode", token);
+        return "email-verification";
+    }
 
+    @PostMapping("/verify-email")
+    public String verifyEmail(@RequestParam("verificationCode") String token,
+                              HttpServletRequest request,
+                              RedirectAttributes rAtt) {
+        token = token.trim();
         try {
             boolean isVerified = userService.verifyEmail(token);
             if (isVerified) {
                 String email = jwtService.extractClaims(token).get("email", String.class);
                 userService.authenticateAfterVerification(email, request);
-                return "redirect:/";
-            } else return "invalid-token";
+                rAtt.addFlashAttribute("successMessage", "Email verified successfully!");
+                return "redirect:/users/login";
+            } else {
+                rAtt.addFlashAttribute("error", "Invalid verification code! Please try again.");
+                return "redirect:/users/verify-email";
+            }
         } catch (Exception e) {
-            return "error";
+            rAtt.addFlashAttribute("error", "An error occurred! Please try again.");
+            return "redirect:/users/verify-email";
         }
     }
 

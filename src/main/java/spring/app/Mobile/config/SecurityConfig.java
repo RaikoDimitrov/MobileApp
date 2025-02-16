@@ -37,7 +37,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/static/favicon.png", "/", "/users/login", "/logout", "/users/register",
+                                .requestMatchers("/static/favicon.png", "/users/verify-email", "/", "/users/login", "/logout", "/users/register",
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
                                 .requestMatchers("/offers/add").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/offers/**").hasAuthority(UserRoleEnum.ADMIN.toString())
@@ -70,9 +70,8 @@ public class SecurityConfig {
             public void onAuthenticationSuccess(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 Authentication authentication) throws IOException {
-                System.out.println("Authenticated user from handler: " + authentication.getName());
                 userMobileDetailsService.handlePostLogin(authentication);
-                response.sendRedirect("/users/login-success");
+                response.sendRedirect("/");
             }
         };
     }

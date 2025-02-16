@@ -30,7 +30,7 @@
 
     .details-box {
       padding: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.6);
       border-radius: 10px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       margin: 0 auto;
@@ -49,6 +49,9 @@
   </style>
 </head>
 <body>
+
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+
 <div class="container text-center">
   <h1 class="error-message">Oops! Something Went Wrong</h1>
   <p>We couldn't find the offer you're looking for.</p>

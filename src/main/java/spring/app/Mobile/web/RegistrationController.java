@@ -41,8 +41,7 @@ public class RegistrationController {
         if (result.hasErrors()) return "auth-register";
         userService.registerUser(userDTO);
         rAtt.addFlashAttribute("successMessage", "Registration successful!");
-        //todo: thymeleaf form: Please verify your email: email verification link
-        return "redirect:/";
+        return "redirect:/users/verify-email";
     }
 
 }
