@@ -37,7 +37,7 @@ public class RestConfig {
         return ((request, body, execution) -> {
            userService.getCurrentUser()
                    .ifPresent(user -> {
-                       String bearerToken = jwtService.generateToken(
+                       String bearerToken = jwtService.generateBearerToken(
                                user.getUuid().toString(),
                                Map.of("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                        );

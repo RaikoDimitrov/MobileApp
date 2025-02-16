@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
 import spring.app.Mobile.service.interfaces.UserService;
 
@@ -36,10 +37,11 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("registerDTO") @Valid UserRegistrationDTO userDTO,
                                BindingResult result,
-                               HttpServletRequest request,
-                               HttpServletResponse response) {
+                               RedirectAttributes rAtt) {
         if (result.hasErrors()) return "auth-register";
-        userService.registerUser(userDTO, request, response);
+        userService.registerUser(userDTO);
+        rAtt.addFlashAttribute("successMessage", "Registration successful!");
+        //todo: thymeleaf form: Please verify your email: email verification link
         return "redirect:/";
     }
 
