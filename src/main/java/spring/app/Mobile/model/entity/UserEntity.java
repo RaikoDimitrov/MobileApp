@@ -5,10 +5,16 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import spring.app.Mobile.model.enums.UserRoleEnum;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.sql.Types.VARCHAR;
 
@@ -18,7 +24,7 @@ import static java.sql.Types.VARCHAR;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity extends BaseEntity {
+public class UserEntity extends BaseEntity implements UserDetails {
 
     @Column(unique = true)
     private String email;
@@ -35,6 +41,8 @@ public class UserEntity extends BaseEntity {
     private String firstName;
     private String lastName;
 
+    private boolean isVerified;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,4 +51,12 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "sellerEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<OfferEntity> offers = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public interface UserService {
 
-    boolean authenticate(String username, String password);
+    void authenticateAfterVerification(String email, HttpServletRequest request);
 
-    void registerUser(UserRegistrationDTO userRegistrationDTO, HttpServletRequest request, HttpServletResponse response);
+    void registerUser(UserRegistrationDTO userRegistrationDTO);
 
     Optional<UserMobileDetails> getCurrentUser();
 
@@ -21,4 +21,7 @@ public interface UserService {
 
     List<UserEntity> initializeUsers();
 
+    boolean verifyEmail(String token);
+
+    boolean passwordReset(String token, String newPassword);
 }

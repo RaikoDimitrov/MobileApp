@@ -1,8 +1,8 @@
 package spring.app.Mobile.service.impl;
 
+import io.jsonwebtoken.Claims;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -14,9 +14,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import spring.app.Mobile.config.AppProperties;
 import spring.app.Mobile.model.dto.UserRegistrationDTO;
 import spring.app.Mobile.model.entity.BaseEntity;
 import spring.app.Mobile.model.entity.UserEntity;
@@ -26,17 +26,20 @@ import spring.app.Mobile.model.user.UserMobileDetails;
 import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.repository.UserRoleRepository;
 import spring.app.Mobile.security.CurrentUser;
+import spring.app.Mobile.service.interfaces.EmailService;
+import spring.app.Mobile.service.interfaces.JwtService;
 import spring.app.Mobile.service.interfaces.UserService;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final AppProperties appProperties;
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -44,6 +47,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final CurrentUser currentUser;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final EmailService emailService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -57,31 +62,107 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser, AuthenticationManager authenticationManager, UserMobileDetailsServiceImpl userMobileDetailsService) {
+    public UserServiceImpl(AppProperties appProperties,
+                           ModelMapper modelMapper,
+                           UserRepository userRepository,
+                           UserRoleRepository userRoleRepository,
+                           PasswordEncoder passwordEncoder, CurrentUser currentUser,
+                           AuthenticationManager authenticationManager,
+                           JwtService jwtService,
+                           EmailService emailService,
+                           UserMobileDetailsServiceImpl userMobileDetailsService) {
+        this.appProperties = appProperties;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.currentUser = currentUser;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.emailService = emailService;
         this.userMobileDetailsService = userMobileDetailsService;
     }
 
 
     @Override
-    public boolean authenticate(String username, String password) {
-        Optional<UserEntity> optionalUser = userRepository.findByUsernameIgnoreCase(username);
+    public void authenticateAfterVerification(String email, HttpServletRequest request) {
+        UserEntity userEntity = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new RuntimeException("User not found."));
 
-        if (optionalUser.isEmpty()) return false;
-        else {
-            if (passwordEncoder.matches(password, optionalUser.get().getPassword())) {
-                currentUser.setAuthenticated(optionalUser.get().getUsername());
-                return true;
-            } else {
-                currentUser.setGuest();
-                return false;
-            }
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userEntity.getUsername(), null, userEntity.getAuthorities());
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        HttpSession session = request.getSession(false);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+        try {
+            userMobileDetailsService.handlePostLogin(authentication);
+        } catch (IOException e) {
+            throw new RuntimeException("Post-Login failed.");
         }
+    }
+
+    @Override
+    public void registerUser(UserRegistrationDTO userRegistrationDTO) {
+
+        UserEntity userEntity = userRepository.save(map(userRegistrationDTO));
+
+        String verificationToken = jwtService.generateEmailVerificationToken(userEntity.getEmail());
+        String verificationLink = appProperties.getBaseUrl() + "/verify-email?token=" + verificationToken;
+
+        try {
+            emailService.sendEmail(userEntity.getEmail(), "Email verification", "Verification link: " + verificationLink);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send verification email.", e);
+        }
+    }
+
+    @Override
+    public boolean verifyEmail(String token) {
+        if (!jwtService.validateEmailVerificationToken(token)) {
+            return false;
+        }
+        Claims claims = jwtService.extractClaims(token);
+        String email = claims.get("email", String.class);
+        Optional<UserEntity> optionalUser = userRepository.findByEmailIgnoreCase(email);
+        if (optionalUser.isPresent()) {
+            UserEntity userEntity = optionalUser.get();
+            if (userEntity.isVerified()) {
+                return true;
+            }
+            userEntity.setVerified(true);
+            userRepository.save(userEntity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean passwordReset(String token, String newPassword) {
+        if (!jwtService.validatePasswordResetToken(token)) {
+            return false;
+        }
+        Claims claims = jwtService.extractClaims(token);
+        String email = claims.get("email", String.class);
+        Optional<UserEntity> optionalUser = userRepository.findByEmailIgnoreCase(email);
+        if (optionalUser.isPresent()) {
+            UserEntity userEntity = optionalUser.get();
+            userEntity.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(userEntity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Optional<UserMobileDetails> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserMobileDetails userMobileDetails) {
+            return Optional.of(userMobileDetails);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -102,7 +183,7 @@ public class UserServiceImpl implements UserService {
                     .lastName("Dimitrov")
                     .username("freddy")
                     .email("freddy98@abv.bg")
-                            .roles(new ArrayList<>(List.of(UserRoleEntity.builder().role(UserRoleEnum.ADMIN).build())))
+                    .roles(new ArrayList<>(List.of(UserRoleEntity.builder().role(UserRoleEnum.ADMIN).build())))
                     .password(passwordEncoder.encode("123123"))
                     .build());
             users.add(UserEntity.builder()
@@ -121,36 +202,7 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    @Override
-    public void registerUser(UserRegistrationDTO userRegistrationDTO, HttpServletRequest request, HttpServletResponse response) {
-
-        userRepository.save(map(userRegistrationDTO));
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userRegistrationDTO.getUsername(), userRegistrationDTO.getPassword()
-        );
-
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        HttpSession session = request.getSession(false);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-        try {
-            userMobileDetailsService.handlePostLogin(authentication);
-        } catch (IOException e) {
-            throw new RuntimeException("Post-Login failed.");
-        }
-    }
-
-    @Override
-    public Optional<UserMobileDetails> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserMobileDetails userMobileDetails) {
-            return Optional.of(userMobileDetails);
-        }
-        return Optional.empty();
-    }
-
+    //private methods
     private UserEntity map(UserRegistrationDTO userRegistrationDTO) {
         UserRoleEntity defaultRole = userRoleRepository.findByRole(UserRoleEnum.USER)
                 .orElseGet(() -> {

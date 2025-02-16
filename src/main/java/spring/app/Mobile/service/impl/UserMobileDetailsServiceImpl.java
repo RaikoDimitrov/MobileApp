@@ -50,7 +50,13 @@ public class UserMobileDetailsServiceImpl implements UserDetailsService {
 
     public void handlePostLogin(Authentication authentication) throws IOException {
         // Set currentUser based on the authenticated user
-        UserMobileDetails principal = (UserMobileDetails) authentication.getPrincipal();
-        currentUser.setAuthenticated(principal.getFullName());
+        UserMobileDetails principal = null;
+        try {
+            principal = (UserMobileDetails) authentication.getPrincipal();
+            currentUser.setAuthenticated(principal.getFullName());
+        } catch (Exception e) {
+            currentUser.setGuest();
+            e.printStackTrace();
+        }
     }
 }
