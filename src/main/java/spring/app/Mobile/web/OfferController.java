@@ -1,9 +1,6 @@
 package spring.app.Mobile.web;
 
-import jakarta.validation.Path;
 import jakarta.validation.Valid;
-import org.apache.kafka.common.network.Mode;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,11 +38,12 @@ public class OfferController {
     }
 
     @ModelAttribute
-    public void populateEnums(Model model) {
+    public void populateEnumsAndBrands(Model model) {
         model.addAttribute("allVehicleTypes", VehicleTypeEnum.values());
         model.addAttribute("allEngineTypes", EngineTypeEnum.values());
         model.addAttribute("allTransmissionTypes", TransmissionTypeEnum.values());
         model.addAttribute("allChassisTypes", ChassisTypeEnum.values());
+        model.addAttribute("brands", brandService.getAllBrands());
     }
 
     @GetMapping("/all")
@@ -64,9 +62,8 @@ public class OfferController {
     @GetMapping("/add")
     public String newOffer(Model model) {
         if (!model.containsAttribute("offerAddDTO")) {
-            model.addAttribute("offerAddDTO", OfferAddDTO.empty());
+            model.addAttribute("offerAddDTO", new OfferAddDTO());
         }
-        model.addAttribute("brands", brandService.getAllBrands());
         model.addAttribute("models", Collections.emptyList());
         return "offer-add";
     }
@@ -82,7 +79,6 @@ public class OfferController {
         }
         if (result.hasErrors()) {
             System.out.println("Validation Errors: " + result.getAllErrors());
-            model.addAttribute("brands", brandService.getAllBrands());
             model.addAttribute("models", modelService.getModelsByBrandName(offerAddDTO.getBrandName()));
             return "offer-add";
         }
@@ -125,16 +121,23 @@ public class OfferController {
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable Long id, Model model) {
         OfferDetailsDTO offerUpdate = offerService.getOfferDetails(id);
+        if (offerUpdate == null) return "offer-not-found";
         model.addAttribute("offerUpdate", offerUpdate);
-        model.addAttribute("brands", brandService.getAllBrands());
         model.addAttribute("models", modelService.getModelsByBrandName(offerUpdate.getBrandName()));
         return "update";
     }
 
     @PatchMapping("/update/{id}")
     public String updateOffer(@PathVariable Long id,
-                              @ModelAttribute OfferDetailsDTO offerDetailsDTO,
+                              @Valid @ModelAttribute("offerUpdate") OfferDetailsDTO offerDetailsDTO,
+                              BindingResult result,
+                              Model model,
                               RedirectAttributes rAtt) {
+        if (result.hasErrors()) {
+            model.addAttribute("offerUpdate", offerDetailsDTO);
+            model.addAttribute("models", modelService.getModelsByBrandName(offerDetailsDTO.getBrandName()));
+            return "update";
+        }
         offerService.updateOffer(id, offerDetailsDTO);
         rAtt.addFlashAttribute("successMessage", "Changes saved!");
         return "redirect:/offers/{id}";

@@ -3,111 +3,26 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Mobile</title>
+    <title>All offers</title>
     <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/offers.css}"/>
     <script src="/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-
-    <style>
-    body {
-        background-color: #f8f9fa;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .container {
-        padding-top: 1px; /* Reduced padding on top */
-    }
-
-    .login-container {
-        max-width: 400px;
-        background: rgba(0, 0, 0, 0.6);
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        color: white;
-    }
-
-    .login-title {
-        font-size: 28px;
-        color: white;
-        margin-bottom: 20px;  /* Adjusted margin to lower the title */
-    }
-
-    .form-group {
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-
-    .form-control {
-        border-radius: 6px;
-        background: rgba(255, 255, 255, 0.8);
-        color: black;
-    }
-
-    .form-control::placeholder {
-        color: rgba(0, 0, 0, 0.5);
-    }
-
-    .btn-login {
-        background-color: #007bff;
-        color: white;
-        border-radius: 6px;
-        padding: 10px;
-        width: 100%;
-    }
-
-    .btn-login:hover {
-        background-color: #0056b3;
-    }
-
-    .resend-link {
-        font-size: 14px;
-        display: block;
-        margin-top: 10px;
-        color: #f8f9fa;
-    }
-
-    .alert {
-        margin-top: 15px;
-    }
-
-    /* Adjust offer card size */
-    .offer {
-        max-width: 280px; /* Making the card smaller */
-        margin: 1rem; /* Add spacing between cards */
-    }
-
-    .btn-info {
-        background-color: #007bff;
-        color: white;
-        border-radius: 6px;
-        padding: 10px;
-        width: 100%;
-    }
-
-    .btn-info:hover {
-        background-color: #0056b3;
-    }
-</style>
 </head>
 
 <body>
 
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'all-offers'})}"></div>
 
+
 <div class="container">
+    <h2 class="text-center text-white mb-4">All Offers</h2>
     <div th:if="${successMessage}" class="alert alert-success" role="alert">
         <span th:text="${successMessage}"></span>
     </div>
 
-    <h2 class="text-center text-white mb-4">All Offers</h2>
 
     <div class="offers row mx-auto d-flex justify-content-start">
         <!-- Loop through the offers -->
@@ -119,7 +34,8 @@
 
             <!-- Card Title with Offer Info -->
             <div class="card-body pb-1">
-                <h5 class="card-title text-center" th:text="${offer.year} + ' ' + ${offer.brandName} + ' ' + ${offer.modelName}">
+                <h5 class="card-title text-center"
+                    th:text="${offer.year} + ' ' + ${offer.brandName} + ' ' + ${offer.modelName}">
                     <!-- Display the offer year, brand, and model -->
                 </h5>
             </div>
@@ -127,9 +43,9 @@
             <!-- Offer Details List -->
             <ul class="offer-details list-group list-group-flush">
                 <li class="list-group-item">
-                    <div class="card-text">• Mileage: <span th:text="${offer.mileage} + ' km'"></span></div>
-                    <div class="card-text">• Price: <span th:text="${offer.price} + ' BGN'"></span></div>
-                    <div class="card-text">• Horse Power: <span th:text="${offer.horsePower} + ' hp'"></span></div>
+                    <div class="card-text">• Mileage: <span th:text="${offer.mileage}"style="font-weight: bold"></span> km</div>
+                    <div class="card-text">• Price: <span th:text="${offer.price}" style="font-weight: bold"></span> BGN</div>
+                    <div class="card-text">• Horse Power: <span th:text="${offer.horsePower}" style="font-weight: bold"></span> hp</div>
                 </li>
             </ul>
 

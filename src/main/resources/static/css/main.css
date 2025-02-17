@@ -1,3 +1,4 @@
+/* Global Body Styles */
 body {
     background-image: url('/images/1.jpg');
     background-position: center center;
@@ -24,6 +25,7 @@ body::before {
     z-index: -1; /* Ensures the overlay stays behind the content */
 }
 
+/* Navbar Styling */
 .navbar .logo {
     width: 150px;
     height: auto;
@@ -60,6 +62,7 @@ body::before {
     color: #ffd700 !important; /* Highlight active link with gold */
 }
 
+/* Container and Layout */
 .container, .container-fluid {
     padding-top: 100px;
     width: 100%;
@@ -70,6 +73,7 @@ body::before {
     gap: 30px;
 }
 
+/* Success/Error Alert */
 .alert {
     position: fixed;
     top: 90px;
@@ -95,111 +99,13 @@ body::before {
     border-color: #721c24; /* Darker red */
 }
 
+/* Welcome Message */
 .welcome-message h5 {
     padding-top: 300px;
     font-size: 28px;
 }
 
-.btn-same-height {
-    height: 40px;  /* Set a fixed height for both buttons */
-    line-height: 40px;  /* Center the text vertically */
-}
-
-.offers {
-    width: 100%;
-    padding-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Adjust spacing between offers */
-    justify-content: center !important;
-    align-items: center;
-}
-.offers-title {
-    width: 100%;
-    margin-left: 100px;
-    margin-top: 100px !important;
-    margin-bottom: 10px;
-}
-
-.offer {
-    background-color: transparent; /* Hollow look */
-    border: 2px solid #ccc; /* Border around the card */
-    border-radius: 10px; /* Rounded corners (optional) */
-    padding: 15px;
-    box-sizing: border-box;
-    transition: all 0.3s ease; /* Smooth transition for the hover effect */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the card */
-}
-
-/* Hover effect for the offer card */
-.offer:hover {
-    background-color: rgba(255, 255, 255, 0.8); /* Slight background on hover */
-    transform: scale(1.0); /* Zoom the card on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhance shadow to give it a 'pop' effect */
-    border-color: #007bff; /* Change border color on hover (you can customize this) */
-}
-
-.details-section {
-    padding: 200px;
-    gap: 30px;
-    width: 100%;
-    margin: 0 auto; /* Center the content horizontally */
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: stretch;
-}
-
-
-.bg-text {
-    background-color: rgba(0, 0, 0, 0.6); /* Black w/opacity/see-through */
-    color: white;
-    font-weight: bold;
-    border: 3px solid #f1f1f1;
-    z-index: 2;
-    width: 80%;
-    padding: 20px;
-    text-align: center;
-}
-
-.brand-section {
-    background-image: linear-gradient(to bottom right, rgba(220, 220, 220, 0.9), rgba(255, 255, 255, 0.9));
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 95%;
-    margin: 0 auto 30px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.card.offer, .offer-details .list-group-item {
-    background-image: linear-gradient(to bottom right, rgba(220, 220, 220, 0.9), rgba(255, 255, 255, 0.9));
-}
-
-.card-img-top-wrapper {
-    height: 150px;
-    overflow: hidden;
-}
-
-form.main-form {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 20px 30px;
-    border-radius: 20px;
-    display: flex;
-}
-
-.field-error {
-    background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="red" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg> ') no-repeat top right/30px 30px;
-}
-
-.logged-user {
-    color: white;
-}
-
+/* Table Customization */
 .table-custom {
     width: 100%;
     max-width: 90%;
@@ -236,6 +142,7 @@ form.main-form {
     background: rgba(255, 255, 255, 0.1); /* Hover effect to slightly lighten */
 }
 
+/* Image Styling */
 .img-thumbnail {
     width: 90px;
     height: auto;
@@ -262,6 +169,7 @@ form.main-form {
     color: #ffffff; /* Keeps the text color consistent */
 }
 
+/* Footer Styling */
 footer {
   position: fixed;      /* Fix the footer at the bottom */
   bottom: 0;            /* Align it at the bottom of the viewport */
@@ -272,8 +180,9 @@ footer {
   padding: 10px 0;      /* Add some space around the text */
   border-top: 1px solid rgba(0, 0, 0, 0.2);  /* Light transparent black border */
   background-color: rgba(0, 0, 0, 0.3);
-
 }
+
+
 
 
 

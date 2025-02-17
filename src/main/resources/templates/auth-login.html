@@ -6,73 +6,9 @@
     <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/auth.css}"/>
     <script src="/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-container {
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            color: white;
-        }
-
-        .login-title {
-            font-size: 28px;
-            color: white;
-            margin-bottom: 20px;  /* Adjusted margin to lower the title */
-        }
-
-        .form-group {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .form-control {
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.8);
-            color: black;
-        }
-
-        .form-control::placeholder {
-            color: rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-login {
-            background-color: #007bff;
-            color: white;
-            border-radius: 6px;
-            padding: 10px;
-            width: 100%;
-        }
-
-        .btn-login:hover {
-            background-color: #0056b3;
-        }
-
-        .resend-link {
-            font-size: 14px;
-            display: block;
-            margin-top: 10px;
-            color: #f8f9fa;
-        }
-
-        .alert {
-            margin-top: 15px;
-        }
-    </style>
 </head>
 
 <body>
@@ -80,10 +16,10 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'login'})}"></div>
 
 <!-- Title outside the container -->
-<h2 class="login-title">Sign in</h2>
+<h2 class="auth-title">Sign in</h2>
 
 <!-- Container for the form -->
-<div class="login-container">
+<div class="login-container auth-container">
     <!-- Success Message -->
     <div th:if="${successMessage}" class="alert alert-success" role="alert">
         <span th:text="${successMessage}"></span>
@@ -107,11 +43,11 @@
         </div>
 
         <div class="mb-3">
-            <button type="submit" class="btn btn-login">Submit</button>
+            <button type="submit" class="btn btn-auth">Submit</button>
         </div>
 
-        <div class="mb-3">
-            <a th:href="@{/users/forgot-password}" class="resend-link">Forgotten password?</a>
+        <div class="auth-link">
+            <a th:href="@{/users/forgot-password}">Forgotten password?</a>
         </div>
 
     </form>
