@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,8 @@ import spring.app.Mobile.service.interfaces.EmailService;
 import spring.app.Mobile.service.interfaces.JwtService;
 import spring.app.Mobile.service.interfaces.UserService;
 
-import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,11 +98,18 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("User not found."));
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userEntity.getUsername(), null, userEntity.getAuthorities());
 
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userEntity.getUsername(), userEntity.getPassword(), userEntity.getAuthorities());
+
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (BadCredentialsException e) {
+            System.err.println("Bad credentials: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+        }
 
         //store security context in the session if needed
         HttpSession session = request.getSession(false);
@@ -113,9 +122,9 @@ public class UserServiceImpl implements UserService {
     private void sendVerificationEmail(UserEntity userEntity) {
         String subject = "Email verification";
         String verificationToken = jwtService.generateEmailVerificationToken(userEntity.getEmail());
-        String verificationLink = appProperties.getBaseUrl() + "/verify-email?token=" + verificationToken;
+        String verificationLink = appProperties.getBaseUrl() + "/verify-email?token=" + URLEncoder.encode(verificationToken, StandardCharsets.UTF_8);
         String message = "Click the link below to verify your email:\n" + verificationLink
-                + "\nOr enter the following code manually:\n" + verificationToken;
+                + "\nOr enter the following code manually: " + verificationToken;
 
         try {
             emailService.sendEmail(userEntity.getEmail(), subject, message);
@@ -145,11 +154,15 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Transactional
     @Override
-    public boolean passwordReset(String token, String newPassword) {
+    public boolean passwordReset(String token, String newPassword, String confirmPassword) {
         if (!jwtService.validatePasswordResetToken(token)) {
             return false;
         }
+        if (newPassword.length() < 8) throw new RuntimeException("Password must be at least 8 symbols");
+        if (!newPassword.equals(confirmPassword)) throw new RuntimeException("Passwords do not match");
+
         Claims claims = jwtService.extractClaims(token);
         String email = claims.get("email", String.class);
         Optional<UserEntity> optionalUser = userRepository.findByEmailIgnoreCase(email);
@@ -160,6 +173,29 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
+    }
+
+    @Override
+    public void sendPasswordResetEmail(UserEntity userEntity) {
+        String subject = "Reset your password!";
+        String passwordResetToken = jwtService.generatePasswordResetToken(userEntity.getEmail());
+        String passwordResetLink = appProperties.getBaseUrl()
+                + "/users/reset-password?token="
+                + URLEncoder.encode(passwordResetToken, StandardCharsets.UTF_8);
+        String text = "Click the link to reset your password: " + passwordResetLink;
+
+        try {
+            emailService.sendEmail(userEntity.getEmail(), subject, text);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send password reset email.", e);
+        }
+
     }
 
     @Override
