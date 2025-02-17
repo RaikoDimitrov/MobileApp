@@ -1,0 +1,114 @@
+/* Global Body Styles */
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Container Styling */
+.container {
+    padding-top: 100px; /* Reduced padding on top */
+    margin-top: 20px;
+    width: 100%;
+    max-width: 1600px;
+}
+
+/* Offer Card Styling */
+.offer {
+    max-width: 280px; /* Keep the card smaller */
+    margin: 1rem; /* Add spacing between cards */
+    border: 2px solid #ccc; /* Border around the card */
+    border-radius: 10px; /* Rounded corners */
+    padding: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+    background-color: #ffffff; /* Hollow look */
+}
+
+.offer:hover {
+    background-color: rgba(255, 255, 255, 0.8); /* Slight background on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow for 'pop' effect */
+    border-color: #007bff; /* Change border color on hover */
+}
+
+/* Image Styling */
+.card-img-top-wrapper {
+    height: 150px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Card Body Text Styling */
+.card-body {
+    padding: 10px;
+}
+
+/* Button Styling */
+.btn-info {
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
+}
+
+.btn-info:hover {
+    background-color: #0056b3;
+}
+
+/* Success Alert Styling */
+.alert {
+    margin-top: 15px;
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    border: 2px solid;
+    padding: 10px 20px;
+    margin: 0;
+    z-index: 9999;
+    width: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #28a745; /* Green */
+    border-color: #1e7e34; /* Darker green */
+}
+
+.alert-error {
+    background-color: #dc3545; /* Red */
+    border-color: #721c24; /* Darker red */
+}
+
+/* Offers Section Layout */
+.offers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center !important;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+}
+
+/* Title Styling */
+.offers-title {
+    width: 100%;
+    margin-left: 100px;
+    margin-top: 100px !important;
+    margin-bottom: 10px;
+}
+

@@ -1,5 +1,6 @@
 package spring.app.Mobile.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -85,6 +86,7 @@ public class OfferServiceImpl implements OfferService {
         offerRepository.deleteById(offerId);
     }
 
+    @Transactional
     @Override
     public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO) {
         OfferEntity offerById = offerRepository.findById(offerId).

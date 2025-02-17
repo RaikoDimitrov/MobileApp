@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Mobile</title>
+    <title>Details offer</title>
     <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
@@ -16,11 +16,13 @@
 
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'details'})}"></div>
 
+
 <div class="container-fluid">
+    <h2 class="text-center text-white mt-5">Details</h2>
     <div th:if="${successMessage}" class="alert alert-success">
         <span th:text="${successMessage}"></span>
     </div>
-    <h2 class="text-center text-white mt-5">Details</h2>
+
     <div th:object="${offerDetails}"
          class="offers row mx-auto d-flex flex-row justify-content-center details-section">
 
