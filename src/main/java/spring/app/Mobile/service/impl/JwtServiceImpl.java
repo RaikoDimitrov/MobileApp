@@ -53,7 +53,7 @@ public class JwtServiceImpl implements JwtService {
     public String generatePasswordResetToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
-        claims.put("email_verification", "purpose");
+        claims.put("purpose", "password_reset");
         return generateToken(claims);
     }
 
@@ -61,7 +61,7 @@ public class JwtServiceImpl implements JwtService {
     public String generateEmailVerificationToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
-        claims.put("password_reset", "purpose");
+        claims.put("purpose", "email_verification");
         return generateToken(claims);
     }
 

@@ -40,7 +40,7 @@ public class RegistrationController {
                                RedirectAttributes rAtt) {
         if (result.hasErrors()) return "auth-register";
         userService.registerUser(userDTO);
-        rAtt.addFlashAttribute("successMessage", "Registration successful!");
+        rAtt.addFlashAttribute("successMessage", "Registration successful! Please check your email.");
         return "redirect:/users/verify-email";
     }
 
