@@ -1,0 +1,202 @@
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1000px; /* Reduced width for smaller container */
+    margin: 0 auto;
+    padding: 80px;
+}
+
+/* Title Styling */
+.text-center {
+    text-align: center;
+}
+
+.text-white {
+    color: white;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+/* Alert Styling */
+.alert {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Offers Section Styling */
+.details-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+    align-items: flex-start;
+    gap: 20px; /* Adding gap between cards */
+}
+
+.offer {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    overflow: hidden;
+}
+
+/* Left Container (Image) */
+.offer-left {
+    width: 100%;
+    flex: 1;
+    /* Image card styling */
+}
+
+.offer-left .offer-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 300px; /* Prevent image from stretching */
+}
+
+/* Right Container (Offer Details) */
+.offer-right {
+    flex: 1;
+    max-width: 500px; /* Fixed width */
+    height: 500px; /* Fixed height */
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly tinted background */
+    border-radius: 10px;
+    padding: 15px;
+    overflow: hidden;
+}
+
+.offer-right .offer-details-section {
+    flex-grow: 1;
+    overflow-y: auto; /* Allow vertical scroll if content overflows */
+    max-height: 300px; /* Set max height for the details section */
+}
+
+.offer-details-table {
+    padding: 15px;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.offer-details-table th,
+.offer-details-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.offer-details-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Card Title Styling */
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.card-title span {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+/* Buttons Styling */
+.btn-same-height {
+    height: 40px;
+    line-height: 40px;
+}
+
+.btn {
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-md {
+    font-size: 1.1rem;
+}
+
+/* Image Styling */
+.card-img-top {
+    max-height: 300px;
+    object-fit: cover; /* Prevent stretching of the image */
+    width: 100%;
+}
+
+/* Responsive Layout */
+@media (max-width: 992px) {
+    .details-section {
+        flex-direction: column;
+    }
+
+    .offer-left .offer-image {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .offer-right {
+        max-width: 100%; /* Allow full-width on smaller screens */
+    }
+}
+
+/* Custom Styling for the Description */
+.card-text {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Spacing Between the Two Cards */
+.offers .offer:not(:last-child) {
+    margin-right: 15px;
+}
+
+/* Description Styling under the Image */
+.offer-description {
+    padding: 15px;
+    font-size: 1rem;
+    color: #333;
+    background-color: rgba(0, 0, 0, 0.05); /* Slightly tinted background */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 15px; /* Margin between image and description */
+}
