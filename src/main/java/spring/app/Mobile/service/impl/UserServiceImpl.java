@@ -160,8 +160,6 @@ public class UserServiceImpl implements UserService {
         if (!jwtService.validatePasswordResetToken(token)) {
             return false;
         }
-        if (newPassword.length() < 8) throw new RuntimeException("Password must be at least 8 symbols");
-        if (!newPassword.equals(confirmPassword)) throw new RuntimeException("Passwords do not match");
 
         Claims claims = jwtService.extractClaims(token);
         String email = claims.get("email", String.class);

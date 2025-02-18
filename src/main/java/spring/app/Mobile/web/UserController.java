@@ -1,8 +1,5 @@
 package spring.app.Mobile.web;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,11 +85,16 @@ public class UserController {
     @GetMapping("/reset-password")
     public String resetPasswordForm(@RequestParam(value = "token", required = false) String token,
                                     Model model) {
+        if (token == null) {
+            token = (String) model.asMap().get("token");
+        }
+
         if (token == null || !jwtService.validatePasswordResetToken(token)) {
             model.addAttribute("error", "Invalid or expired token");
             return "reset-password";
         }
-        model.addAttribute("passwordToken", token);
+
+        model.addAttribute("token", token);
         return "reset-password";
 
     }
@@ -103,18 +105,32 @@ public class UserController {
                                 @RequestParam("confirmPassword") String confirmPassword,
                                 RedirectAttributes rAtt) {
         token = token.trim();
+
+        if (newPassword.length() < 5) {
+            rAtt.addFlashAttribute("error", "Password must be at least 5 symbols");
+            rAtt.addFlashAttribute("token", token);
+            return "redirect:/users/reset-password";
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            rAtt.addFlashAttribute("error", "Passwords do not match");
+            rAtt.addFlashAttribute("token", token);
+            return "redirect:/users/reset-password";
+        }
+
         try {
             boolean passwordReset = userService.passwordReset(token, newPassword, confirmPassword);
             if (passwordReset) {
                 rAtt.addFlashAttribute("successMessage", "Your password has been successfully reset");
                 return "redirect:/users/login";
             } else {
-                rAtt.addFlashAttribute("error", "Invalid or expired token");
+                rAtt.addFlashAttribute("error", "An unexpected error occurred! Please try again");
+                rAtt.addFlashAttribute("token", token);
                 return "redirect:/users/reset-password";
             }
         } catch (Exception e) {
             rAtt.addFlashAttribute("error", "An unexpected error occurred! Please try again");
             System.err.println("Unexpected error: " + e.getMessage());
+            rAtt.addFlashAttribute("token", token);
             return "redirect:/users/reset-password";
         }
     }

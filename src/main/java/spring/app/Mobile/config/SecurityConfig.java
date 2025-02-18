@@ -37,7 +37,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/static/favicon.png", "/users/**", "/users/verify-email", "/", "/users/login", "/logout", "/users/register",
+                                .requestMatchers("/static/favicon.png", "/users/**", "/", "/logout",
                                         "/error", "/offers/all", "/offers/{id}", "/api/convert").permitAll()
                                 .requestMatchers("/offers/add").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/offers/**").hasAuthority(UserRoleEnum.ADMIN.toString())
