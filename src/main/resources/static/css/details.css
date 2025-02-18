@@ -1,139 +1,119 @@
-/* General Styling */
+/* Global Styles */
 body {
-    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     background-color: #f8f9fa;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
 }
 
-.container {
-    max-width: 1000px; /* Reduced width for smaller container */
-    margin: 0 auto;
-    padding: 80px;
+/* Container for Vehicle Offer */
+.vehicle-container {
+    max-width: 500px; /* Smaller container width */
+    color: white; /* Make text white */
+    padding: 15px;
+    border-radius: 8px;
+    position: relative;
+    z-index: 10;
+    margin-top: 100px; /* Prevent content from being cut off at the top */
 }
 
-/* Title Styling */
-.text-center {
+/* Vehicle Title */
+.vehicle-title {
+    font-size: 28px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Vehicle Image */
+.vehicle-image-card {
     text-align: center;
 }
 
-.text-white {
-    color: white;
-}
-
-.mt-4 {
-    margin-top: 1.5rem;
-}
-
-/* Alert Styling */
-.alert {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 5px;
-}
-
-.alert-success {
-    background-color: #28a745;
-    color: white;
-}
-
-/* Offers Section Styling */
-.details-section {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 30px;
-    align-items: flex-start;
-    gap: 20px; /* Adding gap between cards */
-}
-
-.offer {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 15px;
-    overflow: hidden;
-}
-
-/* Left Container (Image) */
-.offer-left {
+.vehicle-image {
     width: 100%;
-    flex: 1;
-    /* Image card styling */
-}
-
-.offer-left .offer-image {
-    width: 100%;
-    height: auto;
+    max-height: 400px;
     object-fit: cover;
-    max-height: 300px; /* Prevent image from stretching */
+    border-radius: 8px;
 }
 
-/* Right Container (Offer Details) */
-.offer-right {
-    flex: 1;
-    max-width: 500px; /* Fixed width */
-    height: 500px; /* Fixed height */
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.9); /* Slightly tinted background */
-    border-radius: 10px;
-    padding: 15px;
-    overflow: hidden;
+/* Vehicle Info Section */
+.vehicle-info {
+    margin-top: 20px;
 }
 
-.offer-right .offer-details-section {
-    flex-grow: 1;
-    overflow-y: auto; /* Allow vertical scroll if content overflows */
-    max-height: 300px; /* Set max height for the details section */
+/* Vehicle Name & Price */
+.vehicle-name-price {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.offer-details-table {
-    padding: 15px;
+.vehicle-name {
+    font-size: 2rem;
+    color: #007bff; /* Blue color for vehicle name */
+    font-weight: bold; /* Make vehicle name bold */
+}
+
+.vehicle-price {
+    font-size: 1.4rem;
+    color: white; /* Price in white */
+    margin-top: 10px;
+    font-weight: bold; /* Make price bold */
+}
+
+/* Vehicle Details Table */
+.table {
     width: 100%;
-    table-layout: fixed;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    color: black; /* Text in table is black */
 }
 
-.offer-details-table th,
-.offer-details-table td {
-    padding: 8px 12px;
+.table th,
+.table td {
+    padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    font-weight: bold; /* Make parameter names bold */
 }
 
-.offer-details-table th {
+.table-striped tr:nth-child(even) {
     background-color: #f2f2f2;
-    font-weight: bold;
 }
 
-/* Card Title Styling */
-.card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+/* Description Section */
+.vehicle-description {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
     color: #333;
-    margin-bottom: 10px;
+    word-wrap: break-word; /* Prevent overflow */
+    overflow-wrap: break-word; /* Ensure text doesn't overflow */
 }
 
-.card-title span {
-    display: inline-block;
-    margin-right: 8px;
-    font-size: 1.2rem;
-}
-
-/* Buttons Styling */
-.btn-same-height {
-    height: 40px;
-    line-height: 40px;
-}
-
+/* Buttons */
 .btn {
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 1rem;
-    padding: 0.5rem 1.5rem;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.update-btn {
+    width: auto; /* Prevents the Update button from stretching */
+}
+
+.delete-btn {
+    width: auto; /* Keeps Delete button at its natural size */
 }
 
 .btn-primary {
     background-color: #007bff;
-    border-color: #007bff;
     color: white;
+    border-color: #007bff;
 }
 
 .btn-primary:hover {
@@ -143,8 +123,8 @@ body {
 
 .btn-danger {
     background-color: #dc3545;
-    border-color: #dc3545;
     color: white;
+    border-color: #dc3545;
 }
 
 .btn-danger:hover {
@@ -152,51 +132,38 @@ body {
     border-color: #bd2130;
 }
 
-.btn-md {
-    font-size: 1.1rem;
+/* Update/Delete Buttons */
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Image Styling */
-.card-img-top {
-    max-height: 300px;
-    object-fit: cover; /* Prevent stretching of the image */
-    width: 100%;
+.d-inline-flex {
+    display: inline-flex;
+    align-items: center;
 }
 
-/* Responsive Layout */
-@media (max-width: 992px) {
-    .details-section {
-        flex-direction: column;
-    }
-
-    .offer-left .offer-image {
+/* Font Size Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .vehicle-container {
         max-width: 100%;
-        margin-bottom: 20px;
+        padding: 15px;
     }
 
-    .offer-right {
-        max-width: 100%; /* Allow full-width on smaller screens */
+    .vehicle-title {
+        font-size: 24px;
     }
-}
 
-/* Custom Styling for the Description */
-.card-text {
-    font-size: 1rem;
-    color: #333;
-}
+    .vehicle-name {
+        font-size: 1.5rem;
+    }
 
-/* Spacing Between the Two Cards */
-.offers .offer:not(:last-child) {
-    margin-right: 15px;
-}
+    .vehicle-price {
+        font-size: 1.2rem;
+    }
 
-/* Description Styling under the Image */
-.offer-description {
-    padding: 15px;
-    font-size: 1rem;
-    color: #333;
-    background-color: rgba(0, 0, 0, 0.05); /* Slightly tinted background */
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 15px; /* Margin between image and description */
+    .vehicle-description p {
+        font-size: 1rem;
+    }
 }

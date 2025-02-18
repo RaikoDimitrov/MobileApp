@@ -18,61 +18,44 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'details'})}"></div>
 
 
-<div class="container">
-    <h2 class="text-center text-white mt-4">Details</h2>
+<div class="container vehicle-container">
+    <h2 class="text-center mt-4 vehicle-title">Vehicle Details</h2>
+
     <div th:if="${successMessage}" class="alert alert-success">
         <span th:text="${successMessage}"></span>
     </div>
 
-    <div th:object="${offerDetails}"
-         class="offers row mx-auto d-flex flex-row justify-content-center details-section">
+    <div th:object="${offerDetails}" class="vehicle-details">
 
-        <!-- Image card on the left side -->
-        <div class="offer card col-md-6 col-lg-5 p-0">
-            <img th:src="@{*{imageUrl}}" class="card-img-top offer-image" alt="Car image">
-            <!-- Description under the image -->
-            <div class="offer-description">
-                <p th:text="*{description}">Description</p>
-            </div>
+        <!-- Vehicle Image Section -->
+        <div class="vehicle-image-card mb-4">
+            <img th:src="@{*{imageUrl}}" class="vehicle-image" alt="Vehicle Image">
         </div>
 
-        <!-- Offer Details Table on the right side -->
-        <div class="offer card col-md-6 col-lg-5 p-0">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title mb-2" style="flex-grow: 0;">
-                    <!-- Use properties from DTO -->
-                    <span th:text="*{year}"></span>
-                    <span th:text="*{brandName}"></span>
-                    <span th:text="*{modelName}"></span>
-                </h5>
+        <!-- Vehicle Details Section -->
+        <div class="vehicle-info">
+            <div class="vehicle-name-price">
+                <h3 th:text="*{year} + ' ' + *{brandName} + ' ' + *{modelName}" class="vehicle-name">Vehicle Name</h3>
+                <p class="vehicle-price" th:text="*{price} + ' BGN'">Price</p>
             </div>
 
-            <!-- Offer Details Table -->
-            <div class="offer-details-section">
-                <table class="offer-details-table table">
+            <div class="vehicle-attributes">
+                <table class="table table-striped">
                     <tr>
                         <th>Mileage</th>
                         <td><span th:text="*{mileage} + ' km'">Mileage</span></td>
                     </tr>
                     <tr>
-                        <th>Price</th>
-                        <td><span th:text="*{price} + ' BGN'">Price</span></td>
-                    </tr>
-                    <tr>
                         <th>Engine Type</th>
-                        <td><span th:text="*{engineType}">Engine type</span></td>
+                        <td><span th:text="*{engineType}">Engine Type</span></td>
                     </tr>
                     <tr>
                         <th>Transmission Type</th>
-                        <td><span th:text="*{transmissionType}">Transmission type</span></td>
+                        <td><span th:text="*{transmissionType}">Transmission Type</span></td>
                     </tr>
                     <tr>
                         <th>Vehicle Type</th>
-                        <td><span th:text="*{vehicleType}">Vehicle type</span></td>
-                    </tr>
-                    <tr>
-                        <th>Chassis Type</th>
-                        <td><span th:text="*{chassisType}">Chassis type</span></td>
+                        <td><span th:text="*{vehicleType}">Vehicle Type</span></td>
                     </tr>
                     <tr>
                         <th>Horse Power</th>
@@ -84,37 +67,46 @@
                     </tr>
                     <tr>
                         <th>Created</th>
-                        <td><span th:text="${#temporals.format(created, 'yyyy-MM-dd HH:mm')}">Offer created</span></td>
+                        <td><span th:text="${#temporals.format(created, 'yyyy-MM-dd HH:mm')}">Offer Created</span></td>
                     </tr>
                     <tr>
-                        <th>Last updated</th>
-                        <td><span th:text="${#temporals.format(updated, 'yyyy-MM-dd HH:mm')}">Offer updated</span></td>
+                        <th>Last Updated</th>
+                        <td><span th:text="${#temporals.format(updated, 'yyyy-MM-dd HH:mm')}">Last Updated</span></td>
                     </tr>
                 </table>
             </div>
+        </div>
 
-            <div class="card-body d-flex justify-content-between d-flex" style="flex-grow: 0;">
-                <a th:if="${offerDetails.sellerUsername == username}"
-                   class="btn btn-primary btn-md d-inline-flex align-items-center px-3 btn-same-height"
-                   th:href="@{/offers/update/{id}(id=${offerDetails.id})}" role="button">
-                    <i class="fas fa-edit me-6"></i> Update
-                </a>
+        <!-- Description Section -->
+        <div class="vehicle-description p-3">
+            <p th:text="*{description}">Description</p>
+        </div>
 
-                <form
-                        th:if="${offerDetails.sellerUsername == username} or ${#authentication?.authorities?.contains('ADMIN')}"
-                        th:method="POST"
-                        th:action="@{/offers/{id}(id=${offerDetails.id})}"
-                        class="d-inline-block">
-                    <!-- hidden method for delete -->
-                    <input type="hidden" th:name="_method" th:value="DELETE">
-                    <button type="submit" class="btn btn-danger btn-md d-inline-flex align-items-center px-3 btn-same-height">
-                        <i class="fas fa-trash me-6"></i> Delete
-                    </button>
-                </form>
-            </div>
+        <!-- Update/Delete Buttons -->
+        <div class="d-flex justify-content-between mt-4">
+            <a th:if="${offerDetails.sellerUsername == username}"
+               class="btn btn-primary btn-md d-inline-flex align-items-center update-btn"
+               th:href="@{/offers/update/{id}(id=${offerDetails.id})}" role="button">
+                <i class="fas fa-edit me-2"></i> Update
+            </a>
+
+            <form th:if="${offerDetails.sellerUsername == username} or ${#authentication?.authorities?.contains('ADMIN')}"
+                  th:method="POST"
+                  th:action="@{/offers/{id}(id=${offerDetails.id})}" class="d-inline-block">
+                <input type="hidden" th:name="_method" th:value="DELETE">
+                <button type="submit" class="btn btn-danger btn-md d-inline-flex align-items-center delete-btn">
+                    <i class="fas fa-trash me-2"></i> Delete
+                </button>
+            </form>
         </div>
     </div>
 </div>
+
+
+
+
+
+
 
 <script th:src="@{/js/currency.js}"></script>
 

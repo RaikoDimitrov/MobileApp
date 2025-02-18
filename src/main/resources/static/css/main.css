@@ -169,6 +169,21 @@ body::before {
     color: #ffffff; /* Keeps the text color consistent */
 }
 
+/* Buttons */
+.btn-main {
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-main:hover {
+    background-color: #0056b3;
+}
+
 /* Footer Styling */
 footer {
   position: fixed;      /* Fix the footer at the bottom */
