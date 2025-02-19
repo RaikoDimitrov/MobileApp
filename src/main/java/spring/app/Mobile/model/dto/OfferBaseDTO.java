@@ -34,9 +34,13 @@ public abstract class OfferBaseDTO {
     private Integer price;
 
     @Min(value = 1900, message = "Year must be 1900 or older")
-    @Max(value = Year.MAX_VALUE, message = "Year cannot be in the future")
     @NotNull(message = "Manufactured year is required")
     private Integer year;
+
+    @AssertTrue(message = "Year cannot be in the future")
+    private boolean isYearValid() {
+        return year == null || year <= Year.now().getValue();
+    }
 
     @Positive(message = "Horse Power must be positive number")
     @NotNull(message = "Horse power is required")
@@ -67,4 +71,5 @@ public abstract class OfferBaseDTO {
     private String sellerUsername;
     private Instant created;
     private Instant updated;
+
 }
