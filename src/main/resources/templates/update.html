@@ -28,19 +28,21 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label class="text-center text-white font-weight-bold" for="brandName">Brand</label>
-                <select id="brandName" th:field="*{brandName}" class="form-control">
+                <select id="brandName" th:field="*{brandName}" class="form-control" disabled>
                     <option value="">- Select a brand -</option>
                     <option th:each="brand : ${brands}" th:value="${brand}" th:text="${brand}"></option>
                 </select>
+                <input type="hidden" name="brandName" th:value="*{brandName}">
                 <span class="text-danger" th:if="${#fields.hasErrors('brandName')}" th:errors="*{brandName}"></span>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label class="text-center text-white font-weight-bold" for="modelName">Model</label>
-                <select id="modelName" th:field="*{modelName}" class="form-control">
+                <select id="modelName" th:field="*{modelName}" class="form-control" disabled>
                     <option value="">- Select a model -</option>
                     <option th:each="model : ${models}" th:label="${model}" th:value="${model}"
                             th:text="${model}"></option>
                 </select>
+                <input type="hidden" name="modelName" th:value="*{modelName}">
                 <span class="text-danger" th:if="${#fields.hasErrors('modelName')}" th:errors="*{modelName}"></span>
             </div>
         </div>
@@ -50,13 +52,14 @@
                 <label class="text-center text-white font-weight-bold" th:for="vehicleType">Vehicle</label>
                 <select th:field="*{vehicleType}"
                         th:errorclass="is-invalid"
-                        class="form-control">
+                        class="form-control" disabled>
                     <option value="">- Select vehicle type -</option>
                     <option th:each="type: ${allVehicleTypes}"
                             th:value="${type}"
                             th:text="${type}">
                     </option>
                 </select>
+                <input type="hidden" name="vehicleType" th:value="*{vehicleType}">
                 <span class="text-danger" th:if="${#fields.hasErrors('vehicleType')}" th:errors="*{vehicleType}"></span>
             </div>
 
@@ -64,13 +67,14 @@
                 <label class="text-center text-white font-weight-bold" th:for="engineType">Engine</label>
                 <select th:field="*{engineType}"
                         th:errorclass="is-invalid"
-                        class="form-control">
+                        class="form-control" disabled>
                     <option value="">- Select engine type -</option>
                     <option th:each="type: ${allEngineTypes}"
                             th:value="${type}"
                             th:text="${type}">
                     </option>
                 </select>
+                <input type="hidden" name="engineType" th:value="*{engineType}">
                 <span class="text-danger" th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></span>
             </div>
         </div>
@@ -80,13 +84,14 @@
                 <label class="text-center text-white font-weight-bold" th:for="transmission">Transmission</label>
                 <select th:field="*{transmissionType}"
                         th:errorclass="is-invalid"
-                        class="form-control">
+                        class="form-control" disabled>
                     <option value="">- Select transmission type -</option>
                     <option th:each="type: ${allTransmissionTypes}"
                             th:value="${type}"
                             th:text="${type}">
                     </option>
                 </select>
+                <input type="hidden" name="transmissionType" th:value="*{transmissionType}">
                 <span class="text-danger" th:if="${#fields.hasErrors('transmissionType')}"
                       th:errors="*{transmissionType}"></span>
             </div>
@@ -95,13 +100,14 @@
                 <label class="text-center text-white font-weight-bold" th:for="chassisType">Chassis</label>
                 <select th:field="*{chassisType}"
                         th:errorclass="is-invalid"
-                        class="form-control">
+                        class="form-control" disabled>
                     <option value="">- Select chassis type -</option>
                     <option th:each="type: ${allChassisTypes}"
                             th:value="${type}"
                             th:text="${type}">
                     </option>
                 </select>
+                <input type="hidden" name="chassisType" th:value="*{chassisType}">
                 <span class="text-danger" th:if="${#fields.hasErrors('chassisType')}" th:errors="*{chassisType}"></span>
             </div>
         </div>
@@ -134,8 +140,6 @@
                 <label th:for="year" class="text-white font-weight-bold">Year</label>
                 <input th:field="*{year}"
                        type="number"
-                       min="1900"
-                       max="2099"
                        step="1"
                        th:errorclass="is-invalid"
                        class="form-control"
