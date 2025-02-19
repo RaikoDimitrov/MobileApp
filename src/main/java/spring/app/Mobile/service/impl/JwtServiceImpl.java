@@ -2,6 +2,7 @@ package spring.app.Mobile.service.impl;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import spring.app.Mobile.service.interfaces.JwtService;
@@ -44,9 +45,12 @@ public class JwtServiceImpl implements JwtService {
                     .setSigningKey(getSigningKey())
                     .build();
             return jwtParser.parseClaimsJws(token).getBody();
-        } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException | SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             throw new RuntimeException("Invalid token", e);
+        } catch (Exception e ) {
+            throw new RuntimeException("Invalid token: " + e.getMessage());
         }
+
     }
 
     @Override

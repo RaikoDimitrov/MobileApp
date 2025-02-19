@@ -41,7 +41,8 @@ public class UserMobileDetailsServiceImpl implements UserDetailsService {
                 userEntity.getPassword(),
                 userEntity.getRoles().stream().map(UserRoleEntity::getRole).map(UserMobileDetailsServiceImpl::map).toList(),
                 userEntity.getFirstName(),
-                userEntity.getLastName());
+                userEntity.getLastName(),
+                userEntity.isVerified());
     }
 
     private static GrantedAuthority map(UserRoleEnum roleEnum) {

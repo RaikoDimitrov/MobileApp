@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    void sendPasswordResetEmail(UserEntity userEntity);
+    void sendVerificationEmail(String email);
+    void sendPasswordResetEmail(String email);
 
     void authenticateAfterVerification(String email, HttpServletRequest request);
 
-    void registerUser(UserRegistrationDTO userRegistrationDTO);
+    void registerUser(UserRegistrationDTO userRegistrationDTO, HttpServletRequest request);
 
     Optional<UserMobileDetails> getCurrentUser();
 

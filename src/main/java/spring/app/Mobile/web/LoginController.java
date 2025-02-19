@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,8 @@ public class LoginController {
         Exception exception = (Exception) request.getSession().getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
         if (exception instanceof BadCredentialsException) {
             model.addAttribute("error", "Invalid username or password!");
+        } else if (exception instanceof DisabledException) {
+            model.addAttribute("error", "Your email is not verified. Please check your email");
         } else if (exception != null) {
             model.addAttribute("error", exception.getMessage());
         }
