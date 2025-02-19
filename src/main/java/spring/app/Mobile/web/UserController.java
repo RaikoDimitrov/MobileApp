@@ -27,8 +27,33 @@ public class UserController {
     }
 
     @GetMapping("/verify-email")
-    public String showVerification(@RequestParam(value = "token", required = false) String token,
-                                   Model model) {
+    public String showVerification(@RequestParam(value = "verificationCode", required = false) String token,
+                                   @RequestParam(value = "resend", required = false) boolean resend,
+                                   Model model,
+                                   HttpServletRequest request) {
+        if (resend) {
+            String email = (String) request.getSession().getAttribute("email");
+            if (email != null) {
+                try {
+                    userService.sendVerificationEmail(email);
+                    model.addAttribute("successMessage", "New verification code has been sent!");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    model.addAttribute("error", "There was error resending the verification code");
+                    return "email-verification";
+                }
+            }
+        }
+
+
+        if (token == null) {
+            return "email-verification";
+        }
+        if (!jwtService.validateEmailVerificationToken(token)) {
+            model.addAttribute("error", "Invalid or expired token");
+            return "email-verification";
+        }
+
         model.addAttribute("verificationCode", token);
         return "email-verification";
     }
@@ -47,12 +72,14 @@ public class UserController {
                 return "redirect:/users/login";
             } else {
                 rAtt.addFlashAttribute("error", "Invalid verification code! Please try again");
+                rAtt.addFlashAttribute("verificationCode", token);
                 return "redirect:/users/verify-email";
             }
 
         } catch (Exception e) {
             rAtt.addFlashAttribute("error", "An unexpected error occurred! Please try again");
             System.err.println("Unexpected error: " + e.getMessage());
+            rAtt.addFlashAttribute("verificationCode", token);
             return "redirect:/users/verify-email";
         }
     }
@@ -67,8 +94,9 @@ public class UserController {
         Optional<UserEntity> optionalUserEntity = userService.findByEmail(email);
         if (optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
+            String emailEntity = userEntity.getEmail();
             try {
-                userService.sendPasswordResetEmail(userEntity);
+                userService.sendPasswordResetEmail(emailEntity);
                 model.addAttribute("successMessage", "Password reset link has been sent to your email");
 
             } catch (Exception e) {

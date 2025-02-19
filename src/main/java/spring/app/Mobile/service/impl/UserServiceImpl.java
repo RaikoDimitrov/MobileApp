@@ -87,10 +87,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void registerUser(UserRegistrationDTO userRegistrationDTO) {
+    public void registerUser(UserRegistrationDTO userRegistrationDTO, HttpServletRequest request) {
 
         UserEntity userEntity = userRepository.save(map(userRegistrationDTO));
-        sendVerificationEmail(userEntity);
+        String email = userEntity.getEmail();
+        request.getSession().setAttribute("email", email);
+        sendVerificationEmail(email);
     }
 
     @Override
@@ -119,15 +121,15 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private void sendVerificationEmail(UserEntity userEntity) {
+    public void sendVerificationEmail(String email) {
         String subject = "Email verification";
-        String verificationToken = jwtService.generateEmailVerificationToken(userEntity.getEmail());
-        String verificationLink = appProperties.getBaseUrl() + "/verify-email?token=" + URLEncoder.encode(verificationToken, StandardCharsets.UTF_8);
+        String verificationToken = jwtService.generateEmailVerificationToken(email);
+        String verificationLink = appProperties.getBaseUrl() + "/users/verify-email?verificationCode=" + URLEncoder.encode(verificationToken, StandardCharsets.UTF_8);
         String message = "Click the link below to verify your email:\n" + verificationLink
                 + "\nOr enter the following code manually: " + verificationToken;
 
         try {
-            emailService.sendEmail(userEntity.getEmail(), subject, message);
+            emailService.sendEmail(email, subject, message);
         } catch (Exception e) {
             throw new RuntimeException("Failed to send verification email.", e);
         }
@@ -179,16 +181,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendPasswordResetEmail(UserEntity userEntity) {
+    public void sendPasswordResetEmail(String email) {
         String subject = "Reset your password!";
-        String passwordResetToken = jwtService.generatePasswordResetToken(userEntity.getEmail());
+        String passwordResetToken = jwtService.generatePasswordResetToken(email);
         String passwordResetLink = appProperties.getBaseUrl()
                 + "/users/reset-password?token="
                 + URLEncoder.encode(passwordResetToken, StandardCharsets.UTF_8);
         String text = "Click the link to reset your password: " + passwordResetLink;
 
         try {
-            emailService.sendEmail(userEntity.getEmail(), subject, text);
+            emailService.sendEmail(email, subject, text);
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to send password reset email.", e);

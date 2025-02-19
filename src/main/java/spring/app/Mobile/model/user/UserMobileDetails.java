@@ -1,7 +1,6 @@
 package spring.app.Mobile.model.user;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -19,18 +18,26 @@ public class UserMobileDetails extends User {
 
     private final String lastName;
 
+    private final boolean isVerified;
+
     public UserMobileDetails(UUID uuid,
                              String username,
                              String email,
                              String password,
                              Collection<? extends GrantedAuthority> authorities,
                              String firstName,
-                             String lastName) {
+                             String lastName, boolean isVerified) {
         super(username, password, authorities);
         this.uuid = uuid;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isVerified = isVerified;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isVerified;
     }
 
     public String getFullName() {

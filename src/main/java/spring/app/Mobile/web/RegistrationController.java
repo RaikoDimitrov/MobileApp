@@ -37,9 +37,10 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("registerDTO") @Valid UserRegistrationDTO userDTO,
                                BindingResult result,
-                               RedirectAttributes rAtt) {
+                               RedirectAttributes rAtt,
+                               HttpServletRequest request) {
         if (result.hasErrors()) return "auth-register";
-        userService.registerUser(userDTO);
+        userService.registerUser(userDTO, request);
         rAtt.addFlashAttribute("successMessage", "Registration successful! Please check your email.");
         return "redirect:/users/verify-email";
     }
