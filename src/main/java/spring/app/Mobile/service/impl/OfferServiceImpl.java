@@ -92,9 +92,9 @@ public class OfferServiceImpl implements OfferService {
         OfferEntity offerById = offerRepository.findById(offerId).
                 orElseThrow(() -> new ResourceNotFoundException("Offer not found!"));
         Instant created = offerById.getCreated();
-        offerDetailsDTO.setUpdated(Instant.now());
         offerMapper.map(offerDetailsDTO, offerById);
         offerById.setCreated(created);
+        offerById.setUpdated(Instant.now());
         offerRepository.save(offerById);
     }
 
@@ -112,10 +112,12 @@ public class OfferServiceImpl implements OfferService {
     //mapping
     private OfferEntity map(OfferAddDTO offerAddDTO) {
         String username = getLoggedUsername();
-        UserEntity seller = userRepository.findByUsername(username);
+        UserEntity sellerUsername = userRepository.findByUsername(username);
+
         BrandEntity brandEntity = brandRepository.findByName(offerAddDTO.getBrandName());
         brandEntity.setName(offerAddDTO.getBrandName());
         brandRepository.save(brandEntity);
+
         ModelEntity modelEntity = modelRepository.findByName(offerAddDTO.getModelName())
                 .stream()
                 .filter(model -> model.getBrandEntity().getName().equals(offerAddDTO.getBrandName()))
@@ -123,10 +125,12 @@ public class OfferServiceImpl implements OfferService {
                 .orElseGet(() -> {
                     ModelEntity newModel = new ModelEntity();
                     newModel.setName(offerAddDTO.getModelName());
+                    newModel.setBrandEntity(brandEntity);
                     return modelRepository.save(newModel);
                 });
+
         OfferEntity mappedOfferEntity = offerMapper.map(offerAddDTO, OfferEntity.class);
-        mappedOfferEntity.setSellerEntity(seller);
+        mappedOfferEntity.setSellerEntity(sellerUsername);
         mappedOfferEntity.setBrandEntity(brandEntity);
         mappedOfferEntity.setModelEntity(modelEntity);
         setCurrentTimeStamps(mappedOfferEntity);

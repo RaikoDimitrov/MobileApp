@@ -1,6 +1,7 @@
 package spring.app.Mobile.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +13,7 @@ import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
 @Entity
 @Table(name = "models")
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 public class ModelEntity extends BaseEntity {

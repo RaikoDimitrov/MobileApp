@@ -19,7 +19,6 @@ import spring.app.Mobile.model.enums.VehicleTypeEnum;
 @AllArgsConstructor
 public class OfferEntity extends BaseEntity {
 
-
     @NotEmpty
     private String description;
 

@@ -6,8 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
-@Getter
-@Setter
+@Data
 @MappedSuperclass
 @SuperBuilder
 @NoArgsConstructor
