@@ -1,25 +1,20 @@
 package spring.app.Mobile.model.dto;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
-import java.time.Instant;
 import java.time.Year;
 
-@SuperBuilder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class OfferBaseDTO {
-    private Long id;
+public abstract class OfferValidationDTO {
 
     @NotBlank(message = "Description cannot be empty")
     @Size(message = "Description must be between 50-500 symbols", min = 50, max = 500)
@@ -67,9 +62,4 @@ public abstract class OfferBaseDTO {
     @NotBlank(message = "Image is required")
     @Pattern(regexp = "^(https?|ftp):\\/\\/([a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+)$", message = "Please provide a valid URL")
     private String imageUrl;
-
-    private String sellerUsername;
-    private Instant created;
-    private Instant updated;
-
 }

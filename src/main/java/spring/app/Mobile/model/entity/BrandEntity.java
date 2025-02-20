@@ -1,6 +1,7 @@
 package spring.app.Mobile.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "brands")
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 public class BrandEntity extends BaseEntity {
