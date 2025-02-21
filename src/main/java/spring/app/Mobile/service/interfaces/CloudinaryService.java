@@ -1,13 +1,12 @@
 package spring.app.Mobile.service.interfaces;
 
-import jakarta.mail.Multipart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CloudinaryService {
 
-    List<Map> uploadImages(List<String> imagePaths);
+    List<String> uploadImages(List<MultipartFile> files);
 
     void deleteImage(String publicId);
 }

@@ -18,6 +18,7 @@ import spring.app.Mobile.repository.BrandRepository;
 import spring.app.Mobile.repository.ModelRepository;
 import spring.app.Mobile.repository.OfferRepository;
 import spring.app.Mobile.repository.UserRepository;
+import spring.app.Mobile.service.interfaces.CloudinaryService;
 import spring.app.Mobile.service.interfaces.OfferService;
 
 import java.time.Instant;
@@ -34,14 +35,16 @@ public class OfferServiceImpl implements OfferService {
     private final ModelRepository modelRepository;
     private final UserRepository userRepository;
     private final ModelMapper offerMapper;
+    private final CloudinaryService cloudinaryService;
     private final RestClient offerRestClient;
 
-    public OfferServiceImpl(OfferRepository offerRepository, BrandRepository brandRepository, ModelRepository modelRepository, UserRepository userRepository, ModelMapper offerMapper, @Qualifier("offerRestClient") RestClient offerRestClient) {
+    public OfferServiceImpl(OfferRepository offerRepository, BrandRepository brandRepository, ModelRepository modelRepository, UserRepository userRepository, ModelMapper offerMapper, CloudinaryService cloudinaryService, @Qualifier("offerRestClient") RestClient offerRestClient) {
         this.offerRepository = offerRepository;
         this.brandRepository = brandRepository;
         this.modelRepository = modelRepository;
         this.userRepository = userRepository;
         this.offerMapper = offerMapper;
+        this.cloudinaryService = cloudinaryService;
         this.offerRestClient = offerRestClient;
     }
 
@@ -77,6 +80,7 @@ public class OfferServiceImpl implements OfferService {
                 .uri("/offers")
                 .body(responseDTO)
                 .retrieve();*/
+
         return responseDTO;
     }
 
@@ -109,7 +113,7 @@ public class OfferServiceImpl implements OfferService {
         return offerMapper.map(offerEntity, OfferDetailsDTO.class);
     }
 
-    //mapping
+    //mapping dto -> entity
     private OfferEntity map(OfferAddDTO offerAddDTO) {
         String username = getLoggedUsername();
         UserEntity sellerUsername = userRepository.findByUsername(username);
@@ -129,10 +133,13 @@ public class OfferServiceImpl implements OfferService {
                     return modelRepository.save(newModel);
                 });
 
+        List<String> imageUrls = cloudinaryService.uploadImages(offerAddDTO.getImages());
+
         OfferEntity mappedOfferEntity = offerMapper.map(offerAddDTO, OfferEntity.class);
         mappedOfferEntity.setSellerEntity(sellerUsername);
         mappedOfferEntity.setBrandEntity(brandEntity);
         mappedOfferEntity.setModelEntity(modelEntity);
+        mappedOfferEntity.setImageUrls(imageUrls);
         setCurrentTimeStamps(mappedOfferEntity);
         return mappedOfferEntity;
     }
