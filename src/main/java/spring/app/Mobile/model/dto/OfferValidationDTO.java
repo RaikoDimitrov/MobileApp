@@ -59,7 +59,7 @@ public abstract class OfferValidationDTO {
     @NotEmpty(message = "Model is required")
     private String modelName;
 
-    @NotBlank(message = "Image is required")
+    /*@NotBlank(message = "Image is required")
     @Pattern(regexp = "^(https?|ftp):\\/\\/([a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+)$", message = "Please provide a valid URL")
-    private String imageUrl;
+    private String imageUrl;*/
 }
