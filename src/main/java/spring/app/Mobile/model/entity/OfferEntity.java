@@ -11,6 +11,9 @@ import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
+import java.awt.*;
+import java.util.List;
+
 @Entity
 @Table(name = "offers")
 @SuperBuilder
@@ -60,8 +63,8 @@ public class OfferEntity extends BaseEntity {
     @JoinColumn(name = "seller_id", nullable = false)
     private UserEntity sellerEntity;
 
-    @NotEmpty
-    private String imageUrl;
+    @ElementCollection
+    private List<String> imageUrls;
 
 
 }
