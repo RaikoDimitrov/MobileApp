@@ -1,9 +1,8 @@
 package spring.app.Mobile.model.dto;
 
-import jakarta.mail.Multipart;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.List;
@@ -17,8 +16,8 @@ public class OfferDetailsDTO extends OfferValidationDTO {
     private Instant created;
     private Instant updated;
 
-    @NotEmpty(message = "Please upload images")
-    private List<Multipart> newImages;
+    private List<String> imageUrls;
+    private List<MultipartFile> newImages;
     private List<Long> removeImagesId;
 
 }

@@ -4,12 +4,14 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
 import java.time.Year;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -58,6 +60,9 @@ public abstract class OfferValidationDTO {
 
     @NotEmpty(message = "Model is required")
     private String modelName;
+
+    @NotEmpty(message = "Please upload images")
+    private List<MultipartFile> images;
 
     /*@NotBlank(message = "Image is required")
     @Pattern(regexp = "^(https?|ftp):\\/\\/([a-zA-Z0-9-._~:\\/?#\\[\\]@!$&'()*+,;%=]+)$", message = "Please provide a valid URL")

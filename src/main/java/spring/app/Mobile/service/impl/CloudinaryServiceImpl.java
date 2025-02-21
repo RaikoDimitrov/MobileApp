@@ -4,12 +4,13 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import spring.app.Mobile.service.interfaces.CloudinaryService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CloudinaryServiceImpl implements CloudinaryService {
@@ -26,23 +27,21 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
-    public List<Map> uploadImages(List<String> imagePaths) {
-        List<Map> uploadedImages = new ArrayList<>();
-        try {
-            for (Map path : uploadedImages) {
-                Map uploadResult = cloudinary.uploader().upload(path, ObjectUtils.emptyMap());
-                uploadResult.get(uploadResult);
+    public List<String> uploadImages(List<MultipartFile> files) {
+        return files.stream().map(file -> {
+            try {
+                Map uploadResult = cloudinary.uploader().upload(file.getInputStream(), ObjectUtils.emptyMap());
+                return (String) uploadResult.get("secure_url");
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading image to cloudinary", e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Error uploading image to cloudinary", e);
-        }
-        return uploadedImages;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public void deleteImage(String publicId) {
         try {
-            Map destroyResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
         } catch (IOException e) {
             throw new RuntimeException("Error deleting image from cloudinary", e);
         }
