@@ -4,15 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
 import spring.app.Mobile.model.enums.VehicleTypeEnum;
 
-import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "offers")
@@ -66,5 +69,16 @@ public class OfferEntity extends BaseEntity {
     @ElementCollection
     private List<String> imageUrls;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        OfferEntity that = (OfferEntity) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

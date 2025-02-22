@@ -2,14 +2,11 @@ package spring.app.Mobile.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import spring.app.Mobile.model.enums.ChassisTypeEnum;
-import spring.app.Mobile.model.enums.EngineTypeEnum;
-import spring.app.Mobile.model.enums.TransmissionTypeEnum;
-import spring.app.Mobile.model.enums.VehicleTypeEnum;
+import org.hibernate.Hibernate;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "models")
@@ -32,4 +29,16 @@ public class ModelEntity extends BaseEntity {
     @JoinColumn(name = "brand_entity_id", nullable = false)
     private BrandEntity brandEntity;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ModelEntity that = (ModelEntity) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
