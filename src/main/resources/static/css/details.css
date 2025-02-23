@@ -10,7 +10,7 @@ body {
 
 /* Container for Vehicle Offer */
 .vehicle-container {
-    max-width: 500px; /* Smaller container width */
+    max-width: 800px; /* Smaller container width */
     color: white; /* Make text white */
     padding: 15px;
     border-radius: 8px;

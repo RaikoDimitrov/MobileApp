@@ -29,7 +29,7 @@
         <div th:each="offer : ${allOffers}" class="offer card col-sm-6 col-md-4 col-lg-3 m-2 p-0">
             <!-- Image Wrapper for Offer -->
             <div class="card-img-top-wrapper">
-                <img class="card-img-top" th:src="@{${offer.imageUrl}}" alt="Car image">
+                <img class="card-img-top" th:src="@{${offer.mainImageUrl}}" alt="Car image">
             </div>
 
             <!-- Card Title with Offer Info -->

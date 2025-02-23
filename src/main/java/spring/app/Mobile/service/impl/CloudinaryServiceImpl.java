@@ -28,7 +28,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public List<String> uploadImages(List<MultipartFile> files) {
-        return files.stream().map(file -> {
+        return files.parallelStream().map(file -> {
             try {
                 Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                 return (String) uploadResult.get("secure_url");
@@ -45,5 +45,15 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         } catch (IOException e) {
             throw new RuntimeException("Error deleting image from cloudinary", e);
         }
+    }
+
+    @Override
+    public String extractPublicIdFromUrl(String imageUrl) {
+        String[] parts = imageUrl.split("/v\\d+/");
+        if (parts.length > 1) {
+            String publicIdWithoutExtenstion = parts[1].split("\\.")[0];
+            return publicIdWithoutExtenstion;
+        }
+        return null;
     }
 }
