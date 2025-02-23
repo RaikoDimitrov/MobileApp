@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
@@ -82,6 +83,7 @@ public class OfferController {
             model.addAttribute("models", modelService.getModelsByBrandName(offerAddDTO.getBrandName()));
             return "offer-add";
         }
+
         offerService.createOffer(offerAddDTO);
         rAtt.addFlashAttribute("successMessage", "Offer added successfully!");
         return "redirect:/offers/all";

@@ -148,10 +148,9 @@
             </div>
 
             <div class="form-group col-md-6 mb-3">
-                <label class="text-white font-weight-bold" for="imageUrl">Image URL</label>
-                <input id="imageUrl" type="url" th:field="*{imageUrl}" class="form-control"
-                       placeholder="Vehicle image URL">
-                <span class="text-danger" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></span>
+                <label class="text-white font-weight-bold" for="images">Upload Images</label>
+                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple>
+                <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
             </div>
         </div>
 
