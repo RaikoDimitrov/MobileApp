@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script th:src="@{/js/modelAddOfferUpdate.js}"></script>
+    <script th:src="@{/js/previewImages.js}"></script>
 
 </head>
 
@@ -144,14 +145,6 @@
             </div>
 
             <div class="form-group col-md-6 mb-3">
-                <label class="text-white font-weight-bold" for="images">Upload Images</label>
-                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple>
-                <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
                 <label th:for="horsePower" class="text-white font-weight-bold">Horse Power (HP)</label>
                 <input th:field="*{horsePower}"
                        type="number"
@@ -160,8 +153,27 @@
                        placeholder="Horse Power"/>
                 <span class="text-danger" th:if="${#fields.hasErrors('horsePower')}" th:errors="*{horsePower}"></span>
             </div>
+        </div>
 
+        <div class="row">
             <div class="form-group col-md-6 mb-3">
+                <label class="text-white font-weight-bold" for="images">Upload Images</label>
+                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple
+                       onchange="previewImages()">
+                <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
+                <!-- Label to choose main image -->
+                <label id="chooseMainLabel" class="text-white font-weight-bold"
+                       style="display: none; margin-top: 20px;"
+                       for="mainImageIndex">Choose main image to be displayed</label>
+            </div>
+            <!-- Image Preview Section -->
+            <div id="imagePreview" class="image-container mt-3"></div>
+            <!-- Hidden field to store selected main image index -->
+            <input type="hidden" id="mainImageIndex" name="mainImageIndex" value="0">
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12 mb-3">
                 <label class="text-white font-weight-bold" th:for="description">Description</label>
                 <textarea
                         th:field="*{description}"

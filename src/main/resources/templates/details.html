@@ -31,12 +31,12 @@
         <!-- Main Image Section -->
         <div class="vehicle-image-card mb-4">
             <button class="vehicle-arrow vehicle-arrow-left">&#10094;</button>
-            <img th:src="@{${offerDetails.imageUrls[0]}}" alt="Vehicle Image" class="vehicle-main-image" id="mainImage">
+            <img th:src="@{${offerDetails.mainImageUrl}}" loading="lazy" alt="Vehicle Image" class="vehicle-main-image" id="mainImage">
             <button class="vehicle-arrow vehicle-arrow-right">&#10095;</button>
         </div>
 
         <div class="vehicle-thumbnails">
-            <img th:each="imgUrl : ${offerDetails.imageUrls}"
+            <img th:each="imgUrl : ${offerDetails.imageUrls}" loading="lazy"
                  th:attr="data-src=${imgUrl}"
                  th:src="@{${imgUrl}}"
                  class="vehicle-thumbnail">
@@ -56,16 +56,20 @@
                         <td><span th:text="*{mileage} + ' km'">Mileage</span></td>
                     </tr>
                     <tr>
+                        <th>Vehicle Type</th>
+                        <td><span th:text="*{vehicleType}">Vehicle Type</span></td>
+                    </tr>
+                    <tr>
+                        <th>Chassis Type</th>
+                        <td><span th:text="*{chassisType}">Chassis Type</span></td>
+                    </tr>
+                    <tr>
                         <th>Engine Type</th>
                         <td><span th:text="*{engineType}">Engine Type</span></td>
                     </tr>
                     <tr>
                         <th>Transmission Type</th>
                         <td><span th:text="*{transmissionType}">Transmission Type</span></td>
-                    </tr>
-                    <tr>
-                        <th>Vehicle Type</th>
-                        <td><span th:text="*{vehicleType}">Vehicle Type</span></td>
                     </tr>
                     <tr>
                         <th>Horse Power</th>

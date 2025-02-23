@@ -21,7 +21,7 @@ public class OfferSummaryDTO {
 
     private String modelName;
 
-    private String imageUrl;
+    private String mainImageUrl;
 
     private Integer mileage;
 

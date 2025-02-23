@@ -18,8 +18,9 @@ public class OfferDetailsDTO extends OfferValidationDTO {
     private Instant created;
     private Instant updated;
 
+    private String mainImageUrl;
     private List<String> imageUrls;
     private List<MultipartFile> newImages;
-    private List<Long> removeImagesId;
+    private List<String> removeImagesId;
 
 }

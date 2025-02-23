@@ -69,6 +69,8 @@ public class OfferEntity extends BaseEntity {
     @ElementCollection
     private List<String> imageUrls;
 
+    private String mainImageUrl;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

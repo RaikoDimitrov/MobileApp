@@ -10,6 +10,7 @@
     <script src="/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script th:src="@{/js/modelAddOfferUpdate.js}"></script>
+    <script th:src="@{/js/previewImages.js}"></script>
 
 </head>
 
@@ -23,6 +24,7 @@
             th:action="@{/offers/update/{id}(id=${offerUpdate.id})}"
             th:method="post"
             th:object="${offerUpdate}"
+            enctype="multipart/form-data"
             class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
         <div class="row">
@@ -148,14 +150,6 @@
             </div>
 
             <div class="form-group col-md-6 mb-3">
-                <label class="text-white font-weight-bold" for="images">Upload Images</label>
-                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple>
-                <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
                 <label th:for="horsePower" class="text-white font-weight-bold">Horse Power (HP)</label>
                 <input th:field="*{horsePower}"
                        type="number"
@@ -164,8 +158,51 @@
                        placeholder="Horse Power"/>
                 <span class="text-danger" th:if="${#fields.hasErrors('horsePower')}" th:errors="*{horsePower}"></span>
             </div>
+        </div>
 
+        <div class="row">
             <div class="form-group col-md-6 mb-3">
+                <label class="text-white font-weight-bold" for="images">Upload Images</label>
+                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple
+                       onchange="previewImages()">
+                <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
+
+                <!-- Label to choose main image -->
+                <label id="chooseMainLabel" class="text-white font-weight-bold" style="margin-top: 20px;">Choose main
+                    image to be displayed</label>
+            </div>
+
+            <!-- Image Preview Section -->
+            <div id="imagePreview" class="image-container mt-3">
+                <th:block th:if="${offerUpdate.imageUrls != null and not #lists.isEmpty(offerUpdate.imageUrls)}">
+                    <div th:each="image, iterStat : ${offerUpdate.imageUrls}" class="preview-image-container"
+                         th:attr="data-index=${iterStat.index}"
+                         th:classappend="${offerUpdate.mainImageIndex == iterStat.index} ? 'selected' : ''"
+                         onclick="selectMainImage(this)">
+
+                        <!-- Remove Button -->
+                        <button type="button" class="remove-btn" th:attr="data-image-url=${image}"
+                                onclick="removeImage(event)">−
+                        </button>
+
+                        <!-- Image Thumbnail -->
+                        <img th:src="${image}" alt="Uploaded Image" class="preview-img" loading="lazy">
+                    </div>
+                </th:block>
+                <th:block th:if="${offerUpdate.imageUrls == null or #lists.isEmpty(offerUpdate.imageUrls)}">
+                    <p class="text-white">No images uploaded.</p>
+                </th:block>
+            </div>
+
+            <!-- Hidden field to store selected main image index -->
+            <input type="hidden" id="mainImageIndex" name="mainImageIndex" th:value="${offerUpdate.mainImageIndex}">
+            <!-- Hidden field to store the images to be removed -->
+            <input type="hidden" id="removeImagesId" name="removeImagesId">
+        </div>
+
+
+        <div class="row">
+            <div class="form-group col-md-12 mb-3">
                 <label class="text-white font-weight-bold" th:for="description">Description</label>
                 <textarea
                         th:field="*{description}"

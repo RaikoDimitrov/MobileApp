@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.multipart.MultipartFile;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
@@ -96,6 +97,31 @@ public class OfferServiceImpl implements OfferService {
         OfferEntity offerById = offerRepository.findById(offerId).
                 orElseThrow(() -> new ResourceNotFoundException("Offer not found!"));
         Instant created = offerById.getCreated();
+
+        List<MultipartFile> newImages = offerDetailsDTO.getNewImages();
+        if (newImages != null && !newImages.isEmpty()) {
+            List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
+            offerById.getImageUrls().addAll(newImagesUrls);
+        }
+        List<String> removedImages = offerDetailsDTO.getRemoveImagesId();
+        if (removedImages != null && !removedImages.isEmpty()) {
+            for (String imageUrl : removedImages) {
+                String publicId = null;
+                try {
+                    publicId = cloudinaryService.extractPublicIdFromUrl(imageUrl);
+                    if (publicId != null) {
+                        cloudinaryService.deleteImage(publicId);
+                        offerById.getImageUrls().remove(imageUrl);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to delete image from cloudinary: " + imageUrl, e);
+                }
+            }
+        }
+        offerDetailsDTO.setImageUrls(offerById.getImageUrls());
+        if (offerDetailsDTO.getMainImageUrl() != null) {
+            offerById.setMainImageUrl(offerDetailsDTO.getMainImageUrl());
+        }
         offerMapper.map(offerDetailsDTO, offerById);
         offerById.setCreated(created);
         offerById.setUpdated(Instant.now());
@@ -139,7 +165,14 @@ public class OfferServiceImpl implements OfferService {
         mappedOfferEntity.setSellerEntity(sellerUsername);
         mappedOfferEntity.setBrandEntity(brandEntity);
         mappedOfferEntity.setModelEntity(modelEntity);
+
         mappedOfferEntity.setImageUrls(imageUrls);
+        if (offerAddDTO.getMainImageIndex() != null && offerAddDTO.getMainImageIndex() < imageUrls.size()) {
+            mappedOfferEntity.setMainImageUrl(imageUrls.get(offerAddDTO.getMainImageIndex()));
+        } else {
+            mappedOfferEntity.setMainImageUrl(imageUrls.isEmpty() ? null : imageUrls.get(0));
+        }
+
         setCurrentTimeStamps(mappedOfferEntity);
         return mappedOfferEntity;
     }
