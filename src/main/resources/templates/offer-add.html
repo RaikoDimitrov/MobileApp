@@ -23,6 +23,7 @@
             th:action="@{/offers/add}"
             th:method="post"
             th:object="${offerAddDTO}"
+            enctype="multipart/form-data"
             class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
         <div class="row">
@@ -144,7 +145,7 @@
 
             <div class="form-group col-md-6 mb-3">
                 <label class="text-white font-weight-bold" for="images">Upload Images</label>
-                <input id="images" type="file" th:field="*{images}" class="form-control" accept="image/*" multiple>
+                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple>
                 <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
             </div>
         </div>

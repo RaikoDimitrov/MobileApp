@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/details.css}"/>
     <script src="/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/galleryImages.js}"></script>
 </head>
 
 <body>
@@ -27,9 +28,18 @@
 
     <div th:object="${offerDetails}" class="vehicle-details">
 
-        <!-- Vehicle Image Section -->
+        <!-- Main Image Section -->
         <div class="vehicle-image-card mb-4">
-            <img th:src="@{*{imageUrl}}" class="vehicle-image" alt="Vehicle Image">
+            <button class="vehicle-arrow vehicle-arrow-left">&#10094;</button>
+            <img th:src="@{${offerDetails.imageUrls[0]}}" alt="Vehicle Image" class="vehicle-main-image" id="mainImage">
+            <button class="vehicle-arrow vehicle-arrow-right">&#10095;</button>
+        </div>
+
+        <div class="vehicle-thumbnails">
+            <img th:each="imgUrl : ${offerDetails.imageUrls}"
+                 th:attr="data-src=${imgUrl}"
+                 th:src="@{${imgUrl}}"
+                 class="vehicle-thumbnail">
         </div>
 
         <!-- Vehicle Details Section -->
@@ -101,11 +111,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 
 
 <script th:src="@{/js/currency.js}"></script>

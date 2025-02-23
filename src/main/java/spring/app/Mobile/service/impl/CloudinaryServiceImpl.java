@@ -30,7 +30,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     public List<String> uploadImages(List<MultipartFile> files) {
         return files.stream().map(file -> {
             try {
-                Map uploadResult = cloudinary.uploader().upload(file.getInputStream(), ObjectUtils.emptyMap());
+                Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                 return (String) uploadResult.get("secure_url");
             } catch (IOException e) {
                 throw new RuntimeException("Error uploading image to cloudinary", e);
