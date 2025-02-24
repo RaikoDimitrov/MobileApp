@@ -80,6 +80,7 @@ public class OfferController {
         }
         if (result.hasErrors()) {
             System.out.println("Validation Errors: " + result.getAllErrors());
+            model.addAttribute("offerAddDTO", offerAddDTO);
             model.addAttribute("models", modelService.getModelsByBrandName(offerAddDTO.getBrandName()));
             return "offer-add";
         }

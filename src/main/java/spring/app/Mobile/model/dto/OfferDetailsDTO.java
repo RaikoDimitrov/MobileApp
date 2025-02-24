@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,7 +20,12 @@ public class OfferDetailsDTO extends OfferValidationDTO {
     private Instant updated;
 
     private String mainImageUrl;
+
     private List<String> imageUrls;
+
+    public List<String> getImageUrls() {
+        return imageUrls != null ? imageUrls : new ArrayList<>();
+    }
     private List<MultipartFile> newImages;
     private List<String> removeImagesId;
 

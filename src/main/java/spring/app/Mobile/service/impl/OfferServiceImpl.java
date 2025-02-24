@@ -96,26 +96,18 @@ public class OfferServiceImpl implements OfferService {
     @Transactional
     @Override
     public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO) {
+        System.out.println("Existing images: " + offerDetailsDTO.getImageUrls());
+        System.out.println("New images: " + offerDetailsDTO.getNewImages());
+        System.out.println("Removed images: " + offerDetailsDTO.getRemoveImagesId());
+
+
         OfferEntity offerById = offerRepository.findById(offerId).
                 orElseThrow(() -> new ResourceNotFoundException("Offer not found!"));
         Instant created = offerById.getCreated();
 
         List<String> updatedImagesUrls = new ArrayList<>(offerById.getImageUrls());
 
-        List<MultipartFile> newImages = offerDetailsDTO.getNewImages();
-        if (newImages == null || newImages.isEmpty()) {
-            System.out.println("No new images received");
-        } else {
-            System.out.println("New images received: " + newImages.size());
-            List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
-            updatedImagesUrls.addAll(newImagesUrls);
-        }
-        if (newImages != null && !newImages.isEmpty()) {
-            List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
-            updatedImagesUrls.addAll(newImagesUrls);
-        }
-        if (updatedImagesUrls.isEmpty()) throw  new RuntimeException("Please upload at least 1 image");
-
+        //remove images
         List<String> removedImages = offerDetailsDTO.getRemoveImagesId();
         if (removedImages != null && !removedImages.isEmpty()) {
             List<String> toRemove = new ArrayList<>();
@@ -133,7 +125,13 @@ public class OfferServiceImpl implements OfferService {
             updatedImagesUrls.removeAll(toRemove);
         }
 
-        if (updatedImagesUrls.isEmpty()) throw  new RuntimeException("Cannot update offer without an image");
+        //upload images
+        List<MultipartFile> newImages = offerDetailsDTO.getNewImages();
+        if (newImages != null && !newImages.isEmpty()) {
+            List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
+            updatedImagesUrls.addAll(newImagesUrls);
+        }
+        if (updatedImagesUrls.isEmpty()) throw  new RuntimeException("Please upload at least one image");
 
         if (offerDetailsDTO.getMainImageIndex() != null
                 && offerDetailsDTO.getMainImageIndex() < offerById.getImageUrls().size()

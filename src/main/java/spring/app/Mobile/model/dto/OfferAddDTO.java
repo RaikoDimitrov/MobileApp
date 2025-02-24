@@ -14,4 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class OfferAddDTO extends OfferValidationDTO {
 
+    @NotEmpty(message = "Please upload at least one image")
+    private List<MultipartFile> images;
+
 }
