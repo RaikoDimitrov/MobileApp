@@ -9,8 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css"/>
     <script src="/js/jquery-3.5.1.slim.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script th:src="@{/js/modelAddOfferUpdate.js}"></script>
-    <script th:src="@{/js/previewImages.js}"></script>
 
 </head>
 
@@ -26,6 +24,10 @@
             th:object="${offerUpdate}"
             enctype="multipart/form-data"
             class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+
+        <div th:if="${error}" class="alert alert-error" role="alert">
+            <span th:text="${error}"></span>
+        </div>
 
         <div class="row">
             <div class="form-group col-md-6 mb-3">
@@ -163,42 +165,35 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label class="text-white font-weight-bold" for="images">Upload Images</label>
-                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple
-                       onchange="previewImages()">
+                <input id="images" type="file" name="newImages" class="form-control" accept="image/*" multiple>
                 <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
-
-                <!-- Label to choose main image -->
-                <label id="chooseMainLabel" class="text-white font-weight-bold" style="margin-top: 20px;">Choose main
-                    image to be displayed</label>
             </div>
-
-            <!-- Image Preview Section -->
-            <div id="imagePreview" class="image-container mt-3">
-                <th:block th:if="${offerUpdate.imageUrls != null and not #lists.isEmpty(offerUpdate.imageUrls)}">
-                    <div th:each="image, iterStat : ${offerUpdate.imageUrls}" class="preview-image-container"
-                         th:attr="data-index=${iterStat.index}"
-                         th:classappend="${offerUpdate.mainImageIndex == iterStat.index} ? 'selected' : ''"
-                         onclick="selectMainImage(this)">
-
-                        <!-- Remove Button -->
-                        <button type="button" class="remove-btn" th:attr="data-image-url=${image}"
-                                onclick="removeImage(event)">−
-                        </button>
-
-                        <!-- Image Thumbnail -->
-                        <img th:src="${image}" alt="Uploaded Image" class="preview-img" loading="lazy">
-                    </div>
-                </th:block>
-                <th:block th:if="${offerUpdate.imageUrls == null or #lists.isEmpty(offerUpdate.imageUrls)}">
-                    <p class="text-white">No images uploaded.</p>
-                </th:block>
-            </div>
-
-            <!-- Hidden field to store selected main image index -->
-            <input type="hidden" id="mainImageIndex" name="mainImageIndex" th:value="${offerUpdate.mainImageIndex}">
-            <!-- Hidden field to store the images to be removed -->
-            <input type="hidden" id="removeImagesId" name="removeImagesId">
         </div>
+
+        <!-- Image Preview Section (Shows existing & new images) -->
+        <div id="imagePreview" class="image-container mt-3">
+            <!-- Loop through existing images (if any) -->
+            <th:block th:if="${offerUpdate.imageUrls != null and not #lists.isEmpty(offerUpdate.imageUrls)}">
+                <div th:each="image, iterStat : ${offerUpdate.imageUrls}" class="preview-image-container"
+                     th:attr="data-index=${iterStat.index}, data-image-url=${image}"
+                     th:classappend="${offerUpdate.mainImageIndex == iterStat.index} ? 'selected' : ''"
+                     onclick="selectMainImage(this)">
+
+                    <!-- Remove Button -->
+                    <button type="button" class="remove-btn" th:attr="data-image-url=${image}"
+                            onclick="removeImage(event)">−
+                    </button>
+
+                    <!-- Image Thumbnail -->
+                    <img th:src="${image}" alt="Uploaded Image" class="preview-img" loading="lazy">
+                </div>
+            </th:block>
+        </div>
+
+        <!-- Hidden input fields for tracking main image and removed images -->
+        <input type="hidden" id="mainImageIndex" name="mainImageIndex" th:value="${offerUpdate.mainImageIndex}">
+        <input type="hidden" id="removeImagesId" name="removeImagesId">
+
 
 
         <div class="row">
@@ -227,9 +222,7 @@
     </form>
 </div>
 
-<div>
-    <footer></footer>
-</div>
-
+<script th:src="@{/js/modelAddOfferUpdate.js}"></script>
+<script th:src="@{/js/previewImages.js}"></script>
 </body>
 </html>

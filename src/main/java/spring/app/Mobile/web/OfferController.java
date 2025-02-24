@@ -135,13 +135,23 @@ public class OfferController {
                               BindingResult result,
                               Model model,
                               RedirectAttributes rAtt) {
+        System.out.println("Received DTO: " + offerDetailsDTO);
+        System.out.println("New images count: " + (offerDetailsDTO.getNewImages() != null ? offerDetailsDTO.getNewImages().size() : 0));
+        System.out.println("Remove images count: " + (offerDetailsDTO.getRemoveImagesId() != null ? offerDetailsDTO.getRemoveImagesId().size() : 0));
+
         if (result.hasErrors()) {
             model.addAttribute("offerUpdate", offerDetailsDTO);
-            model.addAttribute("models", modelService.getModelsByBrandName(offerDetailsDTO.getBrandName()));
             return "update";
         }
-        offerService.updateOffer(id, offerDetailsDTO);
-        rAtt.addFlashAttribute("successMessage", "Changes saved!");
+
+        try {
+            offerService.updateOffer(id, offerDetailsDTO);
+            rAtt.addFlashAttribute("successMessage", "Changes saved!");
+        } catch (Exception e) {
+            model.addAttribute("error", "Cannot update without images");
+            System.out.println(e.getMessage());;
+            return "update";
+        }
         return "redirect:/offers/{id}";
     }
 

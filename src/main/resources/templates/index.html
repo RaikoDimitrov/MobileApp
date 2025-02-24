@@ -17,7 +17,7 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 
 
-<div class="container-fluid welcome-message">
+<div class="container welcome-message">
     <div th:if="${successMessage}" class="alert alert-success">
         <span th:text="${successMessage}"></span>
     </div>

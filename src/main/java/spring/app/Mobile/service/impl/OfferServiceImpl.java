@@ -2,6 +2,7 @@ package spring.app.Mobile.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.apache.kafka.common.protocol.types.Field;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import spring.app.Mobile.service.interfaces.CloudinaryService;
 import spring.app.Mobile.service.interfaces.OfferService;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -98,30 +100,52 @@ public class OfferServiceImpl implements OfferService {
                 orElseThrow(() -> new ResourceNotFoundException("Offer not found!"));
         Instant created = offerById.getCreated();
 
+        List<String> updatedImagesUrls = new ArrayList<>(offerById.getImageUrls());
+
         List<MultipartFile> newImages = offerDetailsDTO.getNewImages();
+        if (newImages == null || newImages.isEmpty()) {
+            System.out.println("No new images received");
+        } else {
+            System.out.println("New images received: " + newImages.size());
+            List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
+            updatedImagesUrls.addAll(newImagesUrls);
+        }
         if (newImages != null && !newImages.isEmpty()) {
             List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
-            offerById.getImageUrls().addAll(newImagesUrls);
+            updatedImagesUrls.addAll(newImagesUrls);
         }
+        if (updatedImagesUrls.isEmpty()) throw  new RuntimeException("Please upload at least 1 image");
+
         List<String> removedImages = offerDetailsDTO.getRemoveImagesId();
         if (removedImages != null && !removedImages.isEmpty()) {
+            List<String> toRemove = new ArrayList<>();
             for (String imageUrl : removedImages) {
-                String publicId = null;
                 try {
-                    publicId = cloudinaryService.extractPublicIdFromUrl(imageUrl);
+                    String publicId = cloudinaryService.extractPublicIdFromUrl(imageUrl);
                     if (publicId != null) {
                         cloudinaryService.deleteImage(publicId);
-                        offerById.getImageUrls().remove(imageUrl);
+                        toRemove.add(imageUrl);
                     }
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to delete image from cloudinary: " + imageUrl, e);
                 }
             }
+            updatedImagesUrls.removeAll(toRemove);
         }
-        offerDetailsDTO.setImageUrls(offerById.getImageUrls());
-        if (offerDetailsDTO.getMainImageUrl() != null) {
-            offerById.setMainImageUrl(offerDetailsDTO.getMainImageUrl());
+
+        if (updatedImagesUrls.isEmpty()) throw  new RuntimeException("Cannot update offer without an image");
+
+        if (offerDetailsDTO.getMainImageIndex() != null
+                && offerDetailsDTO.getMainImageIndex() < offerById.getImageUrls().size()
+                && offerDetailsDTO.getMainImageIndex() >= 0) {
+            offerById.setMainImageUrl(updatedImagesUrls.get(offerDetailsDTO.getMainImageIndex()));
+        } else if (!updatedImagesUrls.isEmpty()){
+            offerById.setMainImageUrl(updatedImagesUrls.get(0));
+        } else {
+            throw new RuntimeException("Please upload images");
         }
+        offerById.setImageUrls(updatedImagesUrls);
+
         offerMapper.map(offerDetailsDTO, offerById);
         offerById.setCreated(created);
         offerById.setUpdated(Instant.now());
@@ -167,10 +191,14 @@ public class OfferServiceImpl implements OfferService {
         mappedOfferEntity.setModelEntity(modelEntity);
 
         mappedOfferEntity.setImageUrls(imageUrls);
-        if (offerAddDTO.getMainImageIndex() != null && offerAddDTO.getMainImageIndex() < imageUrls.size()) {
+        if (offerAddDTO.getMainImageIndex() != null
+                && offerAddDTO.getMainImageIndex() < imageUrls.size()
+                && offerAddDTO.getMainImageIndex() >= 0) {
             mappedOfferEntity.setMainImageUrl(imageUrls.get(offerAddDTO.getMainImageIndex()));
+        } else if (!imageUrls.isEmpty()){
+            mappedOfferEntity.setMainImageUrl(imageUrls.get(0));
         } else {
-            mappedOfferEntity.setMainImageUrl(imageUrls.isEmpty() ? null : imageUrls.get(0));
+            throw new RuntimeException("Please upload images");
         }
 
         setCurrentTimeStamps(mappedOfferEntity);
