@@ -164,12 +164,13 @@
 
         <div class="row">
             <div class="form-group col-md-6 mb-3">
-                <label class="text-white font-weight-bold" for="images">Upload Images</label>
-                <input id="images" type="file" name="newImages" class="form-control" accept="image/*" multiple>
-                <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
+                <label class="text-white font-weight-bold" for="updateImages">Upload Images</label>
+                <input id="updateImages" type="file" name="newImages" class="form-control" accept="image/*" multiple>
+                <span class="text-danger" th:if="${#fields.hasErrors('newImages')}" th:errors="*{newImages}"></span>
             </div>
         </div>
 
+        <input type="hidden" name="imageUrls" id="existingImagesInput" th:value="${#strings.listJoin(offerUpdate.imageUrls, ',')}">
         <!-- Image Preview Section (Shows existing & new images) -->
         <div id="imagePreview" class="image-container mt-3">
             <!-- Loop through existing images (if any) -->

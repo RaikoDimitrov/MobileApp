@@ -61,9 +61,6 @@ public abstract class OfferValidationDTO {
     @NotEmpty(message = "Model is required")
     private String modelName;
 
-    @NotEmpty(message = "Please upload at least one image")
-    private List<MultipartFile> images;
-
     private Integer mainImageIndex;
 
 }

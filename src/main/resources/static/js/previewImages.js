@@ -1,62 +1,76 @@
 document.addEventListener("DOMContentLoaded", function () {
+    let fileInput = document.getElementById("addImages") || document.getElementById("updateImages");
+
+    if (!fileInput) return; // Prevent errors if the form is missing
+
     let imageFiles = []; // Stores new images
     let existingImages = []; // Stores existing images in offer-update
-    const fileInput = document.getElementById("images");
     const imagePreview = document.getElementById("imagePreview");
-    const mainImageIndexInput = document.getElementById("mainImageIndex"); // ✅ Corrected input reference
+    const mainImageIndexInput = document.getElementById("mainImageIndex");
     const chooseMainLabel = document.getElementById("chooseMainLabel");
-    const removeImagesInput = document.getElementById("removeImagesId"); // Hidden field for removed images
+    const removeImagesInput = document.getElementById("removeImagesId");
 
-    // ✅ Load existing images (offer-update only)
+    // ✅ Load existing images (for offer-update)
     document.querySelectorAll(".preview-image-container").forEach((container) => {
         let imageUrl = container.getAttribute("data-image-url");
         if (imageUrl) existingImages.push(imageUrl);
 
+        // Make images selectable
         container.addEventListener("click", function (event) {
             if (!event.target.classList.contains("remove-btn")) {
                 selectMainImage(container);
             }
         });
 
+        // Allow removal of existing images
         container.querySelector(".remove-btn")?.addEventListener("click", function (event) {
             event.stopPropagation();
             removeExistingImage(imageUrl, container);
         });
     });
 
+    fileInput.addEventListener("change", previewImages);
+
     function previewImages() {
         if (!fileInput.files.length) return;
 
-        // ✅ Preserve previously selected images & append new ones
         imageFiles = [...imageFiles, ...Array.from(fileInput.files)];
-
         renderImagePreviews();
     }
 
     function renderImagePreviews() {
-        imagePreview.innerHTML = ""; // Clear existing preview area
+        imagePreview.innerHTML = "";
 
         // ✅ Render existing images first (offer-update)
-        existingImages.forEach((url, index) => {
-            renderImage(url, index, true);
-        });
+        existingImages.forEach((url, index) => renderImage(url, index, true));
 
         // ✅ Render new images (offer-add & offer-update)
         imageFiles.forEach((file, index) => {
             let reader = new FileReader();
-            reader.onload = function (e) {
-                renderImage(e.target.result, existingImages.length + index, false);
-            };
+            reader.onload = (e) => renderImage(e.target.result, existingImages.length + index, false);
             reader.readAsDataURL(file);
         });
 
         toggleChooseMainLabel();
     }
 
+    function updateExistingImagesInput() {
+        let existingImageUrls = [...document.querySelectorAll(".preview-image-container[data-image-url]")]
+            .map(container => container.getAttribute("data-image-url"));
+
+        document.getElementById("existingImagesInput").value = existingImageUrls.join(",");
+    }
+
+
     function renderImage(src, index, isExisting) {
         let imageContainer = document.createElement("div");
         imageContainer.classList.add("preview-image-container");
         imageContainer.setAttribute("data-index", index);
+
+        // ✅ Set data-image-url for existing images
+        if (isExisting) {
+            imageContainer.setAttribute("data-image-url", src);
+        }
 
         let removeBtn = document.createElement("button");
         removeBtn.classList.add("remove-btn");
@@ -85,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imageContainer.appendChild(img);
         imagePreview.appendChild(imageContainer);
 
+        // ✅ Auto-select first image as main
         if (index === 0 && !document.querySelector(".preview-img.selected")) {
             selectMainImage(imageContainer);
         }
@@ -98,10 +113,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function removeExistingImage(imageUrl, container) {
         existingImages = existingImages.filter(img => img !== imageUrl);
 
-        // Track removed images for backend processing
+        // ✅ Track removed images for backend processing
         if (!removeImagesInput.value.includes(imageUrl)) {
             removeImagesInput.value += removeImagesInput.value ? `,${imageUrl}` : imageUrl;
-         }
+        }
 
         container.remove();
         updateMainImageAfterRemoval();
@@ -112,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (remainingImages.length > 0) {
             selectMainImage(remainingImages[0]);
         } else {
-            mainImageIndexInput.value = ""; // ✅ Correctly updating mainImageIndex input
+            mainImageIndexInput.value = "";
         }
         toggleChooseMainLabel();
     }
@@ -128,14 +143,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let index = [...document.querySelectorAll(".preview-image-container")].indexOf(element);
-        let selectedImageUrl = element.getAttribute("data-image-url") || selectedImg.src; // Get from existing images or new ones
+        let selectedImageUrl = element.getAttribute("data-image-url");
 
-        mainImageIndexInput.value = index; // ✅ Corrected input reference
+        if (selectedImageUrl) {
+            // ✅ Existing image (URL-based)
+            mainImageIndexInput.value = existingImages.indexOf(selectedImageUrl);
+        } else {
+            // ✅ New image (File-based)
+            let newImageIndex = [...document.querySelectorAll(".preview-image-container")].indexOf(element) - existingImages.length;
+            mainImageIndexInput.value = existingImages.length + newImageIndex;
+        }
     }
 
     function toggleChooseMainLabel() {
         chooseMainLabel.style.display = (imageFiles.length > 0 || existingImages.length > 0) ? "block" : "none";
     }
-
-    fileInput.addEventListener("change", previewImages);
 });

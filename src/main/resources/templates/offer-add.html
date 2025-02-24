@@ -154,8 +154,8 @@
 
         <div class="row">
             <div class="form-group col-md-6 mb-3">
-                <label class="text-white font-weight-bold" for="images">Upload Images</label>
-                <input id="images" type="file" name="images" class="form-control" accept="image/*" multiple>
+                <label class="text-white font-weight-bold" for="addImages">Upload Images</label>
+                <input id="addImages" type="file" name="images" class="form-control" accept="image/*" multiple>
                 <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
                 <!-- Label to choose main image -->
                 <label id="chooseMainLabel" class="text-white font-weight-bold" th:for="mainImageIndex"
