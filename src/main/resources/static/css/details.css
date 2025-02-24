@@ -16,7 +16,7 @@ body {
     border-radius: 8px;
     position: relative;
     z-index: 10;
-    margin-top: 100px; /* Prevent content from being cut off at the top */
+    margin-top: 1000px;
 }
 
 /* Vehicle Title */
@@ -79,15 +79,14 @@ body {
     display: flex;
     flex-wrap: wrap; /* Allows wrapping */
     justify-content: center;
-    gap: 10px; /* Space between thumbnails */
+    gap: 5px; /* Space between thumbnails */
     max-width: 600px; /* Match main image width */
     margin: 10px auto 0; /* Centered */
 }
 
 /* Thumbnails (4 per row) */
 .vehicle-thumbnail {
-    width: calc(25% - 10px); /* 4 per row */
-    max-width: 120px; /* Prevents excessive stretching */
+    max-width: 115px; /* Prevents excessive stretching */
     height: 100px; /* Uniform height */
     object-fit: cover; /* Prevents distortion */
     border: 2px solid transparent;

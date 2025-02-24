@@ -1,4 +1,13 @@
-/* Global Body Styles */
+/* Ensure Full Page Layout */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Body Background */
 body {
     background-image: url('/images/1.jpg');
     background-position: center center;
@@ -6,23 +15,48 @@ body {
     background-attachment: fixed;
     background-size: cover;
     background-color: #464646;
-    display: flex;
-    min-height: 100vh;
-    margin: 0;
-    flex-direction: column;
-    overflow-y: auto;
-    position: relative;
+    flex-grow: 1;
 }
 
 body::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5); /* Darkens the image */
     z-index: -1; /* Ensures the overlay stays behind the content */
+}
+
+/* Container and Layout */
+.container, .container-fluid {
+    flex-grow: 1;
+    max-width: 1200px;
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    gap: 30px;
+    overflow: visible;
+}
+
+/* Footer Styling */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2); /* Light border */
+  background-color: rgba(0, 0, 0, 0.3);
+  margin-top: auto;
 }
 
 /* Navbar Styling */
@@ -38,6 +72,7 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
+    height: 80px;
     background-color: transparent !important;
     box-shadow: none;
     z-index: 1000; /* Ensure it's above other content */
@@ -60,18 +95,6 @@ body::before {
 
 .navbar .nav-link.active {
     color: #ffd700 !important; /* Highlight active link with gold */
-}
-
-/* Container and Layout */
-.container, .container-fluid {
-    max-width: 1200px;
-    padding-top: 100px;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-    gap: 30px;
 }
 
 /* Success/Error Alert */
@@ -143,13 +166,7 @@ body::before {
     background: rgba(255, 255, 255, 0.1); /* Hover effect to slightly lighten */
 }
 
-/* Image Styling */
-.img-thumbnail {
-    width: 90px;
-    height: auto;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
+
 /* Grid layout for image preview */
 .image-container {
     display: flex;
@@ -164,8 +181,8 @@ body::before {
 /* Image preview container */
 .preview-image-container {
     position: relative;
-    width: 120px; /* Adjust thumbnail width */
-    height: 120px;
+    width: 100px; /* Adjust thumbnail width */
+    height: 100px;
     display: inline-block;
 }
 
@@ -175,6 +192,7 @@ body::before {
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+    z-index: 1 !important;
 }
 
 /* Small remove button */
@@ -192,11 +210,12 @@ body::before {
     line-height: 18px;
     text-align: center;
     cursor: pointer;
+    pointer-events: auto !important;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 20 !important;
 }
 
 /* Responsive adjustments */
@@ -255,46 +274,3 @@ body::before {
 .btn-main:hover {
     background-color: #0056b3;
 }
-
-.remove-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    font-size: 16px;
-    line-height: 18px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10; /* Ensure it's above the image */
-    pointer-events: none;
-}
-
-
-/* Footer Styling */
-footer {
-  position: fixed;      /* Fix the footer at the bottom */
-  bottom: 0;            /* Align it at the bottom of the viewport */
-  width: 100%;          /* Ensure it takes full width */
-  color: white;         /* White text */
-  font-size: 1rem;    /* Increase font size */
-  text-align: center;   /* Center the text */
-  padding: 10px 0;      /* Add some space around the text */
-  border-top: 1px solid rgba(0, 0, 0, 0.2);  /* Light transparent black border */
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-
-
-
-
-
-
