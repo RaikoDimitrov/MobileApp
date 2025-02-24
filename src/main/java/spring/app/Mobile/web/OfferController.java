@@ -1,6 +1,8 @@
 package spring.app.Mobile.web;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -72,6 +74,9 @@ public class OfferController {
     @PostMapping("/add")
     public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO,
                            BindingResult result,
+                           @RequestParam("images[]") List<MultipartFile> images,
+                           @RequestParam("mainImageIndex") Integer mainImageIndex,
+                           @RequestParam("removeImagesId") String removeImagesId,
                            Model model,
                            RedirectAttributes rAtt,
                            Principal principal) {
@@ -85,7 +90,7 @@ public class OfferController {
             return "offer-add";
         }
 
-        offerService.createOffer(offerAddDTO);
+        offerService.createOffer(offerAddDTO, images, mainImageIndex, removeImagesId);
         rAtt.addFlashAttribute("successMessage", "Offer added successfully!");
         return "redirect:/offers/all";
     }

@@ -2,7 +2,6 @@ package spring.app.Mobile.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
-import org.apache.kafka.common.protocol.types.Field;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -73,21 +72,6 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferAddDTO createOffer(OfferAddDTO offerAddDTO) {
-        OfferEntity mappedOfferEntity = map(offerAddDTO);
-        OfferEntity savedOffer = offerRepository.save(mappedOfferEntity);
-        OfferAddDTO responseDTO = offerMapper.map(savedOffer, OfferAddDTO.class);
-
-    /* web client
-        offerRestClient.post()
-                .uri("/offers")
-                .body(responseDTO)
-                .retrieve();*/
-
-        return responseDTO;
-    }
-
-    @Override
     public void deleteOffer(Long offerId) {
         System.out.println("delete method is called with id: " + offerId);
         offerRepository.deleteById(offerId);
@@ -131,13 +115,13 @@ public class OfferServiceImpl implements OfferService {
             List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
             updatedImagesUrls.addAll(newImagesUrls);
         }
-        if (updatedImagesUrls.isEmpty()) throw  new RuntimeException("Please upload at least one image");
+        if (updatedImagesUrls.isEmpty()) throw new RuntimeException("Please upload at least one image");
 
         if (offerDetailsDTO.getMainImageIndex() != null
                 && offerDetailsDTO.getMainImageIndex() < offerById.getImageUrls().size()
                 && offerDetailsDTO.getMainImageIndex() >= 0) {
             offerById.setMainImageUrl(updatedImagesUrls.get(offerDetailsDTO.getMainImageIndex()));
-        } else if (!updatedImagesUrls.isEmpty()){
+        } else if (!updatedImagesUrls.isEmpty()) {
             offerById.setMainImageUrl(updatedImagesUrls.get(0));
         } else {
             throw new RuntimeException("Please upload images");
@@ -161,6 +145,37 @@ public class OfferServiceImpl implements OfferService {
         return offerMapper.map(offerEntity, OfferDetailsDTO.class);
     }
 
+    @Override
+    public OfferAddDTO createOffer(OfferAddDTO offerAddDTO,
+                                   List<MultipartFile> images,
+                                   Integer mainImageIndex,
+                                   String removeImagesId) {
+
+        List<String> imageUrls = cloudinaryService.uploadImages(images);
+        OfferEntity mappedOfferEntity = map(offerAddDTO);
+
+        if (offerAddDTO.getMainImageIndex() != null
+                && offerAddDTO.getMainImageIndex() < imageUrls.size()
+                && offerAddDTO.getMainImageIndex() >= 0) {
+            mappedOfferEntity.setMainImageUrl(imageUrls.get(offerAddDTO.getMainImageIndex()));
+        } else if (!imageUrls.isEmpty()) {
+            mappedOfferEntity.setMainImageUrl(imageUrls.get(0));
+        } else {
+            throw new RuntimeException("Please upload images");
+        }
+        mappedOfferEntity.setImageUrls(imageUrls);
+        OfferEntity savedOffer = offerRepository.save(mappedOfferEntity);
+        OfferAddDTO responseDTO = offerMapper.map(savedOffer, OfferAddDTO.class);
+
+    /* web client
+        offerRestClient.post()
+                .uri("/offers")
+                .body(responseDTO)
+                .retrieve();*/
+
+        return responseDTO;
+    }
+
     //mapping dto -> entity
     private OfferEntity map(OfferAddDTO offerAddDTO) {
         String username = getLoggedUsername();
@@ -181,23 +196,10 @@ public class OfferServiceImpl implements OfferService {
                     return modelRepository.save(newModel);
                 });
 
-        List<String> imageUrls = cloudinaryService.uploadImages(offerAddDTO.getImages());
-
         OfferEntity mappedOfferEntity = offerMapper.map(offerAddDTO, OfferEntity.class);
         mappedOfferEntity.setSellerEntity(sellerUsername);
         mappedOfferEntity.setBrandEntity(brandEntity);
         mappedOfferEntity.setModelEntity(modelEntity);
-
-        mappedOfferEntity.setImageUrls(imageUrls);
-        if (offerAddDTO.getMainImageIndex() != null
-                && offerAddDTO.getMainImageIndex() < imageUrls.size()
-                && offerAddDTO.getMainImageIndex() >= 0) {
-            mappedOfferEntity.setMainImageUrl(imageUrls.get(offerAddDTO.getMainImageIndex()));
-        } else if (!imageUrls.isEmpty()){
-            mappedOfferEntity.setMainImageUrl(imageUrls.get(0));
-        } else {
-            throw new RuntimeException("Please upload images");
-        }
 
         setCurrentTimeStamps(mappedOfferEntity);
         return mappedOfferEntity;
