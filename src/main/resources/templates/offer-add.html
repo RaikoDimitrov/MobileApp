@@ -18,6 +18,7 @@
 <div class="container">
     <h2 class="text-center text-white">Upload Offer</h2>
     <form
+            th:id="uploadForm"
             th:action="@{/offers/add}"
             th:method="post"
             th:object="${offerAddDTO}"
@@ -155,14 +156,15 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label class="text-white font-weight-bold" for="addImages">Upload Images</label>
-                <input id="addImages" type="file" name="images" class="form-control" accept="image/*" multiple>
+                <input id="addImages" type="file" name="images[]" class="form-control" accept="image/*" multiple>
                 <span class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></span>
                 <!-- Label to choose main image -->
                 <label id="chooseMainLabel" class="text-white font-weight-bold" th:for="mainImageIndex"
                        style="display: none; margin-top: 20px;">
                     Choose image as cover
                     <!-- Hidden field to store selected main image index -->
-                    <input type="hidden" id="mainImageIndex" name="mainImageIndex" value="0">
+                    <input type="hidden" id="mainImageIndex" name="mainImageIndex" th:value="${offerAddDTO.mainImageIndex}">
+                    <input type="hidden" id="removeImagesId" name="removeImagesId">
                 </label>
             </div>
             <!-- Image Preview Section -->
@@ -178,7 +180,7 @@
                         th:errorclass="is-invalid"
                         type="textarea"
                         class="form-control"
-                        rows="3"
+                        rows="5"
                         placeholder="Description">
             </textarea>
                 <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>

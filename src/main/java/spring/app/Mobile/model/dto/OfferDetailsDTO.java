@@ -20,9 +20,7 @@ public class OfferDetailsDTO extends OfferValidationDTO {
     private Instant updated;
 
     private String mainImageUrl;
-
     private List<String> imageUrls;
-
     public List<String> getImageUrls() {
         return imageUrls != null ? imageUrls : new ArrayList<>();
     }

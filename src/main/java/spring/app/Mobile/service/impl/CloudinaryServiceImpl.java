@@ -28,7 +28,19 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public List<String> uploadImages(List<MultipartFile> files) {
+
+        files.forEach(file -> {
+            System.out.println("Received file: " + file.getOriginalFilename() + " with size " + file.getSize());
+            try {
+                byte[] fileBytes = file.getBytes();
+                System.out.println("File byte length: " + fileBytes.length);  // Log byte length to debug
+            } catch (IOException e) {
+                System.err.println("Error reading file bytes: " + e.getMessage());
+            }
+        });
         return files.parallelStream().map(file -> {
+            if (file.isEmpty()) throw new RuntimeException("Empty file received for upload");
+
             try {
                 Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                 return (String) uploadResult.get("secure_url");
