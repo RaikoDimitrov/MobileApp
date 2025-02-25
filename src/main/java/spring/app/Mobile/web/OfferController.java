@@ -83,7 +83,7 @@ public class OfferController {
         if (principal == null) {
             return "redirect:/users/login";
         }
-        //todo: fix adding offer - probably images are not handled correctly to front end.
+        //todo: add requestparams into dto and use modelattribute
 
 
         // 🔥 Debugging: Log offerAddDTO values
@@ -100,6 +100,13 @@ public class OfferController {
         // ✅ Log received images BEFORE filtering
         System.out.println("📸 Received images: " + images.size());
         images.forEach(img -> System.out.println(" - " + img.getOriginalFilename() + " (size: " + img.getSize() + ")"));
+
+        images.forEach(img -> {
+            System.out.println("Image Name: " + img.getOriginalFilename());
+            System.out.println("Image Size: " + img.getSize());
+            System.out.println("Is Empty: " + img.isEmpty());
+        });
+
 
         // ✅ Log removed images
         if (removeImagesId != null) {

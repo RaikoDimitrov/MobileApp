@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let mainImageIndexInput = document.getElementById("mainImageIndex");
     let chooseMainLabel = document.getElementById("chooseMainLabel");
     let imagePreview = document.getElementById("imagePreview");
+    let form = document.getElementById("uploadForm"); // Select the first form on the page
 
+    // ✅ First, check if all required elements exist
     if (!fileInput || !removeImagesInput || !mainImageIndexInput || !imagePreview || !chooseMainLabel) {
         console.error("❌ Required DOM elements are missing.");
         return;
@@ -39,15 +41,16 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`📸 Selected ${newFiles.length} new images.`);
 
         newFiles.forEach(file => {
-            console.log(`🖼️ File selected: ${file.name} (${file.size} bytes)`);
             if (!imageFiles.some(existingFile => existingFile.name === file.name)) {
                 imageFiles.push(file);
+                console.log(`🖼️ File selected: ${file.name} (${file.size} bytes)`);
             }
         });
 
         renderImagePreviews();
+        updateMainImageSelectionAfterUpload();
         console.log("📌 Updated imageFiles array:", imageFiles);
-        fileInput.value = ""; // Reset file input after selection
+        //fileInput.value = ""; // Reset file input after selection
     });
 
     /** ✅ Render images (both existing and new) **/
@@ -124,28 +127,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /** ✅ Remove existing image **/
     function removeExistingImage(imageUrl, container) {
-    console.log(`🗑️ Removing existing image: ${imageUrl}`);
+        console.log(`🗑️ Removing existing image: ${imageUrl}`);
 
-    existingImages = existingImages.filter(img => img !== imageUrl);
+        existingImages = existingImages.filter(img => img !== imageUrl);
 
-    // ✅ Add to removed images array only if not already present
-    if (!removedImages.includes(imageUrl)) {
-        removedImages.push(imageUrl);
-    }
+        // ✅ Add to removed images array only if not already present
+        if (!removedImages.includes(imageUrl)) {
+            removedImages.push(imageUrl);
+        }
 
-    // ✅ Convert array to a comma-separated string for backend
-    removeImagesInput.value = removedImages.join(",");
+        // ✅ Convert array to a comma-separated string for backend
+        removeImagesInput.value = removedImages.join(",");
 
-    container.remove();
-    updateMainImageAfterRemoval();
+        container.remove();
+        updateMainImageAfterRemoval();
     }
 
     /** ✅ Update main image after removal **/
     function updateMainImageAfterRemoval() {
         let remainingImages = document.querySelectorAll(".preview-image-container");
         if (remainingImages.length > 0) {
+            // Ensure the first remaining image is selected as the main image
             selectMainImage(remainingImages[0]);
         } else {
+            // No images left, clear main image selection
             mainImageIndexInput.value = "";
         }
         toggleChooseMainLabel();
@@ -163,9 +168,11 @@ document.addEventListener("DOMContentLoaded", function () {
         let index = [...document.querySelectorAll(".preview-image-container")].indexOf(element);
         let selectedImageUrl = element.getAttribute("data-image-url");
 
+        // If it's an existing image, we use the index from existingImages
         if (selectedImageUrl) {
             mainImageIndexInput.value = existingImages.indexOf(selectedImageUrl);
         } else {
+            // If it's a new image, adjust index based on how many existing images are left
             let newImageIndex = index - existingImages.length;
             mainImageIndexInput.value = newImageIndex >= 0 ? existingImages.length + newImageIndex : "";
         }
@@ -173,8 +180,74 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`✅ Main image selected: Index ${mainImageIndexInput.value}`);
     }
 
+    /** ✅ Select main image from the first available image after upload or removal **/
+    function updateMainImageSelectionAfterUpload() {
+        let allImageContainers = document.querySelectorAll(".preview-image-container");
+
+        // If no images exist, clear the main image input
+        if (allImageContainers.length === 0) {
+            mainImageIndexInput.value = "";
+        } else {
+            // Automatically select the first image after upload (or after removing images)
+            selectMainImage(allImageContainers[0]);
+        }
+    }
+
     /** ✅ Show/Hide "Choose main image" label **/
     function toggleChooseMainLabel() {
         chooseMainLabel.style.display = (imageFiles.length > 0 || existingImages.length > 0) ? "block" : "none";
     }
+
+    //todo: fix when adding new images to upload with existing ones and not only most recent
+
+    /** ✅ Add all images (existing + new) to the form before submitting **/
+    form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Combine all images (existing + new)
+            let allImages = [...existingImages, ...imageFiles];
+            console.log("All Images before submit:", allImages);
+
+            // Check if we have images to submit
+            if (allImages.length === 0) {
+                console.warn("⚠️ No images selected for upload!");
+            } else {
+                console.log("📤 Submitting files:");
+                allImages.forEach(file => {
+                    console.log(` - ${file.name || file} (${file.size || ''} bytes)`);
+                });
+            }
+
+            // Prepare FormData
+            let formData = new FormData(form);
+
+            // Append all image files to the FormData object
+            allImages.forEach(image => {
+                formData.append("images[]", image);  // Ensure all images are added to the FormData
+            });
+
+            // Add the removed images (if any)
+            if (removedImages.length > 0) {
+                formData.append("removedImages", removedImages.join(","));
+            }
+
+            // Add main image index (if selected)
+            if (mainImageIndexInput.value) {
+                formData.append("mainImageIndex", mainImageIndexInput.value);
+            }
+
+        // Submit form via AJAX or default submit if needed
+        console.log("Submitting form...");
+
+        setTimeout(() => {
+            // Handle file input or rendering after a delay
+            console.log("Processing files after delay...");
+            // Your file processing code here
+        }, 5000);  // Delay for 1 second before processing files
+
+        // You can use `fetch` to submit the form data if needed, or let the browser handle the submit.
+        form.submit();
+    });
+
+
 });
