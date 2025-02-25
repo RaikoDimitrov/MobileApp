@@ -21,6 +21,7 @@
     </div>
     <h2 class="text-center text-white">Upload Offer</h2>
     <form
+            id="uploadForm"
             th:action="@{/offers/add}"
             th:method="post"
             th:object="${offerAddDTO}"
@@ -163,10 +164,9 @@
 
                 <!-- Choose main image -->
                 <label id="chooseMainLabel" class="text-white font-weight-bold" for="mainImageIndex"
-                       style="display: none; margin-top: 20px;">
+                       style="display: none; margin-top: 30px;">
                     Choose image as cover
-                    <input type="hidden" id="mainImageIndex" name="offerAddDTO.mainImageIndex"
-                           th:value="${offerAddDTO.mainImageIndex}">
+                    <input type="hidden" id="mainImageIndex" name="mainImageIndex">
                 </label>
 
                 <!-- Hidden input for removed images -->
