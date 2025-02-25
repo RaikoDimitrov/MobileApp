@@ -1,8 +1,6 @@
 package spring.app.Mobile.web;
 
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
+import spring.app.Mobile.model.dto.OfferImageDTO;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
@@ -25,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/offers")
@@ -73,24 +73,62 @@ public class OfferController {
 
     @PostMapping("/add")
     public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO,
-                           BindingResult result,
-                           @RequestParam("images[]") List<MultipartFile> images,
-                           @RequestParam("mainImageIndex") Integer mainImageIndex,
-                           @RequestParam("removeImagesId") String removeImagesId,
+                           BindingResult offerResult,
+                           @RequestParam("images") List<MultipartFile> images,
+                           @RequestParam(value = "removeImagesId", required = false) List<String> removeImagesId,
                            Model model,
                            RedirectAttributes rAtt,
                            Principal principal) {
+
         if (principal == null) {
             return "redirect:/users/login";
         }
-        if (result.hasErrors()) {
-            System.out.println("Validation Errors: " + result.getAllErrors());
+        //todo: fix adding offer - probably images are not handled correctly to front end.
+
+
+        // 🔥 Debugging: Log offerAddDTO values
+        System.out.println("Brand Name: " + offerAddDTO.getBrandName());
+        System.out.println("Model Name: " + offerAddDTO.getModelName());
+        System.out.println("Price: " + offerAddDTO.getPrice());
+        System.out.println("Mileage: " + offerAddDTO.getMileage());
+        System.out.println("Year: " + offerAddDTO.getYear());
+        System.out.println("HorsePower: " + offerAddDTO.getHorsePower());
+        System.out.println("Description: " + offerAddDTO.getDescription());
+
+
+
+        // ✅ Log received images BEFORE filtering
+        System.out.println("📸 Received images: " + images.size());
+        images.forEach(img -> System.out.println(" - " + img.getOriginalFilename() + " (size: " + img.getSize() + ")"));
+
+        // ✅ Log removed images
+        if (removeImagesId != null) {
+            System.out.println("🗑️ Removed images: " + removeImagesId);
+        }
+
+
+        if (offerResult.hasErrors()) {
             model.addAttribute("offerAddDTO", offerAddDTO);
             model.addAttribute("models", modelService.getModelsByBrandName(offerAddDTO.getBrandName()));
             return "offer-add";
         }
 
-        offerService.createOffer(offerAddDTO, images, mainImageIndex, removeImagesId);
+        if (images.isEmpty() || images.get(0).isEmpty()) {
+            model.addAttribute("imageError", "Upload at least one image");
+            return "offer-add";
+        }
+        List<MultipartFile> filteredImages = images.stream().filter(image -> removeImagesId == null || !removeImagesId.contains(image.getOriginalFilename()))
+                .collect(Collectors.toList());
+
+
+        // ✅ Log after filtering
+        System.out.println("📸 Images after filtering: " + filteredImages.size());
+
+        try {
+            offerService.createOffer(offerAddDTO, filteredImages);
+        } catch (Exception e) {
+            rAtt.addFlashAttribute("error", "An error occurred while uploading offer");
+        }
         rAtt.addFlashAttribute("successMessage", "Offer added successfully!");
         return "redirect:/offers/all";
     }
@@ -139,6 +177,7 @@ public class OfferController {
     public String updateOffer(@PathVariable Long id,
                               @Valid @ModelAttribute("offerUpdate") OfferDetailsDTO offerDetailsDTO,
                               BindingResult result,
+                              @ModelAttribute("offerImage") OfferImageDTO offerImageDTO,
                               Model model,
                               RedirectAttributes rAtt) {
         System.out.println("Received DTO: " + offerDetailsDTO);
@@ -151,11 +190,12 @@ public class OfferController {
         }
 
         try {
-            offerService.updateOffer(id, offerDetailsDTO);
+            offerService.updateOffer(id, offerDetailsDTO, offerImageDTO);
             rAtt.addFlashAttribute("successMessage", "Changes saved!");
         } catch (Exception e) {
             model.addAttribute("error", "Cannot update without images");
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
+            ;
             return "update";
         }
         return "redirect:/offers/{id}";
