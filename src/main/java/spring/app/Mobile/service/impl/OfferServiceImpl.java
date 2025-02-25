@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
+import spring.app.Mobile.model.dto.OfferImageDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
 import spring.app.Mobile.model.entity.*;
 import spring.app.Mobile.repository.BrandRepository;
@@ -77,9 +78,20 @@ public class OfferServiceImpl implements OfferService {
         offerRepository.deleteById(offerId);
     }
 
+    @Override
+    public OfferDetailsDTO getOfferDetails(Long id) {
+        Optional<OfferEntity> offerEntityById = offerRepository.findById(id);
+        if (offerEntityById.isEmpty()) {
+            System.out.println("Offer not found!");
+            return null;
+        }
+        OfferEntity offerEntity = offerEntityById.get();
+        return offerMapper.map(offerEntity, OfferDetailsDTO.class);
+    }
+
     @Transactional
     @Override
-    public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO) {
+    public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO, OfferImageDTO offerImageDTO) {
         System.out.println("Existing images: " + offerDetailsDTO.getImageUrls());
         System.out.println("New images: " + offerDetailsDTO.getNewImages());
         System.out.println("Removed images: " + offerDetailsDTO.getRemoveImagesId());
@@ -117,10 +129,10 @@ public class OfferServiceImpl implements OfferService {
         }
         if (updatedImagesUrls.isEmpty()) throw new RuntimeException("Please upload at least one image");
 
-        if (offerDetailsDTO.getMainImageIndex() != null
-                && offerDetailsDTO.getMainImageIndex() < offerById.getImageUrls().size()
-                && offerDetailsDTO.getMainImageIndex() >= 0) {
-            offerById.setMainImageUrl(updatedImagesUrls.get(offerDetailsDTO.getMainImageIndex()));
+        if (offerImageDTO.getMainImageIndex() != null
+                && offerImageDTO.getMainImageIndex() < offerById.getImageUrls().size()
+                && offerImageDTO.getMainImageIndex() >= 0) {
+            offerById.setMainImageUrl(updatedImagesUrls.get(offerImageDTO.getMainImageIndex()));
         } else if (!updatedImagesUrls.isEmpty()) {
             offerById.setMainImageUrl(updatedImagesUrls.get(0));
         } else {
@@ -135,23 +147,21 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferDetailsDTO getOfferDetails(Long id) {
-        Optional<OfferEntity> offerEntityById = offerRepository.findById(id);
-        if (offerEntityById.isEmpty()) {
-            System.out.println("Offer not found!");
-            return null;
-        }
-        OfferEntity offerEntity = offerEntityById.get();
-        return offerMapper.map(offerEntity, OfferDetailsDTO.class);
-    }
+    public OfferAddDTO createOffer(OfferAddDTO offerAddDTO, List<MultipartFile> images) {
 
-    @Override
-    public OfferAddDTO createOffer(OfferAddDTO offerAddDTO,
-                                   List<MultipartFile> images,
-                                   Integer mainImageIndex,
-                                   String removeImagesId) {
+        if (images == null || images.isEmpty() || images.get(0).isEmpty()) {
+            throw new IllegalArgumentException("No images uploaded");
+        }
+
+        // ✅ Log the received images before uploading
+        System.out.println("📤 Uploading images to Cloudinary...");
+        images.forEach(img -> System.out.println(" - " + img.getOriginalFilename()));
 
         List<String> imageUrls = cloudinaryService.uploadImages(images);
+
+        // ✅ Log uploaded URLs
+        System.out.println("✅ Uploaded image URLs: " + imageUrls);
+
         OfferEntity mappedOfferEntity = map(offerAddDTO);
 
         if (offerAddDTO.getMainImageIndex() != null
@@ -163,16 +173,18 @@ public class OfferServiceImpl implements OfferService {
         } else {
             throw new RuntimeException("Please upload images");
         }
+
         mappedOfferEntity.setImageUrls(imageUrls);
+
+        // ✅ Log before saving
+        System.out.println("💾 Saving OfferEntity with images: " + mappedOfferEntity.getImageUrls());
+
         OfferEntity savedOffer = offerRepository.save(mappedOfferEntity);
+
+        // ✅ Log the saved entity
+        System.out.println("✅ Offer saved with ID: " + savedOffer.getId());
+
         OfferAddDTO responseDTO = offerMapper.map(savedOffer, OfferAddDTO.class);
-
-    /* web client
-        offerRestClient.post()
-                .uri("/offers")
-                .body(responseDTO)
-                .retrieve();*/
-
         return responseDTO;
     }
 
