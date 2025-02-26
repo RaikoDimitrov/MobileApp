@@ -1,9 +1,7 @@
 package spring.app.Mobile.service.interfaces;
 
-import org.springframework.web.multipart.MultipartFile;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
-import spring.app.Mobile.model.dto.OfferImageDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
 
 import java.util.List;
@@ -16,7 +14,7 @@ public interface OfferService {
 
     void deleteOffer(Long offerId);
 
-    void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO, OfferImageDTO offerImageDTO);
+    void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO);
 
     OfferDetailsDTO getOfferDetails(Long id);
 
