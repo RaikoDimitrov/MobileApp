@@ -160,7 +160,9 @@
             <div class="form-group col-md-6 mb-3">
                 <label class="text-white font-weight-bold" for="addImages">Upload Images</label>
                 <input id="addImages" type="file" name="images" class="form-control" accept="image/*" multiple>
-                <span class="text-danger" th:if="${imageError}" th:errors="${imageError}"></span>
+                <div>
+                    <span class="text-danger" th:if="${imageError}" th:text="${imageError}"></span>
+                </div>
 
                 <!-- Choose main image -->
                 <label id="chooseMainLabel" class="text-white font-weight-bold" for="mainImageIndex"
@@ -168,9 +170,6 @@
                     Choose image as cover
                     <input type="hidden" id="mainImageIndex" name="mainImageIndex">
                 </label>
-
-                <!-- Hidden input for removed images -->
-                <input type="hidden" id="removeImagesId" name="removeImagesId">
             </div>
 
             <!-- Image Preview Section -->
