@@ -211,8 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chooseMainLabel.style.display = (imageFiles.length > 0 || existingImages.length > 0) ? "block" : "none";
     }
 
-    //todo: fix when adding new images to upload with existing ones and not only most recent
-
     /** ✅ Add all images (existing + new) to the form before submitting **/
     form.addEventListener("submit", function (event) {
             event.preventDefault();

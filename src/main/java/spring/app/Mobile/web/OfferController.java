@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
-import spring.app.Mobile.model.dto.OfferImageDTO;
 import spring.app.Mobile.model.enums.ChassisTypeEnum;
 import spring.app.Mobile.model.enums.EngineTypeEnum;
 import spring.app.Mobile.model.enums.TransmissionTypeEnum;
@@ -147,7 +146,6 @@ public class OfferController {
     public String updateOffer(@PathVariable Long id,
                               @Valid @ModelAttribute("offerUpdate") OfferDetailsDTO offerDetailsDTO,
                               BindingResult result,
-                              @ModelAttribute("offerImage") OfferImageDTO offerImageDTO,
                               Model model,
                               RedirectAttributes rAtt) {
         System.out.println("Received DTO: " + offerDetailsDTO);
@@ -160,12 +158,11 @@ public class OfferController {
         }
 
         try {
-            offerService.updateOffer(id, offerDetailsDTO, offerImageDTO);
+            offerService.updateOffer(id, offerDetailsDTO);
             rAtt.addFlashAttribute("successMessage", "Changes saved!");
         } catch (Exception e) {
-            model.addAttribute("error", "Cannot update without images");
+            model.addAttribute("error", "Failed to update offer");
             System.out.println(e.getMessage());
-            ;
             return "update";
         }
         return "redirect:/offers/{id}";

@@ -13,7 +13,6 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 import spring.app.Mobile.model.dto.OfferAddDTO;
 import spring.app.Mobile.model.dto.OfferDetailsDTO;
-import spring.app.Mobile.model.dto.OfferImageDTO;
 import spring.app.Mobile.model.dto.OfferSummaryDTO;
 import spring.app.Mobile.model.entity.*;
 import spring.app.Mobile.repository.BrandRepository;
@@ -91,7 +90,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Transactional
     @Override
-    public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO, OfferImageDTO offerImageDTO) {
+    public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO) {
         System.out.println("Existing images: " + offerDetailsDTO.getImageUrls());
         System.out.println("New images: " + offerDetailsDTO.getNewImages());
         System.out.println("Removed images: " + offerDetailsDTO.getRemoveImagesId());
@@ -104,8 +103,8 @@ public class OfferServiceImpl implements OfferService {
         List<String> updatedImagesUrls = new ArrayList<>(offerById.getImageUrls());
 
         //remove images
-        List<String> removedImages = offerDetailsDTO.getRemoveImagesId();
-        if (removedImages != null && !removedImages.isEmpty()) {
+        List<String> removedImages = Optional.ofNullable(offerDetailsDTO.getRemoveImagesId()).orElse(Collections.emptyList());
+        if (!removedImages.isEmpty()) {
             List<String> toRemove = new ArrayList<>();
             for (String imageUrl : removedImages) {
                 try {
@@ -122,21 +121,20 @@ public class OfferServiceImpl implements OfferService {
         }
 
         //upload images
-        List<MultipartFile> newImages = offerDetailsDTO.getNewImages();
-        if (newImages != null && !newImages.isEmpty()) {
+        List<MultipartFile> newImages = Optional.ofNullable(offerDetailsDTO.getNewImages()).orElse(Collections.emptyList());
+        if (!newImages.isEmpty()) {
             List<String> newImagesUrls = cloudinaryService.uploadImages(newImages);
             updatedImagesUrls.addAll(newImagesUrls);
         }
         if (updatedImagesUrls.isEmpty()) throw new RuntimeException("Please upload at least one image");
 
-        if (offerImageDTO.getMainImageIndex() != null
-                && offerImageDTO.getMainImageIndex() < offerById.getImageUrls().size()
-                && offerImageDTO.getMainImageIndex() >= 0) {
-            offerById.setMainImageUrl(updatedImagesUrls.get(offerImageDTO.getMainImageIndex()));
-        } else if (!updatedImagesUrls.isEmpty()) {
-            offerById.setMainImageUrl(updatedImagesUrls.get(0));
+        Integer mainImageIndex = offerDetailsDTO.getMainImageIndex();
+        if (mainImageIndex != null
+                && mainImageIndex < updatedImagesUrls.size()
+                && mainImageIndex >= 0) {
+            offerById.setMainImageUrl(updatedImagesUrls.get(mainImageIndex));
         } else {
-            throw new RuntimeException("Please upload images");
+            offerById.setMainImageUrl(updatedImagesUrls.get(0));
         }
         offerById.setImageUrls(updatedImagesUrls);
 
