@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let mainImageIndexInput = document.getElementById("mainImageIndex");
     let chooseMainLabel = document.getElementById("chooseMainLabel");
     let imagePreview = document.getElementById("imagePreview");
-    let form = document.getElementById("uploadForm"); // Select the first form on the page
+    let form = document.getElementById("addForm"); // Select the first form on the page
 
     // ✅ First, check if all required elements exist
 /*    if (!fileInput || !removeImagesInput || !mainImageIndexInput || !imagePreview || !chooseMainLabel) {

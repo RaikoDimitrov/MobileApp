@@ -19,11 +19,12 @@
 <div class="container">
     <h2 class="text-center text-white">Update Offer</h2>
     <form
+            id="updateForm"
             th:action="@{/offers/update/{id}(id=${offerUpdate.id})}"
             th:method="post"
             th:object="${offerUpdate}"
             enctype="multipart/form-data"
-            class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+            class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center offer-form">
 
         <div th:if="${error}" class="alert alert-error" role="alert">
             <span th:text="${error}"></span>

@@ -133,10 +133,13 @@ public class OfferServiceImpl implements OfferService {
                 && mainImageIndex < updatedImagesUrls.size()
                 && mainImageIndex >= 0) {
             offerById.setMainImageUrl(updatedImagesUrls.get(mainImageIndex));
+            System.out.println("Selected new main image: " + mainImageIndex);
         } else {
             offerById.setMainImageUrl(updatedImagesUrls.get(0));
         }
         offerById.setImageUrls(updatedImagesUrls);
+
+        System.out.println("Final images before saving: " + updatedImagesUrls);
 
         offerMapper.map(offerDetailsDTO, offerById);
         offerById.setCreated(created);
