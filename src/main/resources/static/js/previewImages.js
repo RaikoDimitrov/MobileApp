@@ -7,10 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let form = document.getElementById("uploadForm"); // Select the first form on the page
 
     // ✅ First, check if all required elements exist
-    if (!fileInput || !removeImagesInput || !mainImageIndexInput || !imagePreview || !chooseMainLabel) {
+/*    if (!fileInput || !removeImagesInput || !mainImageIndexInput || !imagePreview || !chooseMainLabel) {
         console.error("❌ Required DOM elements are missing.");
         return;
-    }
+    }*/
 
     let imageFiles = []; // Stores new image files
     let existingImages = []; // Stores existing images (for offer updates)
@@ -40,12 +40,18 @@ document.addEventListener("DOMContentLoaded", function () {
         let newFiles = Array.from(fileInput.files);
         console.log(`📸 Selected ${newFiles.length} new images.`);
 
+        let dataTransfer = new DataTransfer();
+        imageFiles.forEach(file => dataTransfer.items.add(file));
+
         newFiles.forEach(file => {
             if (!imageFiles.some(existingFile => existingFile.name === file.name)) {
                 imageFiles.push(file);
+                dataTransfer.items.add(file);
                 console.log(`🖼️ File selected: ${file.name} (${file.size} bytes)`);
             }
         });
+
+        fileInput.files = dataTransfer.files;
 
         renderImagePreviews();
         updateMainImageSelectionAfterUpload();
@@ -122,6 +128,13 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(`🗑️ Removing new image at index ${actualIndex}:`, imageFiles[actualIndex].name);
             imageFiles.splice(actualIndex, 1);
         }
+
+        let dataTransfer = new DataTransfer();
+        imageFiles.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files; // ✅ Update input files
+
+        console.log("📌 Updated file input after removal:", fileInput.files);
+
         renderImagePreviews();
     }
 
@@ -205,11 +218,12 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
 
             // Combine all images (existing + new)
-            let allImages = [...existingImages, ...imageFiles];
-            console.log("All Images before submit:", allImages);
+            let allImages = [...imageFiles];
+            console.log("📤 New images before submit:", allImages);
+            console.log("🌐 Existing images (URLs):", existingImages);
 
             // Check if we have images to submit
-            if (allImages.length === 0) {
+            if (allImages.length === 0 && existingImages.length === 0) {
                 console.warn("⚠️ No images selected for upload!");
             } else {
                 console.log("📤 Submitting files:");
@@ -226,6 +240,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append("images[]", image);  // Ensure all images are added to the FormData
             });
 
+            // Add existing images as urls separately
+            if (existingImages.length > 0) {
+                formData.append("existingImages", existingImages.join(","));
+            }
+
             // Add the removed images (if any)
             if (removedImages.length > 0) {
                 formData.append("removedImages", removedImages.join(","));
@@ -235,6 +254,13 @@ document.addEventListener("DOMContentLoaded", function () {
             if (mainImageIndexInput.value) {
                 formData.append("mainImageIndex", mainImageIndexInput.value);
             }
+
+            // Debugging
+            console.log("📤 Submitting form with:");
+            console.log("✅ New images:", imageFiles);
+            console.log("✅ Existing images:", existingImages);
+            console.log("✅ Removed images:", removedImages);
+            console.log("✅ Main image index:", mainImageIndexInput.value);
 
         // Submit form via AJAX or default submit if needed
         console.log("Submitting form...");

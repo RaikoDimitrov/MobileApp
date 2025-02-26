@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/offers")
@@ -75,7 +74,6 @@ public class OfferController {
     public String addOffer(@Valid @ModelAttribute("offerAddDTO") OfferAddDTO offerAddDTO,
                            BindingResult offerResult,
                            @RequestParam("images") List<MultipartFile> images,
-                           @RequestParam(value = "removeImagesId", required = false) List<String> removeImagesId,
                            Model model,
                            RedirectAttributes rAtt,
                            Principal principal) {
@@ -83,36 +81,6 @@ public class OfferController {
         if (principal == null) {
             return "redirect:/users/login";
         }
-        //todo: add requestparams into dto and use modelattribute
-
-
-        // 🔥 Debugging: Log offerAddDTO values
-        System.out.println("Brand Name: " + offerAddDTO.getBrandName());
-        System.out.println("Model Name: " + offerAddDTO.getModelName());
-        System.out.println("Price: " + offerAddDTO.getPrice());
-        System.out.println("Mileage: " + offerAddDTO.getMileage());
-        System.out.println("Year: " + offerAddDTO.getYear());
-        System.out.println("HorsePower: " + offerAddDTO.getHorsePower());
-        System.out.println("Description: " + offerAddDTO.getDescription());
-
-
-
-        // ✅ Log received images BEFORE filtering
-        System.out.println("📸 Received images: " + images.size());
-        images.forEach(img -> System.out.println(" - " + img.getOriginalFilename() + " (size: " + img.getSize() + ")"));
-
-        images.forEach(img -> {
-            System.out.println("Image Name: " + img.getOriginalFilename());
-            System.out.println("Image Size: " + img.getSize());
-            System.out.println("Is Empty: " + img.isEmpty());
-        });
-
-
-        // ✅ Log removed images
-        if (removeImagesId != null) {
-            System.out.println("🗑️ Removed images: " + removeImagesId);
-        }
-
 
         if (offerResult.hasErrors()) {
             model.addAttribute("offerAddDTO", offerAddDTO);
@@ -120,19 +88,14 @@ public class OfferController {
             return "offer-add";
         }
 
-        if (images.isEmpty() || images.get(0).isEmpty()) {
+        boolean isValidImage = images.stream().anyMatch(multipartFile -> !multipartFile.isEmpty());
+        if (!isValidImage) {
             model.addAttribute("imageError", "Upload at least one image");
             return "offer-add";
         }
-        List<MultipartFile> filteredImages = images.stream().filter(image -> removeImagesId == null || !removeImagesId.contains(image.getOriginalFilename()))
-                .collect(Collectors.toList());
-
-
-        // ✅ Log after filtering
-        System.out.println("📸 Images after filtering: " + filteredImages.size());
 
         try {
-            offerService.createOffer(offerAddDTO, filteredImages);
+            offerService.createOffer(offerAddDTO);
         } catch (Exception e) {
             rAtt.addFlashAttribute("error", "An error occurred while uploading offer");
         }

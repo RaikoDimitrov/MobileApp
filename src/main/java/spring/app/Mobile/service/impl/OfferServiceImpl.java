@@ -147,20 +147,13 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferAddDTO createOffer(OfferAddDTO offerAddDTO, List<MultipartFile> images) {
+    public OfferAddDTO createOffer(OfferAddDTO offerAddDTO) {
 
-        if (images == null || images.isEmpty() || images.get(0).isEmpty()) {
+        if (offerAddDTO.getImages() == null || offerAddDTO.getImages().isEmpty() || offerAddDTO.getImages().get(0).isEmpty()) {
             throw new IllegalArgumentException("No images uploaded");
         }
 
-        // ✅ Log the received images before uploading
-        System.out.println("📤 Uploading images to Cloudinary...");
-        images.forEach(img -> System.out.println(" - " + img.getOriginalFilename()));
-
-        List<String> imageUrls = cloudinaryService.uploadImages(images);
-
-        // ✅ Log uploaded URLs
-        System.out.println("✅ Uploaded image URLs: " + imageUrls);
+        List<String> imageUrls = cloudinaryService.uploadImages(offerAddDTO.getImages());
 
         OfferEntity mappedOfferEntity = map(offerAddDTO);
 
@@ -175,15 +168,7 @@ public class OfferServiceImpl implements OfferService {
         }
 
         mappedOfferEntity.setImageUrls(imageUrls);
-
-        // ✅ Log before saving
-        System.out.println("💾 Saving OfferEntity with images: " + mappedOfferEntity.getImageUrls());
-
         OfferEntity savedOffer = offerRepository.save(mappedOfferEntity);
-
-        // ✅ Log the saved entity
-        System.out.println("✅ Offer saved with ID: " + savedOffer.getId());
-
         OfferAddDTO responseDTO = offerMapper.map(savedOffer, OfferAddDTO.class);
         return responseDTO;
     }

@@ -12,7 +12,7 @@ public interface OfferService {
 
     List<OfferSummaryDTO> getAllOffers();
 
-    OfferAddDTO createOffer(OfferAddDTO offerAddDTO, List<MultipartFile> images);
+    OfferAddDTO createOffer(OfferAddDTO offerAddDTO);
 
     void deleteOffer(Long offerId);
 
