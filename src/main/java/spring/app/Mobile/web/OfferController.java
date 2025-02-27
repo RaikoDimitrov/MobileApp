@@ -151,6 +151,7 @@ public class OfferController {
         System.out.println("Received DTO: " + offerDetailsDTO);
         System.out.println("New images count: " + (offerDetailsDTO.getNewImages() != null ? offerDetailsDTO.getNewImages().size() : 0));
         System.out.println("Remove images count: " + (offerDetailsDTO.getRemoveImagesId() != null ? offerDetailsDTO.getRemoveImagesId().size() : 0));
+        System.out.println("Main image index from update: " + offerDetailsDTO.getMainImageIndex());
 
         if (result.hasErrors()) {
             model.addAttribute("offerUpdate", offerDetailsDTO);

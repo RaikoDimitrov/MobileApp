@@ -3,6 +3,8 @@ package spring.app.Mobile.service.impl;
 import jakarta.transaction.Transactional;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +41,8 @@ public class OfferServiceImpl implements OfferService {
     private final ModelMapper offerMapper;
     private final CloudinaryService cloudinaryService;
     private final RestClient offerRestClient;
+
+    private static final Logger  offerLogger = LoggerFactory.getLogger(OfferServiceImpl.class);
 
     public OfferServiceImpl(OfferRepository offerRepository, BrandRepository brandRepository, ModelRepository modelRepository, UserRepository userRepository, ModelMapper offerMapper, CloudinaryService cloudinaryService, @Qualifier("offerRestClient") RestClient offerRestClient) {
         this.offerRepository = offerRepository;
@@ -85,23 +89,31 @@ public class OfferServiceImpl implements OfferService {
             return null;
         }
         OfferEntity offerEntity = offerEntityById.get();
-        return offerMapper.map(offerEntity, OfferDetailsDTO.class);
+        System.out.println("Main image in db: " + offerEntity.getMainImageUrl());
+        OfferDetailsDTO map = offerMapper.map(offerEntity, OfferDetailsDTO.class);
+        System.out.println("main image in dto after map: " + map.getMainImageUrl());
+        return map;
     }
 
     @Transactional
     @Override
     public void updateOffer(Long offerId, OfferDetailsDTO offerDetailsDTO) {
+        //todo: fix updating main image url, mapped from entity and prevent uploading already existing images twice
         System.out.println("Existing images: " + offerDetailsDTO.getImageUrls());
         System.out.println("New images: " + offerDetailsDTO.getNewImages());
         System.out.println("Removed images: " + offerDetailsDTO.getRemoveImagesId());
+        System.out.println("Main image on detailsDTO before map: " + offerDetailsDTO.getMainImageUrl());
 
 
         OfferEntity offerById = offerRepository.findById(offerId).
                 orElseThrow(() -> new ResourceNotFoundException("Offer not found!"));
         Instant created = offerById.getCreated();
 
-        List<String> updatedImagesUrls = new ArrayList<>(offerById.getImageUrls());
+        offerMapper.map(offerById, offerDetailsDTO);
+        System.out.println("Main image on detailsDTO after map entity -> dto: " + offerDetailsDTO.getMainImageUrl());
+        List<String> updatedImagesUrls = new ArrayList<>(offerDetailsDTO.getImageUrls());
 
+        System.out.println("offer main image before updating it with selected index: " + offerById.getMainImageUrl());
         //remove images
         List<String> removedImages = Optional.ofNullable(offerDetailsDTO.getRemoveImagesId()).orElse(Collections.emptyList());
         if (!removedImages.isEmpty()) {
@@ -132,16 +144,24 @@ public class OfferServiceImpl implements OfferService {
         if (mainImageIndex != null
                 && mainImageIndex < updatedImagesUrls.size()
                 && mainImageIndex >= 0) {
-            offerById.setMainImageUrl(updatedImagesUrls.get(mainImageIndex));
+            System.out.println("Updated image urls size: " + updatedImagesUrls.size());
             System.out.println("Selected new main image: " + mainImageIndex);
+            offerById.setMainImageUrl(updatedImagesUrls.get(mainImageIndex));
         } else {
-            offerById.setMainImageUrl(updatedImagesUrls.get(0));
+            if (!updatedImagesUrls.isEmpty()) {
+                String defaultIndex = updatedImagesUrls.get(0);
+                offerById.setMainImageUrl(defaultIndex);
+            } else {
+                offerById.setMainImageUrl(null);
+            }
         }
         offerById.setImageUrls(updatedImagesUrls);
-
+        System.out.println("Final main image before map: " +  offerById.getMainImageUrl());
         System.out.println("Final images before saving: " + updatedImagesUrls);
 
         offerMapper.map(offerDetailsDTO, offerById);
+        offerById.setMainImageUrl(offerDetailsDTO.getMainImageUrl());
+        System.out.println("Final main image after map: " +  offerById.getMainImageUrl());
         offerById.setCreated(created);
         offerById.setUpdated(Instant.now());
         offerRepository.save(offerById);

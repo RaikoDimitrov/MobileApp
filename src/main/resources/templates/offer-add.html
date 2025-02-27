@@ -21,12 +21,11 @@
     </div>
     <h2 class="text-center text-white">Upload Offer</h2>
     <form
-            id="addForm"
             th:action="@{/offers/add}"
             th:method="post"
             th:object="${offerAddDTO}"
             enctype="multipart/form-data"
-            class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center offer-form">
+            class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
         <div class="row">
             <div class="form-group col-md-6 mb-3">

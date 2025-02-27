@@ -19,12 +19,11 @@
 <div class="container">
     <h2 class="text-center text-white">Update Offer</h2>
     <form
-            id="updateForm"
             th:action="@{/offers/update/{id}(id=${offerUpdate.id})}"
             th:method="post"
             th:object="${offerUpdate}"
             enctype="multipart/form-data"
-            class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center offer-form">
+            class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
         <div th:if="${error}" class="alert alert-error" role="alert">
             <span th:text="${error}"></span>
@@ -168,24 +167,28 @@
                 <label class="text-white font-weight-bold" for="updateImages">Upload Images</label>
                 <input id="updateImages" type="file" name="newImages" class="form-control" accept="image/*" multiple>
                 <span class="text-danger" th:if="${#fields.hasErrors('newImages')}" th:errors="*{newImages}"></span>
+                <label id="chooseMainLabel" class="text-white font-weight-bold" for="mainImageIndex"
+                       style="display: none; margin-top: 30px;">
+                    Choose image as cover
+                    <input type="hidden" id="mainImageIndex" name="mainImageIndex">
+                </label>
             </div>
         </div>
 
-        <input type="hidden" name="imageUrls" id="existingImagesInput" th:value="${#strings.listJoin(offerUpdate.imageUrls, ',')}">
+        <!-- Hidden input for existing images -->
+        <input type="hidden" name="imageUrls" id="existingImages"
+               th:value="${#strings.listJoin(offerUpdate.imageUrls, ',')}">
+
         <!-- Image Preview Section (Shows existing & new images) -->
         <div id="imagePreview" class="image-container mt-3">
             <!-- Loop through existing images (if any) -->
             <th:block th:if="${offerUpdate.imageUrls != null and not #lists.isEmpty(offerUpdate.imageUrls)}">
                 <div th:each="image, iterStat : ${offerUpdate.imageUrls}" class="preview-image-container"
                      th:attr="data-index=${iterStat.index}, data-image-url=${image}"
-                     th:classappend="${offerUpdate.mainImageIndex == iterStat.index} ? 'selected' : ''"
-                     onclick="selectMainImage(this)">
+                     th:classappend="${offerUpdate.mainImageIndex == iterStat.index} ? 'selected' : ''">
 
                     <!-- Remove Button -->
-                    <button type="button" class="remove-btn" th:attr="data-image-url=${image}"
-                            onclick="removeImage(event)">−
-                    </button>
-
+                    <button type="button" class="remove-btn" th:attr="data-image-url=${image}">−</button>
                     <!-- Image Thumbnail -->
                     <img th:src="${image}" alt="Uploaded Image" class="preview-img" loading="lazy">
                 </div>
@@ -193,7 +196,6 @@
         </div>
 
         <!-- Hidden input fields for tracking main image and removed images -->
-        <input type="hidden" id="mainImageIndex" name="mainImageIndex" th:value="${offerUpdate.mainImageIndex}">
         <input type="hidden" id="removeImagesId" name="removeImagesId">
 
 

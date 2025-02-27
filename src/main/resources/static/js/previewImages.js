@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let fileInput = document.getElementById("addImages");
+    let fileInput = document.getElementById("addImages") || document.getElementById("updateImages");
     let removeImagesInput = document.getElementById("removeImagesId");
     let mainImageIndexInput = document.getElementById("mainImageIndex");
     let chooseMainLabel = document.getElementById("chooseMainLabel");
     let imagePreview = document.getElementById("imagePreview");
-    let form = document.getElementById("addForm"); // Select the first form on the page
+    let form = document.querySelector("form"); // Select the first form on the page
 
     // ✅ First, check if all required elements exist
 /*    if (!fileInput || !removeImagesInput || !mainImageIndexInput || !imagePreview || !chooseMainLabel) {
@@ -262,12 +262,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Submit form via AJAX or default submit if needed
         console.log("Submitting form...");
-
-        setTimeout(() => {
-            // Handle file input or rendering after a delay
-            console.log("Processing files after delay...");
-            // Your file processing code here
-        }, 5000);  // Delay for 1 second before processing files
 
         // You can use `fetch` to submit the form data if needed, or let the browser handle the submit.
         form.submit();
