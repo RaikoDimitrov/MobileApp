@@ -8,6 +8,8 @@ public interface CloudinaryService {
 
     List<String> uploadImages(List<MultipartFile> files);
 
+    String uploadImage(MultipartFile file);
+
     void deleteImage(String publicId);
 
     String extractPublicIdFromUrl(String imageUrl);

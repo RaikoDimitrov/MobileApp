@@ -148,10 +148,6 @@ public class OfferController {
                               BindingResult result,
                               Model model,
                               RedirectAttributes rAtt) {
-        System.out.println("Received DTO: " + offerDetailsDTO);
-        System.out.println("New images count: " + (offerDetailsDTO.getNewImages() != null ? offerDetailsDTO.getNewImages().size() : 0));
-        System.out.println("Remove images count: " + (offerDetailsDTO.getRemoveImagesId() != null ? offerDetailsDTO.getRemoveImagesId().size() : 0));
-        System.out.println("Main image index from update: " + offerDetailsDTO.getMainImageIndex());
 
         if (result.hasErrors()) {
             model.addAttribute("offerUpdate", offerDetailsDTO);
@@ -164,6 +160,7 @@ public class OfferController {
         } catch (Exception e) {
             model.addAttribute("error", "Failed to update offer");
             System.out.println(e.getMessage());
+            e.printStackTrace();
             return "update";
         }
         return "redirect:/offers/{id}";
