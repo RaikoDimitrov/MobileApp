@@ -10,13 +10,15 @@ body {
 
 /* Container for Vehicle Offer */
 .vehicle-container {
-    max-width: 800px; /* Smaller container width */
-    color: white; /* Make text white */
-    padding: 15px;
+    position: absolute;
+    top: 100px;
+    left: 25%;
+    width: 100%;
+    max-width: 800px;
+    min-height: 150vh;
+    color: white;
     border-radius: 8px;
-    position: relative;
     z-index: 10;
-    margin-top: 850px;
 }
 
 /* Vehicle Title */

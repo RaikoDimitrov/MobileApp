@@ -157,6 +157,9 @@ public class OfferController {
         try {
             offerService.updateOffer(id, offerDetailsDTO);
             rAtt.addFlashAttribute("successMessage", "Changes saved!");
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "update";
         } catch (Exception e) {
             model.addAttribute("error", "Failed to update offer");
             System.out.println(e.getMessage());

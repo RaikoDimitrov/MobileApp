@@ -6,12 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let imagePreview = document.getElementById("imagePreview");
     let form = document.querySelector("form"); // Select the first form on the page
 
-    // ✅ First, check if all required elements exist
-/*    if (!fileInput || !removeImagesInput || !mainImageIndexInput || !imagePreview || !chooseMainLabel) {
-        console.error("❌ Required DOM elements are missing.");
-        return;
-    }*/
-
     let imageFiles = []; // Stores new image files
     let existingImages = []; // Stores existing images (for offer updates)
     let removedImages = [];
@@ -19,9 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ DOM fully loaded. Waiting for image selection...");
 
     /** ✅ Load existing images (for updating offers) **/
-    document.querySelectorAll(".preview-image-container").forEach((container) => {
+    document.querySelectorAll(".preview-image-container").forEach((container, index) => {
         let imageUrl = container.getAttribute("data-image-url");
         if (imageUrl) existingImages.push(imageUrl);
+        toggleChooseMainLabel();
+        if (index === 0) {
+        selectMainImage(container);
+        }
 
         container.addEventListener("click", function (event) {
             if (!event.target.classList.contains("remove-btn")) {
@@ -37,17 +35,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /** ✅ Handle file input change **/
     fileInput.addEventListener("change", function () {
-        let newFiles = Array.from(fileInput.files);
+        let newFiles = Array.from(fileInput.files).filter(file => file.size > 0);
         console.log(`📸 Selected ${newFiles.length} new images.`);
 
         let dataTransfer = new DataTransfer();
         imageFiles.forEach(file => dataTransfer.items.add(file));
 
         newFiles.forEach(file => {
-            if (!imageFiles.some(existingFile => existingFile.name === file.name)) {
+            if (!imageFiles.some(existingFile => existingFile.name === file.name) && file.size > 0) {
                 imageFiles.push(file);
                 dataTransfer.items.add(file);
                 console.log(`🖼️ File selected: ${file.name} (${file.size} bytes)`);
+            } else {
+                console.warn(`🚨 Skipping empty or duplicate file: ${file.name}`);
             }
         });
 
@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderImagePreviews();
         updateMainImageSelectionAfterUpload();
         console.log("📌 Updated imageFiles array:", imageFiles);
-        //fileInput.value = ""; // Reset file input after selection
     });
 
     /** ✅ Render images (both existing and new) **/
@@ -134,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
         fileInput.files = dataTransfer.files; // ✅ Update input files
 
         console.log("📌 Updated file input after removal:", fileInput.files);
-
         renderImagePreviews();
     }
 
@@ -235,7 +233,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Append all image files to the FormData object
             allImages.forEach(image => {
-                formData.append("images[]", image);  // Ensure all images are added to the FormData
+                if (image.size > 0) {
+                formData.append("images[]", image); // Ensure all images are added to the FormData
+                } else {
+                console.warn(`🚨 Skipping empty file: ${image.name}`);
+                }
             });
 
             // Add existing images as urls separately

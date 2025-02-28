@@ -14,6 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function updateMainImage() {
+        mainImage.src = imageUrls[currentIndex];
+        updateActiveThumbnail();
+    }
+
     function changeImage(element) {
         const url = element.getAttribute("data-src");
         if (url) {
@@ -26,15 +31,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function prevImage() {
         if (imageUrls.length === 0) return; // Prevent errors if array is empty
         currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-        mainImage.src = imageUrls[currentIndex];
-        updateActiveThumbnail();
+        updateMainImage();
     }
 
     function nextImage() {
         if (imageUrls.length === 0) return;
         currentIndex = (currentIndex + 1) % imageUrls.length;
-        mainImage.src = imageUrls[currentIndex];
-        updateActiveThumbnail();
+        updateMainImage();
     }
 
     // Attach event listeners

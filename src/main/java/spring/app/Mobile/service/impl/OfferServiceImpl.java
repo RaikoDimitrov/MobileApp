@@ -101,7 +101,6 @@ public class OfferServiceImpl implements OfferService {
         Instant created = offerById.getCreated();
         List<String> updatedImagesUrls = new ArrayList<>(offerById.getImageUrls());
 
-        System.out.println("Image urls in DB: " + updatedImagesUrls.size());
         //remove images
         List<String> removedImages = Optional.ofNullable(offerDetailsDTO.getRemoveImagesId()).orElse(Collections.emptyList());
         if (!removedImages.isEmpty()) {
@@ -119,11 +118,14 @@ public class OfferServiceImpl implements OfferService {
             }
             updatedImagesUrls.removeAll(toRemove);
         }
-        //todo: fix uploading same images
+
         //upload images
-        List<MultipartFile> newImages = Optional.ofNullable(offerDetailsDTO.getNewImages()).orElse(Collections.emptyList());
-        System.out.println("Images for upload: " + newImages.size());
-        if (!newImages.isEmpty()) {
+        List<MultipartFile> newImages = Optional.ofNullable(offerDetailsDTO.getNewImages())
+                .orElse(Collections.emptyList())
+                .stream().filter(file -> file != null && !file.isEmpty())
+                .collect(Collectors.toList());
+
+        if (!newImages.isEmpty() && newImages.get(0) != null) {
             for (MultipartFile file : newImages) {
                 String uploadedUrl = cloudinaryService.uploadImage(file);
                 String publicIdFromUrl = cloudinaryService.extractPublicIdFromUrl(uploadedUrl);
@@ -135,7 +137,6 @@ public class OfferServiceImpl implements OfferService {
                 }
             }
         }
-        System.out.println("Images after upload: " + updatedImagesUrls);
 
         if (updatedImagesUrls.isEmpty()) throw new RuntimeException("Please upload at least one image");
 
@@ -147,7 +148,6 @@ public class OfferServiceImpl implements OfferService {
         } else {
             offerById.setMainImageUrl(updatedImagesUrls.get(0));
         }
-
 
         offerMapper.map(offerDetailsDTO, offerById);
         offerById.setImageUrls(updatedImagesUrls);
