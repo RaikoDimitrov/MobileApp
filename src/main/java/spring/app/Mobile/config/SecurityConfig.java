@@ -28,7 +28,6 @@ public class SecurityConfig {
     public SecurityConfig(UserMobileDetailsServiceImpl userMobileDetailsService) {
         this.userMobileDetailsService = userMobileDetailsService;
     }
-    //todo: jwt authentication filter for security filterchain
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
