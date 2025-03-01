@@ -18,8 +18,6 @@ public interface UserService {
 
     Optional<UserMobileDetails> getCurrentUser();
 
-    void loginUser(String username);
-
     List<UserEntity> initializeUsers();
 
     boolean verifyEmail(String token);

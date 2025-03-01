@@ -50,8 +50,7 @@ public class SecurityConfig {
                                 .passwordParameter("password")
                                 .defaultSuccessUrl("/", true)
                                 .failureUrl("/users/login-error")
-                                .permitAll()
-                                .successHandler(authenticationSuccessHandler(userMobileDetailsService)))
+                                .permitAll())
                 .logout(logout ->
                         logout
                                 .logoutUrl("/logout")
@@ -59,20 +58,6 @@ public class SecurityConfig {
                                 .invalidateHttpSession(true))
                 .userDetailsService(userMobileDetailsService)
                 .build();
-    }
-
-    // Custom AuthenticationSuccessHandler to update currentUser
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler(UserMobileDetailsServiceImpl userMobileDetailsService) {
-        return new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request,
-                                                HttpServletResponse response,
-                                                Authentication authentication) throws IOException {
-                userMobileDetailsService.handlePostLogin(authentication);
-                response.sendRedirect("/");
-            }
-        };
     }
 
     //manager

@@ -27,7 +27,6 @@ import spring.app.Mobile.model.enums.UserRoleEnum;
 import spring.app.Mobile.model.user.UserMobileDetails;
 import spring.app.Mobile.repository.UserRepository;
 import spring.app.Mobile.repository.UserRoleRepository;
-import spring.app.Mobile.security.CurrentUser;
 import spring.app.Mobile.service.interfaces.EmailService;
 import spring.app.Mobile.service.interfaces.JwtService;
 import spring.app.Mobile.service.interfaces.UserService;
@@ -49,11 +48,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CurrentUser currentUser;
     private final JwtService jwtService;
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
-    private final UserMobileDetailsServiceImpl userMobileDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
@@ -69,20 +66,18 @@ public class UserServiceImpl implements UserService {
                            ModelMapper modelMapper,
                            UserRepository userRepository,
                            UserRoleRepository userRoleRepository,
-                           PasswordEncoder passwordEncoder, CurrentUser currentUser,
+                           PasswordEncoder passwordEncoder,
                            JwtService jwtService,
                            EmailService emailService,
-                           AuthenticationManager authenticationManager, UserMobileDetailsServiceImpl userMobileDetailsService) {
+                           AuthenticationManager authenticationManager) {
         this.appProperties = appProperties;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.currentUser = currentUser;
         this.jwtService = jwtService;
         this.emailService = emailService;
         this.authenticationManager = authenticationManager;
-        this.userMobileDetailsService = userMobileDetailsService;
     }
 
 
@@ -205,12 +200,6 @@ public class UserServiceImpl implements UserService {
             return Optional.of(userMobileDetails);
         }
         return Optional.empty();
-    }
-
-    @Override
-    public void loginUser(String username) {
-        currentUser.setUsername(username);
-        currentUser.setAuthenticated(username);
     }
 
     @Override
