@@ -9,7 +9,7 @@ public class MobileApplication {
 
 	public static void main(String[] args) {
 
-		Dotenv dotenv = Dotenv.configure().filename("cloud.env").load(); // Loads .env file
+		Dotenv dotenv = Dotenv.configure().filename("credentials.env").load(); // Loads .env file
 		System.setProperty("CLOUDINARY_CLOUD_NAME", dotenv.get("CLOUDINARY_CLOUD_NAME"));
 		System.setProperty("CLOUDINARY_API_KEY", dotenv.get("CLOUDINARY_API_KEY"));
 		System.setProperty("CLOUDINARY_API_SECRET", dotenv.get("CLOUDINARY_API_SECRET"));
